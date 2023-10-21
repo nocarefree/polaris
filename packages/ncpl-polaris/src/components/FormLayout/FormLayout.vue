@@ -5,7 +5,6 @@
 </template>
 <script setup lang="ts">
 import { computed, useSlots, h } from 'vue'
-import type { FormLayoutProps } from './FormLayout'
 import styles from './FormLayout.module.scss'
 import Item from "./Item"
 import Group from "./group"
@@ -14,7 +13,6 @@ import { elementChildren } from '../../utils';
 defineOptions({
   name: 'NpFormLayout',
 })
-defineProps<FormLayoutProps>()
 
 const slots = useSlots();
 

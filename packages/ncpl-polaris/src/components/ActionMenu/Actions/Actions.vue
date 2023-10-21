@@ -1,6 +1,6 @@
 <template>
   <div :class="styles.ActionsLayout" ref="actionsLayoutRef">
-    <ButtonGroup :spacing="polarisSummerEditions2023 ? 'tight' : 'extraTight'">
+    <ButtonGroup gap="tight">
       <template v-for="action in showableActions">
         <SecondaryAction v-if="action" v-bind="action" @getOffsetWidth="handleActionsOffsetWidth">
           {{ action.content }}
@@ -22,7 +22,7 @@ import SecondaryAction from '../SecondaryAction';
 import MenuGroup from '../MenuGroup';
 
 import styles from './Actions.module.scss'
-import { useI18n, useFeatures } from '../../context';
+import { useI18n } from '../../context';
 import { useEventListener } from '@vueuse/core';
 import { debounce } from "@ncpl-polaris/utils/debounce"
 
@@ -39,7 +39,6 @@ defineOptions({
 const props = withDefaults(defineProps<ActionMenuActionsProps>(), { actions: () => [], groups: () => [] });
 
 const i18n = useI18n();
-const { polarisSummerEditions2023 } = useFeatures();
 
 const defaultRollupGroup: MenuGroupDescriptor = {
   title: i18n.value.translate('Polaris.ActionMenu.Actions.moreActions'),

@@ -5,7 +5,7 @@
       <div v-if="selectMode" :class="groupClassName" ref="groupNode" :style="{ width }">
         <div :class="styles.ButtonGroupWrapper" ref="buttonsNode">
           <div :class="styles.ButtonGroupInner">
-            <HorizontalStack v-if="promotedActions && numberOfPromotedActionsToRender > 0 || hasPopover" gap="3">
+            <InlineStack v-if="promotedActions && numberOfPromotedActionsToRender > 0 || hasPopover" gap="300">
               <template v-for="action in promotedActions">
                 <BulkActionMenu v-if="instanceOfMenuGroupDescriptor(action)" v-bind="action"
                   :isNewBadgeInBadgeActions="isNewBadgeInBadgeActions()" />
@@ -24,7 +24,7 @@
                   <ActionList :sections="combinedActions" @actionAnyItem="togglePopover" />
                 </Popover>
               </div>
-            </HorizontalStack>
+            </InlineStack>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
 import { ref, computed, reactive, watch, onMounted } from 'vue'
 import type { BulkActionsProps, BulkAction } from './BulkActions'
 import styles from './BulkActions.module.scss'
-import HorizontalStack from "../HorizontalStack"
+import InlineStack from "../InlineStack"
 import Popover from "../Popover"
 import ActionList from "../ActionList"
 import BulkActionMenu from "./BulkActionMenu"

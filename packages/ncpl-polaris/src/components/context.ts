@@ -11,6 +11,42 @@ import type {
 import type { StickyManager, ScrollLockManager, I18n } from "@ncpl-polaris/utils"
 import { scrollable } from "./shared";
 
+//theme
+import type { ThemeName, Theme } from '@shopify/polaris-tokens';
+import { themes } from '@shopify/polaris-tokens';
+
+export function getTheme(themeName: ThemeName): Theme {
+  return themes[themeName];
+}
+
+export const themeContextKey: InjectionKey<ComputedRef<Theme>> = Symbol(
+  "themeContextKey"
+);
+
+export const themeContext = {
+  inject: () => {
+    return inject(themeContextKey);
+  },
+  provide: (themeName: ComputedRef<ThemeName>) => {
+    provide(themeContextKey, computed(() => {
+      return getTheme(themeName.value)
+    }));
+  },
+};
+
+export function useTheme() {
+  const theme = themeContext.inject();
+
+  if (!theme || !theme.value) {
+    throw new Error(
+      'No theme was provided. Your application must be wrapped in an <AppProvider> component. See https://polaris.shopify.com/components/app-provider for implementation instructions.',
+    );
+  }
+
+  return theme;
+}
+
+
 //i18
 export const i18nContextKey: InjectionKey<Ref<I18n>> =
   Symbol("i18nContextKey");
@@ -443,7 +479,12 @@ export interface IndexTableContext extends IndexTableProps {
   selectMode: boolean;
   shouldShowBulkActions: boolean;
   bulkActionsAccessibilityLabel: string;
-  bulkSelectState: boolean,
+  bulkSelectState: boolean;
+  paginatedSelectAllText: string;
+  paginatedSelectAllAction: {
+    content: string;
+    onAction: () => {};
+  }
 }
 
 export const indexTableContextKey: InjectionKey<ComputedRef<IndexTableContext>> = Symbol(
@@ -451,7 +492,7 @@ export const indexTableContextKey: InjectionKey<ComputedRef<IndexTableContext>> 
 );
 export const indexTableContext = {
   inject: () => {
-    return computed(() => unref(inject(indexTableContextKey)));
+    return inject(indexTableContextKey);
   },
   provide: (value: ComputedRef<IndexTableContext>) => {
     provide(indexTableContextKey, value);
@@ -461,17 +502,16 @@ export const indexTableContext = {
 export function useIndexTable() {
   const indexTable = indexTableContext.inject();
 
-  if (!indexTable.value) {
+  if (!indexTable || !indexTable.value) {
     throw new Error('No IndexTable was provided.');
   }
 
   return indexTable as ComputedRef<IndexTableContext>
 }
 
-
 //IndexTableRowContext
 export interface IndexTableRowContext {
-  itemId?: string;
+  itemId?: string | number;
   selected?: boolean;
   disabled?: boolean;
   position?: number;
@@ -483,7 +523,7 @@ export const indexTableRowContextKey: InjectionKey<ComputedRef<IndexTableRowCont
 );
 export const indexTableRowContext = {
   inject: () => {
-    return computed(() => unref(inject(indexTableRowContextKey)));
+    return inject(indexTableRowContextKey);
   },
   provide: (value: ComputedRef<IndexTableRowContext>) => {
     provide(indexTableRowContextKey, value);
@@ -493,9 +533,45 @@ export const indexTableRowContext = {
 export function useIndexTableRow() {
   const indexTableRow = indexTableRowContext.inject();
 
-  if (!indexTableRow.value) {
+  if (!indexTableRow || !indexTableRow.value) {
     throw new Error('No IndexTable was provided.');
   }
 
-  return indexTableRow as ComputedRef<IndexTableRowContext>
+  return indexTableRow
+}
+
+
+import { themeDefault } from '@shopify/polaris-tokens';
+import { useBreakpoints as baseUseBreakpoints } from "@vueuse/core"
+export const useBreakpoints = () => {
+
+  const options = Object.fromEntries(Object.entries(themeDefault.breakpoints).map(([key, value]: [string, string]) => {
+    return [key.replace('breakpoints-', ''), value];
+  }));
+
+  const obj = baseUseBreakpoints(options)
+
+
+  return {
+    xsUp: obj.greaterOrEqual('xs'),
+    xsDown: obj.smaller('xs'),
+    xsOnly: obj.smaller('md'),
+
+    smUp: obj.greaterOrEqual('sm'),
+    smDown: obj.smaller('sm'),
+    smOnly: obj.between('sm', 'md'),
+
+    mdUp: obj.greaterOrEqual('md'),
+    mdDown: obj.smaller('md'),
+    mdOnly: obj.between('md', 'lg'),
+
+    lgUp: obj.greaterOrEqual('lg'),
+    lgDown: obj.smaller('lg'),
+    lgOnly: obj.between('lg', 'xl'),
+
+    xlUp: obj.greaterOrEqual('xl'),
+    xlDown: obj.smaller('xl'),
+    xlOnly: obj.greaterOrEqual('xl'),
+  }
+
 }

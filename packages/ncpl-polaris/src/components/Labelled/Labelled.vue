@@ -2,11 +2,12 @@
   <div :class="classNames(
     labelHidden && styles.hidden,
     disabled && styles.disabled,
-    polarisSummerEditions2023 && readOnly && styles.readOnly,
+    readOnly && styles.readOnly,
   )">
     <div v-if="label || $slots.label" :class="styles.LabelWrapper">
       <Label :id="id" :required-indicator="requiredIndicator" v-bind="$attrs" :hidden="false">
-        <component :is="() => $slots.label ? $slots.label():[label]"></component>
+        <component v-if="label" :is="() => [label]"></component>
+        <slot v-else name="label"></slot>
       </Label>
       <component :is="actionComponent"></component>
     </div>
@@ -15,8 +16,9 @@
       <InlineError :message="error" :field-id="id" />
     </div>
     <div v-if="helpText || $slots.helpText" :class="styles.HelpText" :id="helpTextID(id)" :aria-disabled="disabled">
-      <Text as="span" color="subdued" breakWord>
-        <component :is="() => $slots.helpText ? $slots.helpText():[helpText]"></component>
+      <Text as="span" tone="subdued" breakWord>
+        <component v-if="helpText" :is="() => [helpText]"></component>
+        <slot v-else name="helpText"></slot>
       </Text>
     </div>
   </div>
@@ -30,14 +32,12 @@ import InlineError from '../InlineError';
 import Label from '../Label';
 import Text from '../Text';
 import { classNames } from '../../utils';
-import { useFeatures } from '../context';
 
 defineOptions({
   name: 'NpLabelled',
 })
 const props = defineProps<LabelledProps>()
 
-const { polarisSummerEditions2023 } = useFeatures();
 const actionComponent = computed(() => {
   return () => props.action ? h('div', { class: styles.Action }, [buttonFrom(props.action, { plain: true })]) : null
 })

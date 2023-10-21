@@ -1,7 +1,7 @@
 <template>
   <ul :class="className">
     <li v-if="title" :class="styles.SectionHeading">
-      <Text as="span" variant="bodySm" font-weight="medium" color="subdued">
+      <Text as="span" variant="bodySm" font-weight="medium" tone="subdued">
         {{ title }}
       </Text>
       <template v-if="action">

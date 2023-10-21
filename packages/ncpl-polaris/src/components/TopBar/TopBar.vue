@@ -1,46 +1,48 @@
 <template>
   <div :class="styles.TopBar">
-    <div :class="styles.LeftContent">
-      <button v-if="showNavigationToggle" type="button" :class="classNames(
-        styles.NavigationIcon,
-        focused && styles.focused,
-      )" ref="toggleButton" @click="$emit('navigationToggle')"
-        :aria-label="i18n.translate('Polaris.TopBar.toggleMenuLabel')">
-        <div :class="styles.IconWrapper">
-          <Icon :source="MobileHamburgerMajor" />
+    <div :class="styles.Container">
+      <div :class="styles.LeftContent">
+        <button v-if="showNavigationToggle" type="button" :class="classNames(
+          styles.NavigationIcon,
+          focused && styles.focused,
+        )" ref="toggleButton" @click="$emit('navigationToggle')"
+          :aria-label="i18n.translate('Polaris.TopBar.toggleMenuLabel')">
+          <div :class="styles.IconWrapper">
+            <Icon :source="MobileHamburgerMajor" />
+          </div>
+        </button>
+        <div v-if="$slots.ContextControl" :class="styles.ContextControl">
+          <slot name="contextControl"></slot>
         </div>
-      </button>
-      <div v-if="$slots.ContextControl" :class="styles.ContextControl">
-        <slot name="contextControl"></slot>
+        <div v-else-if="logo" :class="classNames(
+          styles.LogoContainer,
+          showNavigationToggle || $slots.searchField
+            ? styles.LogoDisplayControl
+            : styles.LogoDisplayContainer,
+          $slots.logoSuffix && styles.hasLogoSuffix,
+        )">
+          <UnstyledLink :url="logo.url || ''" :class="styles.LogoLink" :style="{ width }">
+            <Image :source="logo.topBarSource || ''" :alt="logo.accessibilityLabel || ''" :class="styles.Logo"
+              :style="{ width }" />
+          </UnstyledLink>
+          <slot name="logoSuffix"></slot>
+        </div>
       </div>
-      <div v-else-if="logo" :class="classNames(
-        styles.LogoContainer,
-        showNavigationToggle || $slots.searchField
-          ? styles.LogoDisplayControl
-          : styles.LogoDisplayContainer,
-        $slots.logoSuffix && styles.hasLogoSuffix,
-      )">
-        <UnstyledLink :url="logo.url || ''" :class="styles.LogoLink" :style="{ width }">
-          <Image :source="logo.topBarSource || ''" :alt="logo.accessibilityLabel || ''" :class="styles.Logo"
-            :style="{ width }" />
-        </UnstyledLink>
-        <slot name="logoSuffix"></slot>
+      <div :class="styles.Search">
+        <template v-if="$slots.searchField">
+          <slot name="searchField"></slot>
+          <Search :visible="searchResultsVisible" @dismiss="$emit('searchResultsDismiss')"
+            :overlay-visible="searchResultsOverlayVisible">
+            <slot name="searchResults"></slot>
+          </Search>
+        </template>
       </div>
-    </div>
-    <div :class="styles.Search">
-      <template v-if="$slots.searchField">
-        <slot name="searchField"></slot>
-        <Search :visible="searchResultsVisible" @dismiss="$emit('searchResultsDismiss')"
-          :overlay-visible="searchResultsOverlayVisible">
-          <slot name="searchResults"></slot>
-        </Search>
-      </template>
-    </div>
-    <div :class="styles.RightContent">
-      <div :class="styles.SecondaryMenu">
-        <slot name="secondaryMenu"></slot>
+      <div :class="styles.RightContent">
+        <div :class="styles.SecondaryMenu">
+          <slot name="secondaryMenu"></slot>
+        </div>
+        <slot name="userMenu"></slot>
       </div>
-      <slot name="userMenu"></slot>
     </div>
   </div>
 </template>

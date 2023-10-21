@@ -1,11 +1,8 @@
 <template>
   <span :class="className">
     <template v-if="progress && !icon">
-      <span v-if="polarisSummerEditions2023" :class="styles.Icon">
+      <span :class="styles.Icon">
         <Icon :accessibility-label="accessibilityLabel" :source="progressIconMap[progress]" />
-      </span>
-      <span v-else :class="styles.PipContainer">
-        <Pip :progress="progress" :status="status" :accessibility-label-override="accessibilityLabel" />
       </span>
     </template>
     <Text v-else-if="accessibilityLabel" as="span" visually-hidden>
@@ -16,7 +13,7 @@
       <Icon :source="icon" />
     </span>
 
-    <Text v-if="$slots.default" as="span" variant="bodySm" :font-weight="status === 'new' ? 'medium' : undefined">
+    <Text v-if="$slots.default" as="span" variant="bodySm" :font-weight="tone === 'new' ? 'medium' : undefined">
       <slot></slot>
     </Text>
   </span>
@@ -26,10 +23,9 @@ import { computed, unref, h } from 'vue'
 import type { BadgeProps } from './Badge'
 import Text from '@ncpl-polaris/components/Text';
 import Icon from '@ncpl-polaris/components/Icon';
-import Pip from "./Pip"
 import styles from './Badge.module.scss'
 import { classNames, variationName } from '@ncpl-polaris/utils';
-import { useFeatures, useI18n, useWithinFilter } from "../context";
+import { useI18n, useWithinFilter } from "../context";
 import { getDefaultAccessibilityLabel } from "./utils"
 
 const DEFAULT_SIZE = 'medium';
@@ -37,18 +33,18 @@ const DEFAULT_SIZE = 'medium';
 defineOptions({
   name: 'NpBadge',
 })
-const props = defineProps<BadgeProps>()
-
-
-const { polarisSummerEditions2023 } = useFeatures();
+const props = withDefaults(defineProps<BadgeProps>(), {
+  size: DEFAULT_SIZE
+});
 const i18n = useI18n();
 const withinFilter = useWithinFilter();
 
 const className = computed(() => {
+  const { tone, size } = props;
   return classNames(
     styles.Badge,
-    props.status && styles[variationName('status', props.status)],
-    props.size && props.size !== DEFAULT_SIZE && styles[variationName('size', props.size)],
+    tone && styles[variationName('tone', tone)],
+    size && size !== DEFAULT_SIZE && styles[variationName('size', size)],
     unref(withinFilter) && styles.withinFilter,
   )
 })
@@ -56,7 +52,7 @@ const className = computed(() => {
 const accessibilityLabel = computed(
   () => props.statusAndProgressLabelOverride
     ? props.statusAndProgressLabelOverride
-    : getDefaultAccessibilityLabel(i18n.value, props.progress, props.status)
+    : getDefaultAccessibilityLabel(i18n.value, props.progress, props.tone)
 );
 
 const progressIconMap = {

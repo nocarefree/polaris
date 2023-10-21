@@ -9,14 +9,13 @@
             {{ name }}
           </Text>
           <span :class="styles.Message">
-            <Text as="p" variant="bodySm" alignment="start" color="subdued" truncate>
+            <Text as="p" variant="bodySm" alignment="start" tone="subdued" truncate>
               {{ detail }}
             </Text>
           </span>
         </span>
         <MessageIndicator :active="Boolean(message)">
-          <Avatar shape="square" :size="polarisSummerEditions2023 ? 'medium' : 'small'" :initials="initials &&
-            initials.replace(' ', '')" :source="avatar" :name="name" />
+          <Avatar size="md" :initials="initials && initials.replace(' ', '')" :source="avatar" :name="name" />
         </MessageIndicator>
       </template>
     </template>
@@ -29,7 +28,6 @@ import MessageIndicator from '@ncpl-polaris/components/MessageIndicator'
 import Avatar from '@ncpl-polaris/components/Avatar'
 import Text from '@ncpl-polaris/components/Text'
 import styles from './UserMenu.module.scss'
-import { useFeatures } from '../../context'
 
 defineOptions({
   name: 'NpUserMenu',
@@ -37,6 +35,4 @@ defineOptions({
 defineProps<UserMenuProps>()
 
 defineEmits(['update:open']);
-
-const { polarisSummerEditions2023 } = useFeatures();
 </script>

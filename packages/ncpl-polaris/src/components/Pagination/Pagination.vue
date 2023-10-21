@@ -1,15 +1,28 @@
 <template>
-  <nav :aria-label="navLabel" ref="node" :class="styles.Pagination">
-    <ButtonGroup :segmented="!$slots.label || polarisSummerEditions2023">
+  <nav v-if="type == 'table'" :aria-label="navLabel" :ref="node" :className="classNames(styles.Pagination, styles.table)">
+    <Box background="bg-surface-secondary" padding-bloc-start="150" padding-block-end="150" padding-inline-start="300"
+      padding-inline-end="200">
+      <InlineStack :align="labelComponent ? 'space-between' : 'end'" block-align="center">
+        <Text as="span" variant="bodySm" font-weight="medium">
+          <component :is="labelComponent"></component>
+        </Text>
+        <ButtonGroup variant="segmented">
+          <component :is="constructedPrevious"></component>
+          <component :is="constructedNext"></component>
+        </ButtonGroup>
+      </InlineStack>
+    </Box>
+  </nav>
+  <nav v-else :aria-label="navLabel" ref="node" :class="styles.Pagination">
+    <ButtonGroup variant="segmented">
       <component :is="constructedPrevious"></component>
-      <Box v-if="$slots.label" :padding="polarisSummerEditions2023 ? '3' : undefined" padding-block-start="0"
-        padding-block-end="0">
+      <Box v-if="labelComponent" padding="300" padding-block-start="0" padding-block-end="0">
         <div aria-live="polite">
           <span v-if="hasNext && hasPrevious">
-            <slot></slot>
+            <component :is="labelComponent"></component>
           </span>
-          <Text v-else color="subdued" as="span">
-            <slot></slot>
+          <Text v-else tone="subdued" as="span">
+            <component :is="labelComponent"></component>
           </Text>
         </div>
       </Box>
@@ -18,19 +31,19 @@
   </nav>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted, onUpdated, h } from 'vue'
+import { ref, computed, onMounted, onUpdated, h, useSlots } from 'vue'
 import type { PaginationProps } from './Pagination'
-import ButtonGroup from "@ncpl-polaris/components/ButtonGroup"
-import Button from "@ncpl-polaris/components/Button"
-import Box from "@ncpl-polaris/components/Box"
-import Text from "@ncpl-polaris/components/Text"
-import Tooltip from "@ncpl-polaris/components/Tooltip"
+import ButtonGroup from "../ButtonGroup"
+import Button from "../Button"
+import Box from "../Box"
+import Text from "../Text"
+import Tooltip from "../Tooltip"
 import styles from './Pagination.module.scss'
 import { ChevronLeftMinor, ChevronRightMinor } from "@ncpl/ncpl-icons";
-import { useI18n, useFeatures } from "../context"
+import { useI18n } from "../context"
 import { useEventListener } from "@vueuse/core"
 import { isInputFocused } from '@ncpl-polaris/utils/is-input-focused';
-import type { Fn } from "@vueuse/core"
+import { classNames } from "@ncpl-polaris/utils"
 
 defineOptions({
   name: 'NpPagination',
@@ -39,7 +52,7 @@ const props = defineProps<PaginationProps>()
 const emit = defineEmits(['previous', 'next'])
 const node = ref();
 const i18n = useI18n()
-const { polarisSummerEditions2023 } = useFeatures();
+const slots = useSlots();
 
 const navLabel = computed(() => {
   return props.accessibilityLabel || i18n.value.translate('Polaris.Pagination.pagination');
@@ -51,6 +64,10 @@ const previousLabel = computed(() => {
 
 const nextLabel = computed(() => {
   return props.accessibilityLabels?.next || i18n.value.translate('Polaris.Pagination.next');
+})
+
+const labelComponent = computed(() => {
+  return props.label ? typeof props.label === 'string' ? [props.label] : props.label : slots.label;
 })
 
 const constructedPrevious = computed(() => {
@@ -94,7 +111,7 @@ function clickPaginationLink(id: string, node?: HTMLElement) {
   };
 }
 
-let cleanpre: Fn, cleannext: Fn;
+let cleanpre: () => void, cleannext: () => void;
 function bindKeys() {
   const { previousKeys, hasPrevious, previousURL, nextKeys, hasNext, nextURL } = props;
 

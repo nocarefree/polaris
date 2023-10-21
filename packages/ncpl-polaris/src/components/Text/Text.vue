@@ -22,7 +22,7 @@ const className = computed(() => {
   const {
     alignment,
     breakWord,
-    color,
+    tone,
     fontWeight,
     numeric = false,
     truncate = false,
@@ -36,7 +36,7 @@ const className = computed(() => {
     (alignment || truncate) && styles.block,
     alignment && styles[alignment],
     breakWord && styles.break,
-    color && styles[color],
+    tone && styles[tone],
     numeric && styles.numeric,
     truncate && styles.truncate,
     visuallyHidden && styles.visuallyHidden

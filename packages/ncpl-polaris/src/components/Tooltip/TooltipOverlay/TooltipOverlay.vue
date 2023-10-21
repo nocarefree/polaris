@@ -4,7 +4,7 @@
     <template #default="overlayDetails">
       <div :style="containerStyle(overlayDetails.chevronOffset)" :class="containerClassName(overlayDetails)"
         v-bind="layer.props">
-        <svg v-if="polarisSummerEditions2023" :classe="styles.Tail" width="19" height="11" fill="none">
+        <svg :classe="styles.Tail" width="19" height="11" fill="none">
           <template v-if="overlayDetails.positioning === 'above'">
             <path
               d="M18.829 8.171 11.862.921A3 3 0 0 0 7.619.838L0 8.171h1.442l6.87-6.612a2 2 0 0 1 2.83.055l6.3 6.557h1.387Z"
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { TooltipOverlayProps } from './TooltipOverlay'
-import { useI18n, useFeatures } from '../../context';
+import { useI18n } from '../../context';
 import { layer } from '../../shared';
 import type { OverlayDetails } from "@ncpl-polaris/components/PositionedOverlay"
 import PositionedOverlay from "@ncpl-polaris/components/PositionedOverlay"
@@ -43,7 +43,6 @@ defineOptions({
 const props = defineProps<TooltipOverlayProps>()
 
 const i18n = useI18n();
-const { polarisSummerEditions2023 } = useFeatures()
 
 const containerStyle = (chevronOffset: number) => {
   const { borderRadius, padding } = props
@@ -54,7 +53,7 @@ const containerStyle = (chevronOffset: number) => {
       : undefined,
     '--pc-tooltip-padding':
       padding && padding === 'default'
-        ? 'var(--p-space-1) var(--p-space-2)'
+        ? 'var(--p-space-100) var(--p-space-200)'
         : `var(--p-space-${padding})`,
   }
 };

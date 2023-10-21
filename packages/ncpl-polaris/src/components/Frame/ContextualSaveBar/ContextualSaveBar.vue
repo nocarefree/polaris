@@ -4,20 +4,19 @@
       <component :is="contextControl"></component>
     </div>
     <div v-if="!(contextControl || alignContentFlush)" :class="styles.LogoContainer" :style="{ width: logoWidth }">
-      <NpImage v-if="logo" :style="{ width: logoWidth }" :source="logo.contextualSaveBarSource || ''" alt="">
-      </NpImage>
+      <Image v-if="logo" :style="{ width: logoWidth }" :source="logo.contextualSaveBarSource || ''" alt="" />
     </div>
     <div :class="contentsClassName">
-      <NpText as="h2" variant="headingMd" color="text-inverse" :truncate="true">{{ message }}</NpText>
+      <Text as="h2" variant="headingMd" tone="text-inverse" truncate>{{ message }}</Text>
       <div :class="styles.ActionContainer">
-        <NpLegacyStack spacing="tight" :wrap="false">
+        <LegacyStack spacing="tight" :wrap="false">
           <component v-if="secondaryMenu" :is="secondaryMenu"></component>
-          <NpButton v-if="discardAction" v-bind="discardAction" @click="discardAction?.onAction">{{ discardAction.content
-            || "Discard" }}</NpButton>
-          <NpButton v-if="saveAction" v-bind="saveAction" primary>{{
-            saveAction.content || "Save"
-          }}</NpButton>
-        </NpLegacyStack>
+          <Button v-if="discardAction" v-bind="discardAction" @click="discardAction?.onAction">{{ discardAction.content
+            || "Discard" }}</Button>
+          <Button v-if="saveAction" v-bind="saveAction" variant="primary" tone="success" size="large">{{
+            saveAction && saveAction.content ? saveAction.content : i18n.translate('Polaris.ContextualSaveBar.save')
+          }}</Button>
+        </LegacyStack>
       </div>
     </div>
   </div>
@@ -26,14 +25,18 @@
 import { computed } from "vue";
 import type { ContextualSaveBarProps } from "./ContextualSaveBar";
 import styles from "./ContextualSaveBar.module.scss";
-import { NpImage, NpText, NpLegacyStack, NpButton } from "@ncpl-polaris/components";
+import LegacyStack from "../../LegacyStack"
+import Text from "../../Text"
+import Image from "../../Image"
+import Button from "../../Button"
 import { classNames } from "@ncpl-polaris/utils";
-import { useFrame } from "../../context"
+import { useFrame, useI18n } from "../../context"
 
 
 const props = defineProps<ContextualSaveBarProps>();
 
 const { logo } = useFrame();
+const i18n = useI18n();
 
 
 const logoWidth = computed(() => {

@@ -1,20 +1,27 @@
 import { IconSource } from "../types"
 
-type Color =
-  | "base"
-  | "subdued"
-  | "critical"
-  | "interactive"
-  | "warning"
-  | "highlight"
-  | "success"
-  | "primary"
-  | "magic";
-
+type Tone =
+  | 'base'
+  | 'subdued'
+  | 'caution'
+  | 'warning'
+  | 'critical'
+  | 'interactive'
+  | 'info'
+  | 'success'
+  | 'primary'
+  | 'emphasis'
+  | 'magic'
+  | 'textCaution'
+  | 'textWarning'
+  | 'textCritical'
+  | 'textInfo'
+  | 'textSuccess'
+  | 'textPrimary'
+  | 'textMagic';
 
 export type IconProps = {
   source: IconSource,
-  color?: Color,
-  backdrop?: boolean,
+  tone?: Tone,
   accessibilityLabel?: string
 };

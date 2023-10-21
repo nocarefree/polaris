@@ -1,15 +1,15 @@
 <template>
-  <Choice :id="uniqId" :label="label" :label-hidden="labelHidden" :disabled="disabled"
+  <Choice :id="uniqId" :label="label || ''" :label-hidden="labelHidden" :disabled="disabled"
     :label-class-name="classNames(styles.ChoiceLabel, labelClassName)" :fill="fill" v-bind="extraChoiceProps">
     <span :class="classNames(styles.Checkbox, error && styles.error)">
       <input ref="inputNode" :id="uniqId" :name="name" :value="value" type="checkbox" :checked="isChecked"
         :disabled="disabled" :class="classNames(styles.Input, isIndeterminate && styles['Input-indeterminate'],)"
         @blur="handleBlur" @click="handleOnClick" @focus="e => $emit('focus', e)" :aria-invalid="error != null"
         :aria-controls="ariaControls" :aria-describedby="_ariaDescribedBy"
-        :role="isWithinListbox ? 'presentation' : 'checkbox'" {...indeterminateAttributes} />
+        :role="isWithinListbox ? 'presentation' : 'checkbox'" v-bind="indeterminateAttributes" />
       <span :class="styles.Backdrop" @click="e => e.stopPropagation()" @keyUp="(e: Event) => e.stopPropagation()" />
-      <span :class="classNames(styles.Icon, animatedTickIcon && styles.animated,)">
-        <svg v-if="animatedTickIcon" viewBox="0 0 16 16" shapeRendering="geometricPrecision"
+      <span :class="classNames(styles.Icon, !isIndeterminate && styles.animated,)">
+        <svg v-if="!isIndeterminate" viewBox="0 0 16 16" shapeRendering="geometricPrecision"
           textRendering="geometricPrecision">
           <path :class="classNames(checked && styles.checked)"
             d="M1.5,5.5L3.44655,8.22517C3.72862,8.62007,4.30578,8.64717,4.62362,8.28044L10.5,1.5"
@@ -25,11 +25,12 @@
 import { shallowRef, toRef, computed } from 'vue'
 import type { CheckboxProps } from './Checkbox'
 import Choice from '../Choice';
+import Icon from '../Icon';
 import styles from './Checkbox.module.scss'
 import { classNames } from "@ncpl-polaris/utils"
 import { MinusMinor, TickSmallMinor } from "@ncpl/ncpl-icons"
 import { errorTextID } from '../InlineError';
-import {  useId, useFeatures, withinListboxContext } from "../context"
+import { useId, withinListboxContext } from "../context"
 
 defineOptions({
   name: 'NpCheckbox',
@@ -41,7 +42,6 @@ const props = defineProps<CheckboxProps>()
 const uniqId = useId(toRef(props, 'id'));
 const inputNode = shallowRef();
 const isWithinListbox = withinListboxContext.inject();
-const { polarisSummerEditions2023 } = useFeatures();
 
 const _ariaDescribedBy = computed(() => {
   const { error, helpText, ariaDescribedBy } = props;
@@ -76,8 +76,7 @@ const extraChoiceProps = computed(() => {
 const isIndeterminate = computed(() => props.checked === 'indeterminate');
 const isChecked = computed(() => !isIndeterminate.value && Boolean(props.checked));
 const iconSource = computed(() => isIndeterminate.value ? MinusMinor : TickSmallMinor);
-const animatedTickIcon = computed(() => polarisSummerEditions2023 && !isIndeterminate.value);
-
+const indeterminateAttributes = computed(() => isIndeterminate.value ? { indeterminate: true, ariaChecked: 'mixed' } : { ariaChecked: isChecked.value });
 
 const handleBlur = () => {
   emit('blur');

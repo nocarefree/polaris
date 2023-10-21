@@ -1,27 +1,39 @@
 <template>
-  <div v-if="slots.helpText || error">
-    <component :is="labelMarkup"></component>
-    <div :class="styles.Descriptions">
-      <div v-if="error && (typeof error !== 'boolean')" :className="styles.Error">
-        <InlineError :message="error" :field-id="id" />
+  <ConditionalWrapper :is="helpText || hasError">
+    <template #wrapper="{ children }">
+      <div>
+        <component :is="children"></component>
+        <div :class="styles.Descriptions">
+          <div v-if="hasError" :class="styles.Error">
+            <InlineError :message="error!" :field-id="id" />
+          </div>
+          <div v-if="helpText" ;class="styles.HelpText" :id="helpTextID(id)">
+            <Text as="span" :tone="disabled ? undefined : 'subdued'">
+              {{ helpText }}
+            </Text>
+          </div>
+        </div>
       </div>
-      <div v-if="slots.helpText" :className="styles.HelpText" :id="helpTextID(id)">
-        <Text as="span" :color="disabled && polarisSummerEditions2023 ? undefined : 'subdued'">
-          <slot name="helpText"></slot>
-        </Text>
-      </div>
-    </div>
-  </div>
-  <component v-else :is="labelMarkup"></component>
+    </template>
+    <label :className="className" :htmlFor="id" @click="e => $emit('click', e)"
+      :style="sanitizeCustomProperties(labelStyle)">
+      <span :className="styles.Control">
+        <slot></slot>
+      </span>
+      <span :className="styles.Label">
+        <span>{{ label }}</span>
+      </span>
+    </label>
+  </ConditionalWrapper>
 </template>
 <script setup lang="ts">
-import { computed, h, useSlots } from 'vue'
-import type { ChoiceProps } from './Choice'
-import { helpTextID } from './Choice'
-import styles from './Choice.module.scss'
-import Text from "../Text"
-import InlineError from "../InlineError"
-import { useFeatures } from "../context"
+import { computed } from 'vue';
+import type { ChoiceProps } from './Choice';
+import { helpTextID } from './Choice';
+import ConditionalWrapper from '../ConditionalWrapper';
+import styles from './Choice.module.scss';
+import Text from "../Text";
+import InlineError from "../InlineError";
 import { classNames, getResponsiveProps, getResponsiveValue, sanitizeCustomProperties } from "@ncpl-polaris/utils";
 
 defineOptions({
@@ -29,8 +41,14 @@ defineOptions({
 })
 const props = defineProps<ChoiceProps>()
 const emit = defineEmits(['click']);
-const slots = useSlots();
-const { polarisSummerEditions2023 } = useFeatures();
+
+const className = computed(() => classNames(
+  styles.Choice,
+  props.labelHidden && styles.labelHidden,
+  props.disabled && styles.disabled,
+  props.labelClassName,
+));
+const hasError = computed(() => props.error && typeof props.error !== 'boolean')
 
 const labelStyle = computed(() => {
   const { bleedBlockEnd, bleed, bleedBlockStart, bleedInlineStart, bleedInlineEnd, fill } = props;
@@ -70,22 +88,5 @@ const labelStyle = computed(() => {
   }
 });
 
-const labelMarkup = computed(() => {
-  const { labelHidden, disabled, labelClassName, id } = props;
-  return () => h('label', {
-    class: classNames(
-      styles.Choice,
-      labelHidden && styles.labelHidden,
-      disabled && styles.disabled,
-      labelClassName,
-    ),
-    htmlFor: id,
-    onClick: (e: any) => emit('click', e),
-    style: sanitizeCustomProperties(labelStyle.value),
-  }, [
-    h('span', { class: styles.Control }, slots.default?.()),
-    h('span', { class: styles.Label }, [h('span', {}, slots.label?.())]),
-  ])
-})
 
 </script>

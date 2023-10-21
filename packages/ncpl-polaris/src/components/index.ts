@@ -1,8 +1,6 @@
 export * from "./AppProvider";
 export * from "./Image";
 export * from "./Text";
-export * from "./LegacyStack";
-export * from './LegacyStack/Item'
 export * from "./Icon";
 export * from "./Spinner";
 export * from "./UnstyledLink";
@@ -11,14 +9,11 @@ export * from "./Link";
 export * from "./Banner";
 export * from "./Button";
 export * from "./Frame";
-export * from './HorizontalStack';
-export * from './HorizontalGrid';
 export * from './Navigation';
 export * from './Navigation/Section';
 export * from './Scrollable';
 export * from './Tooltip';
 export * from './Collapsible';
-export * from './LegacyCard';
 export * from './TextContainer';
 export * from './ButtonGroup';
 export * from './Box';
@@ -76,5 +71,30 @@ export * from './SkeletonBodyText'
 export * from './SkeletonDisplayText'
 export * from './SkeletonPage'
 export * from './SkeletonTabs'
-export * from './SkeletonThumbnail'
-export * from './Loading'
+export * from './SkeletonThumbnail';
+export * from './Loading';
+export * from './IndexFilters';
+export * from './Tabs';
+export * from './Filters';
+export * from './ChoiceList';
+export * from './Bleed';
+export * from './RadioButton';
+export * from './Transition';
+export * from './RangeSlider';
+export * from './InlineCode';
+export * from './InlineGrid';
+export * from './InlineStack';
+export * from './BlockStack';
+export * from './ShadowBevel';
+export * from './Card';
+
+// deprecated
+export * from './LegacyCard';
+export * from './LegacyCard/Section';
+// export * from './HorizontalStack';
+// export * from './HorizontalGrid';
+// export * from './LegacyFilters';
+// export * from './LegacyTabs';
+export * from "./LegacyStack";
+export * from './LegacyStack/Item'
+

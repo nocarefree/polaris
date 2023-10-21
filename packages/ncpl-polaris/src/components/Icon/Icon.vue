@@ -1,6 +1,6 @@
 <template>
     <span :class="className">
-        <Text as="span" visually-hidden :accessibility-label="accessibilityLabel"></Text>
+        <Text as="span" visually-hidden>{{ accessibilityLabel }}</Text>
         <div v-if="source === 'placeholder'" :class="styles.Placeholder"></div>
         <img v-if="typeof source === 'string'" :class="styles.Img" :src="`data:image/svg+xml;utf8,${source}`" alt=""
             aria-hidden="true" />
@@ -19,12 +19,11 @@ import styles from "./Icon.module.scss"
 const props = defineProps<IconProps>();
 
 const className = computed(() => {
-    const { color, backdrop } = props;
+    const { tone } = props;
     return classNames(
         styles.Icon,
-        color && styles[variationName("color", color)],
-        color && styles.applyColor,
-        backdrop && styles.hasBackdrop
+        tone && styles[variationName("tone", tone)],
+        tone && styles.applyColor,
     );
 });
 </script>

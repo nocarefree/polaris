@@ -6,7 +6,7 @@
         :accessibilityLabel="i18n.translate('Polaris.Banner.dismissButton')" />
     </div>
     <Box paddingInlineEnd="4">
-      <Icon :source="iconName" :color="icon.iconColor" />
+      <Icon :source="iconName" :tone="icon.iconColor" />
     </Box>
 
     <div :class="styles.ContentWrapper">

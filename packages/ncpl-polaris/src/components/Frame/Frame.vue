@@ -15,7 +15,7 @@
     </div>
     <TrapFocus v-if="$slots.navigation" :trapping="mobileNavShowing">
       <CSSTransition :in="showMobileNavigation" :node-ref="navigationNode" :classNames="navTransitionClasses"
-        :timeout="parseInt(motion['motion-duration-300'], 10)">
+        :timeout="parseInt(theme.motion['motion-duration-300'], 10)">
         <div id="AppFrameNav" ref="navigationNode" :class="navClassName" v-bind="mobileNavAttributes"
           @keydown.escape="e => $emit('update:showMobileNavigation', false)">
           <slot name="navigation"></slot>
@@ -56,13 +56,12 @@ import {
   onMounted,
   onUpdated
 } from "vue";
-import { useI18n, useMediaQuery, frameContext } from "../context"
-import { classNames, setRootProperty } from "@ncpl-polaris/utils"
-import type { AttrsType } from "@ncpl-polaris/components/types"
-import { dataPolarisTopBar, layer } from "@ncpl-polaris/components/shared"
-import { frameProps } from "./Frame"
-import CSSAnimation from "./CSSAnimation/CSSAnimation.vue"
-import { motion } from '@shopify/polaris-tokens';
+import { useI18n, useMediaQuery, frameContext, useTheme } from "../context";
+import { classNames, setRootProperty } from "@ncpl-polaris/utils";
+import type { AttrsType } from "@ncpl-polaris/components/types";
+import { dataPolarisTopBar, layer } from "@ncpl-polaris/components/shared";
+import { frameProps } from "./Frame";
+import CSSAnimation from "./CSSAnimation/CSSAnimation.vue";
 import { MobileCancelMajor } from "@ncpl/ncpl-icons";
 import Icon from "@ncpl-polaris/components/Icon";
 import TrapFocus from "@ncpl-polaris/components/TrapFocus";
@@ -72,8 +71,8 @@ import ContextualSaveBar from "./ContextualSaveBar/ContextualSaveBar.vue";
 import LoadingBar from "./Loading/Loading.vue";
 import ToastManager from "./ToastManager/ToastManager.vue";
 import styles from "./Frame.module.scss";
-import type { ToastMessage } from "./ToastManager/ToastManager"
-import { useEventListener } from '@vueuse/core'
+import type { ToastMessage } from "./ToastManager/ToastManager";
+import { useEventListener } from '@vueuse/core';
 
 defineOptions({
   name: "NpFrame",
@@ -83,8 +82,7 @@ const props = defineProps(frameProps);
 const slots = defineSlots();
 defineEmits(["update:showMobileNavigation"]);
 
-
-
+const theme = useTheme();
 const showContextualSaveBar = ref(false);
 const contextualSaveBarProps = ref<AttrsType>({})
 const skipFocused = ref(false);

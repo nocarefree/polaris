@@ -19,6 +19,8 @@ export interface PageHeaderPrimaryAction
 export interface PageHeaderProps extends PageHeaderTitleProps {
     /** Visually hide the title */
     titleHidden?: boolean;
+    /** Enables filtering action list items */
+    filterActions?: boolean;
     /** Primary page-level action */
     primaryAction?: PageHeaderPrimaryAction;
     /** Page-level pagination */

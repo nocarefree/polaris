@@ -1,5 +1,6 @@
 import type { Component } from "vue"
 import type { LabelledProps } from "../Labelled"
+import type { Error } from "../types"
 
 type Type =
     | 'text'

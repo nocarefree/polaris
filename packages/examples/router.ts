@@ -5,6 +5,7 @@ import Templates from "./pages/templates/Templates.vue"
 import TemplateDetails from "./pages/templates/TemplateDetails.vue"
 import Sites from "./pages/sites/Sites.vue"
 import SiteDetails from "./pages/sites/SiteDetails.vue"
+import Tabs from "./pages/Tabs.vue"
 
 
 const routes = [
@@ -14,6 +15,8 @@ const routes = [
 
     { path: '/sites', component: Sites },
     { path: '/sites/new', component: SiteDetails },
+
+    { path: '/tabs', component: Tabs },
 ]
 
 

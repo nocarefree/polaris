@@ -9,6 +9,9 @@
 import { onMounted, toRef } from 'vue';
 import { usePortalsManager, useId } from "../context"
 
+defineOptions({
+  name: 'NpPortal'
+})
 const props = defineProps<{ idPrefix?: string }>();
 const emit = defineEmits(['portalCreated']);
 const container = usePortalsManager();

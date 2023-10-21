@@ -3,9 +3,8 @@
     styles.Section,
     titleHidden && styles.titleHidden,
   )">
-    <Box as="section" :padding="flush ? '0' : polarisSummerEditions2023 ? '4' : '5'"
-      :padding-inline-end="titleHidden ? '0' : undefined"
-      :background="subdued ? (polarisSummerEditions2023 ? 'bg-secondary-experimental' : 'bg-subdued') : undefined">
+    <Box as="section" :padding="flush ? '0' : '400'" :padding-inline-end="titleHidden ? '0' : undefined"
+      :background="subdued ? 'bg-surface-tertiary' : undefined">
       <slot></slot>
     </Box>
   </div>
@@ -13,14 +12,15 @@
 <script setup lang="ts">
 import type { ModalSectionProps } from './Section'
 import styles from './Section.module.scss'
-import Box from '@ncpl-polaris/components/Box';
+import Box from '../../Box';
 import { classNames } from '@ncpl-polaris/utils';
-import { useFeatures } from '../../context';
 
 defineOptions({
   name: 'NpModalSection',
 })
-defineProps<ModalSectionProps>()
-
-const { polarisSummerEditions2023 } = useFeatures();
+withDefaults(defineProps<ModalSectionProps>(), {
+  flush: false,
+  subdued: false,
+  titleHidden: false,
+})
 </script>

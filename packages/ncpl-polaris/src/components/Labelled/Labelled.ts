@@ -7,7 +7,7 @@ export type LabelledProps = {
     /** A unique identifier for the label */
     id: LabelProps['id'];
     /** Text for the label */
-    label: string | Component;
+    label?: string | Component;
     helpText?: string | Component;
     /** Error to display beneath the label */
     error?: Error | boolean;

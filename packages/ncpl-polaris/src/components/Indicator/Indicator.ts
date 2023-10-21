@@ -1,1 +1,3 @@
-export type IndicatorProps = {}
+export type IndicatorProps = {
+    pulse?: boolean; 
+}

@@ -1,26 +1,27 @@
 <template>
-  <Box position="relative" :padding-block-start="{ xs: '4', md: polarisSummerEditions2023 ? '6' : '5' }"
-    :padding-block-end="{ xs: '4', md: polarisSummerEditions2023 ? '6' : '5' }"
-    :padding-inline-start="{ xs: '4', sm: '0' }" :padding-inline-end="{ xs: '4', sm: '0' }"
+  <Box position="relative" :padding-block-start="{ xs: '400', md: '600' }" :padding-block-end="{ xs: '400', md: '600' }"
+    :padding-inline-start="{ xs: '400', sm: '0' }" :padding-inline-end="{ xs: '400', sm: '0' }"
     :visually-hidden="titleHidden">
-    <component :is="contentRender"></component>
+    <div :class="headerClassNames">
+      <component :is="contentRender"></component>
+    </div>
   </Box>
 </template>
 <script setup lang="ts">
 import { h, computed, useSlots } from 'vue'
 import type { PageHeaderProps, PageHeaderPrimaryAction as PrimaryAction } from './Header'
 import Title from "./Title"
-import Box from '@ncpl-polaris/components/Box'
-import { buttonFrom } from '@ncpl-polaris/components/Button/utils'
-import HorizontalStack from '@ncpl-polaris/components/HorizontalStack'
-import ActionMenu from '@ncpl-polaris/components/ActionMenu'
-import Tooltip from '@ncpl-polaris/components/Tooltip'
-import Text from '@ncpl-polaris/components/Text'
-import Breadcrumbs from '@ncpl-polaris/components/Breadcrumbs'
-import Pagination from '@ncpl-polaris/components/Pagination'
+import Box from '../../Box'
+import { buttonFrom } from '../../Button/utils'
+import InlineStack from '../../InlineStack'
+import ActionMenu from '../../ActionMenu'
+import Tooltip from '../../Tooltip'
+import Text from '../../Text'
+import Breadcrumbs from '../../Breadcrumbs'
+import Pagination from '../../Pagination'
 import styles from './Header.module.scss'
 import { classNames } from "@ncpl-polaris/utils"
-import { useFeatures, useI18n, useMediaQuery } from '@ncpl-polaris/components/context'
+import { useI18n, useMediaQuery } from '../../context'
 
 const SHORT_TITLE = 20;
 const REALLY_SHORT_TITLE = 8;
@@ -37,67 +38,93 @@ const props = withDefaults(defineProps<PageHeaderProps>(), {
   compactTitle: false,
 })
 const slots = useSlots();
-const { polarisSummerEditions2023 } = useFeatures();
 const mediaQuery = useMediaQuery();
 const i18n = useI18n();
+
+const isSingleRow = computed(() => {
+  return props.primaryAction && props.pagination &&
+    ((Array.isArray(props.secondaryActions) && !props.secondaryActions.length) ||
+      slots.secondaryActions) &&
+    !props.actionGroups.length;
+})
+
+const breadcrumbMarkup = computed(() => props.backAction ? () =>
+  h('div', { class: styles.BreadcrumbWrapper }, [
+    h(Box, { maxWidth: "100%", paddingInlineEnd: '100', printHidden: true },
+      { default: () => h(Breadcrumbs, { backAction: props.backAction! }) }
+    )]
+  ) : null
+);
+
+const paginationMarkup = computed(() =>
+  props.pagination && !mediaQuery.isNavigationCollapsed ? () =>
+    h('div', { class: styles.PaginationWrapper }, [
+      h(Box, { printHidden: true }, { default: () => h(Pagination, { ...props.pagination }) })
+    ]) : null
+)
+
+const additionalNavigationMarkup = computed(() => slots.additionalNavigation ? () =>
+  h(InlineStack, { gap: "400", align: "end" }, [
+    h(Box, { printHidden: true }, { default: slots.additionalNavigation })
+  ]) : null
+)
+
+const actionMenuMarkup = computed(() => {
+  if (Array.isArray(props.secondaryActions) && props.secondaryActions.length > 0) {
+    return () => h(ActionMenu, {
+      actions: props.secondaryActions!,
+      groups: props.actionGroups,
+      rollup: mediaQuery.isNavigationCollapsed,
+      rollupActionsLabel: props.title ? i18n.value.translate('Polaris.Page.Header.rollupActionsLabel', { title: props.title }) : undefined,
+      onActionRollup: (e: any) => emit('actionRollup', e),
+    });
+  } else if (slots.secondaryActions) {
+    return slots.secondaryActions
+  }
+  return null
+})
+
+const additionalMetadataMarkup = computed(() => slots.additionalMetadata ? () =>
+  h('div', { class: styles.AdditionalMetaData }, [
+    h(Text, {
+      color: "subdued",
+      as: "span",
+      variant: 'bodySm',
+    }, { default: slots.additionalMetadata })
+  ]) : null
+);
+
+const pageTitleMarkup = computed(() =>
+  () => h('div', { className: styles.TitleWrapper }, [
+    h(Title, {
+      title: props.title,
+      subtitle: props.subtitle,
+      compactTitle: props.compactTitle
+    }, { titleMetadata: slots.titleMetadata })
+  ])
+)
+
+const primaryActionMarkup = computed(() => {
+  return props.primaryAction ? getPrimaryActionMarkup : null
+})
+
+const headerClassNames = computed(() => classNames(
+  isSingleRow.value && styles.isSingleRow,
+  (breadcrumbMarkup.value || paginationMarkup.value || additionalNavigationMarkup.value) && styles.hasNavigation,
+  actionMenuMarkup && styles.hasActionMenu,
+  mediaQuery.isNavigationCollapsed && styles.mobileView,
+  !props.backAction && styles.noBreadcrumbs,
+  props.title && props.title.length < LONG_TITLE && styles.mediumTitle,
+  props.title && props.title.length > LONG_TITLE && styles.longTitle,
+));
 
 
 
 const contentRender = computed(() => {
-  const { secondaryActions, title, actionGroups, primaryAction, subtitle, compactTitle, backAction, pagination } = props;
+  const { title } = props;
   const isNavigationCollapsed = mediaQuery.isNavigationCollapsed;
 
-  let actionMenuMarkup: any = null;
-  if (Array.isArray(secondaryActions) && secondaryActions.length > 0) {
-    actionMenuMarkup = () => h(ActionMenu, {
-      actions: secondaryActions,
-      groups: actionGroups,
-      rollup: isNavigationCollapsed,
-      rollupActionsLabel: title ? i18n.value.translate('Polaris.Page.Header.rollupActionsLabel', { title }) : undefined,
-      onActionRollup: (e: any) => emit('actionRollup', e),
-    })
-  } else if (slots.secondaryActions) {
-    actionMenuMarkup = slots.secondaryActions
-  }
 
-
-  let additionalMetadataMarkup = slots.additionalMetadata ?
-    () => h('div', { class: styles.AdditionalMetaData }, [
-      h(Text, {
-        color: "subdued",
-        as: "span",
-        variant: polarisSummerEditions2023 ? 'bodySm' : undefined,
-      }, { default: slots.additionalMetadata })
-    ]) : null
-
-  let additionalNavigationMarkup = slots.additionalNavigation ? () =>
-    h(HorizontalStack, { gap: "4", align: "end" }, [
-      h(Box, { printHidden: true }, { default: slots.additionalNavigation })
-    ]) : null;
-
-  let pageTitleMarkup = () =>
-    h('div', { className: styles.TitleWrapper }, [
-      h(Title, {
-        title: title,
-        subtitle: subtitle,
-        compactTitle: compactTitle
-      }, { titleMetadata: slots.titleMetadata })
-    ]);
-
-  let primaryActionMarkup = primaryAction ? getPrimaryActionMarkup : null;
-
-  let breadcrumbMarkup = backAction ? () =>
-    h('div', { class: styles.BreadcrumbWrapper }, [
-      h(Box, { maxWidth: "100%", paddingInlineEnd: polarisSummerEditions2023 ? '1' : '4', printHidden: true },
-        { default: () => h(Breadcrumbs, { backAction: backAction }) }
-      )]
-    ) : null;
-
-  let paginationMarkup =
-    pagination && !isNavigationCollapsed ? () =>
-      h('div', { class: styles.PaginationWrapper }, [
-        h(Box, { printHidden: true }, { default: () => h(Pagination, { ...pagination }) })
-      ]) : null;
   //    Header Layout
   // |----------------------------------------------------|
   // | slot1 | slot2 |                    | slot3 | slot4 |
@@ -109,53 +136,53 @@ const contentRender = computed(() => {
     mobileCompact: {
       slots: {
         slot1: null,
-        slot2: pageTitleMarkup,
-        slot3: actionMenuMarkup,
-        slot4: primaryActionMarkup,
-        slot5: additionalMetadataMarkup,
-        slot6: additionalNavigationMarkup,
+        slot2: pageTitleMarkup.value,
+        slot3: actionMenuMarkup.value,
+        slot4: primaryActionMarkup.value,
+        slot5: additionalMetadataMarkup.value,
+        slot6: additionalNavigationMarkup.value,
       },
       condition:
         isNavigationCollapsed &&
-        breadcrumbMarkup == null &&
+        breadcrumbMarkup.value == null &&
         title != null &&
         title.length <= REALLY_SHORT_TITLE,
     },
     mobileDefault: {
       slots: {
-        slot1: breadcrumbMarkup,
-        slot2: pageTitleMarkup,
-        slot3: actionMenuMarkup,
-        slot4: primaryActionMarkup,
-        slot5: additionalMetadataMarkup,
-        slot6: additionalNavigationMarkup,
+        slot1: breadcrumbMarkup.value,
+        slot2: pageTitleMarkup.value,
+        slot3: actionMenuMarkup.value,
+        slot4: primaryActionMarkup.value,
+        slot5: additionalMetadataMarkup.value,
+        slot6: additionalNavigationMarkup.value,
       },
       condition: isNavigationCollapsed,
     },
     desktopCompact: {
       slots: {
-        slot1: breadcrumbMarkup,
-        slot2: pageTitleMarkup,
-        slot3: actionMenuMarkup,
-        slot4: primaryActionMarkup,
-        slot5: additionalMetadataMarkup,
-        slot6: additionalNavigationMarkup,
+        slot1: breadcrumbMarkup.value,
+        slot2: pageTitleMarkup.value,
+        slot3: actionMenuMarkup.value,
+        slot4: primaryActionMarkup.value,
+        slot5: additionalMetadataMarkup.value,
+        slot6: additionalNavigationMarkup.value,
       },
       condition:
         !isNavigationCollapsed &&
-        paginationMarkup == null &&
-        actionMenuMarkup == null &&
+        paginationMarkup.value == null &&
+        actionMenuMarkup.value == null &&
         title != null &&
         title.length <= SHORT_TITLE,
     },
     desktopDefault: {
       slots: {
-        slot1: breadcrumbMarkup,
-        slot2: pageTitleMarkup,
-        slot3: () => [actionMenuMarkup?.(), primaryActionMarkup?.()],
-        slot4: paginationMarkup,
-        slot5: additionalMetadataMarkup,
-        slot6: additionalNavigationMarkup,
+        slot1: breadcrumbMarkup.value,
+        slot2: pageTitleMarkup.value,
+        slot3: () => [actionMenuMarkup.value?.(), primaryActionMarkup.value?.()],
+        slot4: paginationMarkup.value,
+        slot5: additionalMetadataMarkup.value,
+        slot6: additionalNavigationMarkup.value,
       },
       condition: !isNavigationCollapsed,
     },
@@ -164,20 +191,6 @@ const contentRender = computed(() => {
   const layout = Object.values(layouts).find((layout) => layout.condition) || layouts.desktopDefault;
   const { slot1, slot2, slot3, slot4, slot5, slot6 } = layout.slots;
 
-  const isSingleRow = primaryAction && pagination &&
-    ((Array.isArray(secondaryActions) && !secondaryActions.length) ||
-      slots.secondaryActions) &&
-    !actionGroups.length;
-
-  const headerClassNames = classNames(
-    isSingleRow && styles.isSingleRow,
-    (breadcrumbMarkup || paginationMarkup || additionalNavigationMarkup) && styles.hasNavigation,
-    actionMenuMarkup && styles.hasActionMenu,
-    isNavigationCollapsed && styles.mobileView,
-    !props.backAction && styles.noBreadcrumbs,
-    props.title && props.title.length < LONG_TITLE && styles.mediumTitle,
-    props.title && props.title.length > LONG_TITLE && styles.longTitle,
-  )
 
   let children: any = [];
   if ([slot1, slot2, slot3, slot4].some(notNull)) {
@@ -199,16 +212,14 @@ const contentRender = computed(() => {
     if ([slot5, slot6].some(notNull)) {
       children.push(
         h('div', { class: styles.Row }, [
-          h(HorizontalStack, { gap: "4" }, { default: slot5 }),
+          h(InlineStack, { gap: "400" }, { default: slot5 }),
           slot6 ? h('div', { class: styles.RightAlign }, [slot6()]) : undefined
         ])
       );
     }
-
-
   }
 
-  return () => h('div', { class: headerClassNames }, children);
+  return children;
 })
 
 const getPrimaryActionMarkup = () => {
@@ -218,9 +229,7 @@ const getPrimaryActionMarkup = () => {
     actionMarkup = () => {
       const { primary: isPrimary, helpText } = primaryAction;
       const primary = isPrimary === undefined ? true : isPrimary;
-      const button = buttonFrom(shouldShowIconOnly(Boolean(mediaQuery.isNavigationCollapsed), primaryAction), {
-        primary,
-      },);
+      const button = buttonFrom(shouldShowIconOnly(Boolean(mediaQuery.isNavigationCollapsed), primaryAction), { variant: primary ? 'primary' : undefined });
       return helpText ? h(Tooltip, { content: helpText }, { default: () => button }) : button
     }
   } else if (slots.primaryAction) {

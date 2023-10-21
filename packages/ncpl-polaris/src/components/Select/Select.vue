@@ -12,8 +12,8 @@
         <component :is="optionsMarkup"></component>
       </select>
       <div :class="styles.Content" aria-hidden :aria-disabled="disabled">
-        <Box v-if="labelInline" paddingInlineEnd="1">
-          <Text as="span" color="subdued" truncate>
+        <Box v-if="labelInline" padding-inline-end="1">
+          <Text as="span" tone="subdued" truncate>
             <component :is="() => $slots.label ? $slots.label() : [label]"></component>
           </Text>
         </Box>

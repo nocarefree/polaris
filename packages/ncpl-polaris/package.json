@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "@ncpl/ncpl-icons": "workspace:^",
-    "@shopify/polaris-tokens": "^7.5.2",
+    "@shopify/polaris-tokens": "^8.0.0",
     "@vueuse/core": "^10.3.0",
     "@vueuse/integrations": "^10.3.0",
     "sass": "^1.64.2",

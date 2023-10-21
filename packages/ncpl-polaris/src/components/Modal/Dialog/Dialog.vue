@@ -1,5 +1,5 @@
 <template>
-  <transition :css="false" v-bind="fadeUpClasses" :duration="parseInt(motion['motion-duration-200'], 10)">
+  <transition :css="false" v-bind="fadeUpClasses" :duration="parseInt(theme.motion['motion-duration-200'], 10)">
     <div v-if="Boolean(open)" :class="styles.Container" data-polaris-layer data-polaris-overlay ref="containerNode">
       <TrapFocus>
         <div role="dialog" aria-modal :aria-label="labelledBy" :aria-labelledby="labelledBy" tabindex="-1"
@@ -20,8 +20,8 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import TrapFocus from '@ncpl-polaris/components/TrapFocus';
-import { motion } from '@shopify/polaris-tokens';
+import TrapFocus from '../../TrapFocus';
+import { useTheme } from '../../context';
 import type { DialogProps } from './Dialog'
 import styles from './Dialog.module.scss'
 import { classNames } from '@ncpl-polaris/utils';
@@ -37,6 +37,7 @@ const emit = defineEmits(['closing'])
 defineProps<DialogProps>();
 
 const containerNode = ref();
+const theme = useTheme()
 
 
 const fadeUpClasses = computed(() => {

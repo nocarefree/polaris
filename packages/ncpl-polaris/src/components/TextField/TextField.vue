@@ -43,7 +43,7 @@
           <Text as="span" visually-hidden>
             {{ i18n.translate('Polaris.Common.clear') }}
           </Text>
-          <Icon :source="CircleCancelMinor" color="base" />
+          <Icon :source="CircleCancelMinor" tone="base" />
         </button>
         <Spinner v-if="isNumericType && step !== 0 && !disabled && !readOnly" @click="handleClickChild"
           @change="handleNumberChange" @mousedown="handleButtonPress" @mouseup="handleButtonRelease" ref="spinnerRef"

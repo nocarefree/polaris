@@ -1,49 +1,56 @@
 <template>
   <component :is="url? UnstyledLink:'button'" v-bind="attributes" @click="(e: any) => $emit('action', e)">
-    <WrapperComponent>
-      <HorizontalStack block-align="center" :gap="polarisSummerEditions2023 ? '1_5-experimental' : '4'" :wrap="!truncate">
+    <Box width="100%">
+      <InlineStack block-align="center" gap="150" :wrap="!truncate">
         <span v-if="prefix" :class="styles.Prefix">
           <component :is="prefix"></component>
         </span>
         <span v-else-if="icon" :class="styles.Prefix">
           <Icon :source="icon"></Icon>
         </span>
+        <span v-else-if="image" role="presentation" :class="styles.Prefix"
+          :style="{ backgroundImage: `url(${image}` }"></span>
         <span :class="styles.Text">
-          <contentComponet>
-            <span v-if="truncate">{{ content }}</span>
+          <ConditionalWrapper :condition="helpText">
+            <TruncateText v-if="truncate && content">{content}</TruncateText>
             <template v-else>{{ ellipsis ? `${content}…` : content }}</template>
-          </contentComponet>
+            <template #wrapper="{ children }">
+              <Box>
+                <component :is="children"></component>
+              </Box>
+              <Text as="span" variant="bodySm" :tone="active || disabled ? undefined : 'subdued'">
+                <component :is="()=>[helpText]"></component>
+              </Text>
+            </template>
+          </ConditionalWrapper>
         </span>
         <Box v-if="suffix">
           <span :class="styles.Suffix">
             <component :is="suffix"></component>
           </span>
         </Box>
-      </HorizontalStack>
-    </WrapperComponent>
+      </InlineStack>
+    </Box>
   </component>
 </template>
 <script setup lang="ts">
-import { computed, defineComponent, h } from "vue";
+import { computed } from "vue";
 import type { ActionListItemProps } from './Item'
-import UnstyledLink from "@ncpl-polaris/components/UnstyledLink";
-import HorizontalStack from "@ncpl-polaris/components/HorizontalStack";
-import Box from "@ncpl-polaris/components/Box";
-import Icon from "@ncpl-polaris/components/Icon";
-import Text from "@ncpl-polaris/components/Text";
+import UnstyledLink from "../../UnstyledLink";
+import InlineStack from "../../InlineStack";
+import Box from "../../Box";
+import Icon from "../../Icon";
+import Text from "../../Text";
+import ConditionalWrapper from "../../ConditionalWrapper";
 import styles from '../ActionList.module.scss';
-
-import { useFeatures } from '../../context';
 import { classNames } from '@ncpl-polaris/utils';
+
 
 
 defineOptions({
   name: 'NpItem',
 })
 const props = defineProps<ActionListItemProps>()
-
-
-const { polarisSummerEditions2023 } = useFeatures();
 
 const attributes = computed(() => {
   const { id, url, disabled, destructive, active, variant, accessibilityLabel, role } = props;
@@ -73,39 +80,6 @@ const attributes = computed(() => {
     _attrs.onMouseUp = (event: MouseEvent) => (event.currentTarget as HTMLButtonElement).blur();
   }
   return _attrs;
-})
-
-const WrapperComponent = defineComponent({
-  setup(_props, { slots }) {
-
-    return () => {
-      return polarisSummerEditions2023 ? h(Box, { width: '100%' }, slots) : slots.default?.();
-    }
-  }
-})
-
-const contentComponet = defineComponent({
-  setup(_props, { slots }) {
-    return () => {
-      let nodes: any[] = [];
-
-      if (props.helpText) {
-        nodes.push(h(Box, {}, slots));
-        nodes.push(
-          h(Text, {
-            as: "span",
-            variant: polarisSummerEditions2023 ? 'bodySm' : undefined,
-            color: polarisSummerEditions2023 && (props.active || props.disabled) ? undefined : 'subdued'
-          }, { default: () => props.helpText })
-        );
-        return nodes
-      } else {
-        return slots.default?.()
-      }
-
-      ;
-    }
-  }
 })
 
 </script>

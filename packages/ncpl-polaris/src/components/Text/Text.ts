@@ -28,8 +28,9 @@ type Alignment = "start" | "center" | "end" | "justify";
 
 type FontWeight = "regular" | "medium" | "semibold" | "bold";
 
-type Color = "success" | "critical" | "warning" | "subdued" | "text-inverse";
+type Tone = 'success' | 'critical' | 'caution' | 'subdued' | 'text-inverse';
 
+type TextDecorationLine = 'line-through';
 
 export type TextProps = {
   /** Adjust horizontal alignment of text */
@@ -38,8 +39,8 @@ export type TextProps = {
   as?: Element,
   /** Prevent text from overflowing */
   breakWord?: boolean,
-  /** Adjust color of text */
-  color?: Color,
+  /** Adjust tone of text */
+  tone?: Tone;
   /** Adjust weight of text */
   fontWeight?: FontWeight,
   /** Use a numeric font variant with monospace appearance */
@@ -50,4 +51,6 @@ export type TextProps = {
   variant?: Variant,
   /** Visually hide the text */
   visuallyHidden?: boolean,
+  /** Add a line-through to the text */
+  textDecorationLine?: TextDecorationLine;
 };

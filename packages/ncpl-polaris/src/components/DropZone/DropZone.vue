@@ -28,9 +28,9 @@ import type { DropZoneProps } from './DropZone'
 import Labelled from "../Labelled"
 import Text from "../Text"
 import Icon from "../Icon"
-import VerticalStack from "../VerticalStack"
+import BlockStack from "../BlockStack"
 import styles from './DropZone.module.scss'
-import { useI18n, useFeatures, useId } from "../context"
+import { useI18n, useId } from "../context"
 import { defaultAllowMultiple, createAllowMultipleKey, getDataTransferFiles, fileAccepted, type DropZoneEvent } from "./utils"
 import { capitalize } from "lodash"
 import { UploadMajor, CircleAlertMajor } from "@ncpl/ncpl-icons"
@@ -50,8 +50,6 @@ const props = withDefaults(defineProps<DropZoneProps>(), {
 })
 const emit = defineEmits(['click', 'drop', 'dropAccepted', 'dropRejected', 'dragOver', 'dragEnter', 'dragLeave', 'fileDialogClose'])
 
-
-const { polarisSummerEditions2023 } = useFeatures()
 const i18n = useI18n();
 const node = ref();
 const internalError = ref(false);
@@ -87,35 +85,24 @@ const dragOverlay = computed(() =>
   !internalError.value &&
   !props.error &&
   props.overlay &&
-  overlayMarkup(UploadMajor, 'interactive', overlayTextWithDefault.value)
+  overlayMarkup(UploadMajor,overlayTextWithDefault.value)
 );
 
 const dragErrorOverlay = computed(() =>
   dragging.value &&
   (internalError.value || props.error) &&
-  overlayMarkup(CircleAlertMajor, 'critical', errorOverlayTextWithDefault.value)
+  overlayMarkup(CircleAlertMajor,errorOverlayTextWithDefault.value)
 );
 
 
 function overlayMarkup(
   icon: Component,
-  color: 'critical' | 'interactive',
   text: string,
+  color?: 'critical'
 ) {
-  let iconColor: 'critical' | 'interactive' | undefined = color;
-  const summerEditions = {
-    critical: 'critical',
-    interactive: undefined,
-  };
-  if (polarisSummerEditions2023) {
-    iconColor = summerEditions[color] as
-      | 'critical'
-      | 'interactive'
-      | undefined;
-  }
   return h('div', { class: styles.Overlay }, [
-    h(VerticalStack, { gap: "2", inlineAlign: "center" }, [
-      size.value === 'small' ? h(Icon, { source: icon, color: iconColor }) : null,
+    h(BlockStack, { gap: "200", inlineAlign: "center" }, [
+      size.value === 'small' ? h(Icon, { source: icon, tone: color }) : null,
       (size.value === 'medium' || size.value === 'large') ? h(Text, { variant: "bodySm", as: "p", fontWeight: "bold" }, { default: () => text }) : null
     ])
   ]);

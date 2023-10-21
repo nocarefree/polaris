@@ -1,7 +1,7 @@
 type RowStatus = 'success' | 'subdued' | 'critical';
 
 export type IndexTableRowProps = {
-    id: string;
+    id: string | number;
     selected?: boolean;
     position: number;
     subdued?: boolean;

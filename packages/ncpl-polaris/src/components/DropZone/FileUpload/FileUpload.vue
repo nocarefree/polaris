@@ -5,7 +5,7 @@
     dropZone.size === 'large' && styles.large,
     dropZone.size === 'small' && styles.small,
   )">
-    <VerticalStack v-if="dropZone.size == 'large' || dropZone.size == 'medium'" inline-align="center" gap="2">
+    <BlockStack v-if="dropZone.size == 'large' || dropZone.size == 'medium'" inline-align="center" gap="200">
       <div :class="classNames(
         styles.Action,
         dropZone.disabled && styles.disabled,
@@ -13,26 +13,21 @@
       <Text v-if="actionHint" variant="bodySm" as="p" color="subdued">
         {{ actionHint }}
       </Text>
-    </VerticalStack>
-
-    <template v-else>
-      <div v-if="polarisSummerEditions2023" :class="classNames(styles.UploadIcon, dropZone.disabled && styles.disabled)">
-        <Icon :source="UploadMajor" />
-      </div>
-      <img v-else width="20" :src="uploadArrow" alt="" />
-    </template>
+    </BlockStack>
+    <div v-else :class="classNames(styles.UploadIcon, dropZone.disabled && styles.disabled)">
+      <Icon :source="UploadMajor" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
-import VerticalStack from "../../VerticalStack"
+import BlockStack from "../../BlockStack"
 import Text from "../../Text"
 import Icon from "../../Icon"
 import styles from "./FileUpload.module.scss"
 import { classNames } from '@ncpl-polaris/utils';
-import { useI18n, useFeatures, dropZoneContext } from "../../context"
+import { useI18n, dropZoneContext } from "../../context"
 import { UploadMajor } from "@ncpl/ncpl-icons"
-import uploadArrow from "../images/upload-arrow.svg";
 import { createAllowMultipleKey } from "../utils"
 import { capitalize } from "lodash"
 
@@ -44,7 +39,6 @@ const props = defineProps<{
 
 
 const i18n = useI18n();
-const { polarisSummerEditions2023 } = useFeatures();
 const dropZone = dropZoneContext.inject()
 
 

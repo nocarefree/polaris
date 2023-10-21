@@ -2,18 +2,16 @@
   <div :class="styles.AnnotatedSection">
     <div :class="styles.AnnotationWrapper">
       <div :class="styles.Annotation">
-        <TextContainer :spacing="polarisSummerEditions2023 ? 'tight' : undefined">
+        <TextContainer spacing="tight">
           <Text :id="id" variant="headingMd" as="h2">
-            <template v-if="title">{{ title }}</template>
-            <slot v-else name="title"></slot>
+            {{ title }}<slot name="title"></slot>
           </Text>
 
-          <Box v-if="$slots.description || description" color="text-subdued">
+          <Box v-if="$slots.description || description" color="text-secondary">
             <template v-if="description">
-              <Text v-if="polarisSummerEditions2023" as="p" variant="bodyMd">
+              <Text as="p" variant="bodyMd">
                 {{ description }}
               </Text>
-              <p v-else>{{ description }}</p>
             </template>
             <slot v-else name="description"></slot>
           </Box>
@@ -27,18 +25,15 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { LayoutAnnotatedSectionProps } from './AnnotatedSection'
 import styles from '../Layout.module.scss'
 import TextContainer from "@ncpl-polaris/components/TextContainer"
 import Text from "@ncpl-polaris/components/Text"
 import Box from "@ncpl-polaris/components/Box"
-import { useFeatures } from "../../context"
 
 defineOptions({
   name: 'NpLayoutAnnotatedSection',
 })
 defineProps<LayoutAnnotatedSectionProps>()
 
-const { polarisSummerEditions2023 } = useFeatures();
 </script>

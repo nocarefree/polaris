@@ -1,32 +1,47 @@
 <template>
-  <WrapComponent>
-    <Box v-if="section.title" v-bind="titleAttributes">
-      <Text as="p" :variant="polarisSummerEditions2023 ? 'headingSm' : 'headingXs'">
-        {{ section.title }}
-      </Text>
-    </Box>
-    <Box v-bind="contentBoxAttributes">
-      <WrapContentComponent>
-        <Box v-for="({ content, onAction, ...item }, index) in section.items" as="li" :key="`${content}-${index}`" :role="actionRole === 'menuitem'
-          ? 'presentation' : undefined">
-          <WrapActionComponent>
+  <ConditionalWrapper :condition="hasMultipleSections">
+    <template #wrapper="{ children }">
+      <Box as="li" role="presentation" border-color="border-secondary"
+        :border-block-start-width="!isFirst ? '025' : undefined"
+        :padding-block-start="!section.title ? '150' : undefined">
+        <component :is="children"></component>
+      </Box>
+    </template>
+    <template v-if="section.title">
+      <Box v-if="(typeof section.title == 'string')" padding-block-start="300" padding-block-end="100"
+        padding-inline-start="300" padding-inline-end="300">
+        <Text as="p" variant="headingSm">
+          {{ section.title }}
+        </Text>
+      </Box>
+      <Box padding="200" padding-inline-end="150">
+        <component :is="section.title"></component>
+      </Box>
+    </template>
+    <Box as="div" padding="150" :padding-block-start="hasMultipleSections ? '0' : undefined"
+      :tabIndex="!hasMultipleSections ? -1 : undefined">
+      <BlockStack ap="100" as="ul" :role="sectionRole">
+        <Box v-for="( { content, onAction, ...item }, index ) in  section.items " as="li" :key="`${content}-${index}`"
+          :role="actionRole === 'menuitem'
+            ? 'presentation' : undefined
+            ">
+          <InlineStack :wrap="false">
             <Item :content="content" role="actionRole" v-bind="item" @action="handleAction(onAction)"></Item>
-          </WrapActionComponent>
+          </InlineStack>
         </Box>
-      </WrapContentComponent>
+      </BlockStack>
     </Box>
-  </WrapComponent>
+  </ConditionalWrapper>
 </template>
 <script setup lang="ts">
-import { computed, defineComponent, h } from 'vue'
+import { computed } from 'vue'
 import type { ActionListSectionProps } from './Section'
-import { useFeatures } from "../../context";
-import Box from "@ncpl-polaris/components/Box";
-import VerticalStack from "@ncpl-polaris/components/VerticalStack/VerticalStack.vue"
-import HorizontalStack from "@ncpl-polaris/components/HorizontalStack/HorizontalStack.vue"
+import ConditionalWrapper from "../../ConditionalWrapper"
+import Box from "../../Box";
+import BlockStack from "../../BlockStack"
+import InlineStack from "../../InlineStack"
 import Item from "../Item/Item.vue"
-import type { BoxProps } from "@ncpl-polaris/components/Box";
-import Text from "@ncpl-polaris/components/Text/Text.vue";
+import Text from "../../Text/Text.vue";
 
 defineOptions({
   name: 'NpSection',
@@ -34,7 +49,6 @@ defineOptions({
 
 const props = defineProps<ActionListSectionProps>()
 const emit = defineEmits(['actionAnyItem'])
-const { polarisSummerEditions2023 } = useFeatures();
 
 
 const sectionRole = computed(() => {
@@ -48,65 +62,9 @@ const sectionRole = computed(() => {
   }
 })
 
-const contentBoxAttributes = computed(() => {
-  return {
-    as: polarisSummerEditions2023 ? 'div' : 'ul',
-    padding: polarisSummerEditions2023 ? '1_5-experimental' : '2',
-    ...(props.hasMultipleSections && { paddingBlockStart: '0' }),
-    ...(sectionRole.value && !polarisSummerEditions2023 && { role: sectionRole.value }),
-    tabIndex: !props.hasMultipleSections ? -1 : undefined,
-  } as BoxProps
-})
-
-const boxAttributes = computed(() => {
-  return {
-    as: "li",
-    role: "presentation",
-    borderColor: "border-subdued",
-    borderBlockStartWidth: props.isFirst ? undefined : 1,
-    paddingBlockStart: props.section.title ? undefined : (polarisSummerEditions2023 ? '1_5-experimental' : '2'),
-  } as BoxProps;
-})
-
-const titleAttributes = computed(() => {
-  return {
-    ...(polarisSummerEditions2023
-      ? {
-        paddingBlockStart: '3',
-        paddingBlockEnd: '1',
-        paddingInlineStart: '3',
-        paddingInlineEnd: '3',
-      }
-      : {
-        paddingBlockStart: '4',
-        paddingInlineStart: '4',
-        paddingBlockEnd: '2',
-        paddingInlineEnd: '4',
-      })
-  } as BoxProps;
-})
-
-const WrapComponent = defineComponent({
-  setup(_props, { slots }) {
-    return () => props.hasMultipleSections ? h(Box, { ...boxAttributes.value }, slots) : slots.default?.();
-  }
-})
-
-const WrapContentComponent = defineComponent({
-  setup(_props, { slots }) {
-    return () => polarisSummerEditions2023 ? h(VerticalStack, { gap: "1", as: 'ul', role: sectionRole.value }, slots) : slots.default?.();
-  }
-})
-
-const WrapActionComponent = defineComponent({
-  setup(_props, { slots }) {
-    return () => polarisSummerEditions2023 ? h(HorizontalStack, { wrap: false }, slots) : slots.default?.();
-  }
-})
-
 const handleAction = (action?: () => void) => {
   emit('actionAnyItem');
-  return action
+  action && action()
 }
 
 

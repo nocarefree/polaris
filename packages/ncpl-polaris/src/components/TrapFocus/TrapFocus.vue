@@ -1,6 +1,6 @@
 <template>
-  <Focus :disabled="disableFocus" :root="TrapFocusWrapper">
-    <div ref="TrapFocusWrapper">
+  <Focus :disabled="disableFocus" :root="trapFocusWrapper">
+    <div ref="trapFocusWrapper">
       <slot></slot>
     </div>
   </Focus>
@@ -15,19 +15,22 @@ import { findFirstKeyboardFocusableNode, findLastKeyboardFocusableNode, focusFir
 import { Key } from "../types";
 
 
+defineOptions({
+  name: 'NpTrapFocus'
+})
 
 const props = withDefaults(defineProps<TrapFocusProps>(), { trapping: true })
 
 const trapping = toRef(props, 'trapping');
 
 const { canSafelyFocus } = useFocusManager(trapping)
-const TrapFocusWrapper = ref();
+const trapFocusWrapper = ref();
 
 const disableFocus = computed(() => {
   return canSafelyFocus.value &&
     !(
-      TrapFocusWrapper.value &&
-      TrapFocusWrapper.value.contains(document.activeElement)
+      trapFocusWrapper.value &&
+      trapFocusWrapper.value.contains(document.activeElement)
     )
     ? !props.trapping
     : true;
@@ -40,30 +43,27 @@ const handleTab = (event: KeyboardEvent) => {
     return;
   }
 
-  if (props.trapping === false || !TrapFocusWrapper.value) {
+  if (props.trapping === false || !trapFocusWrapper.value) {
     return;
   }
 
   const firstFocusableNode = findFirstKeyboardFocusableNode(
-    TrapFocusWrapper.value,
+    trapFocusWrapper.value,
   );
   const lastFocusableNode = findLastKeyboardFocusableNode(
-    TrapFocusWrapper.value,
+    trapFocusWrapper.value,
   );
 
   if (event.target === lastFocusableNode && !event.shiftKey) {
     event.preventDefault();
-    focusFirstKeyboardFocusableNode(TrapFocusWrapper.value);
+    focusFirstKeyboardFocusableNode(trapFocusWrapper.value);
   }
 
   if (event.target === firstFocusableNode && event.shiftKey) {
     event.preventDefault();
-    focusLastKeyboardFocusableNode(TrapFocusWrapper.value);
+    focusLastKeyboardFocusableNode(trapFocusWrapper.value);
   }
 };
 
-const cleanup = useEventListener(document, 'keydown', handleTab)
-
-
-onBeforeUnmount(() => cleanup())
+useEventListener(document, 'keydown', handleTab)
 </script>

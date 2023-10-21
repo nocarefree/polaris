@@ -1,5 +1,5 @@
 <template>
-  <transition :css="false" :duration="parseInt(motion['motion-duration-100'], 10)"
+  <transition :css="false" :duration="parseInt(theme.motion['motion-duration-100'], 10)"
     @before-enter="transitionStatus === TransitionStatus.Entered"
     @after-enter="transitionStatus = TransitionStatus.Entered"
     @before-leave="transitionStatus = TransitionStatus.Entering"
@@ -47,7 +47,7 @@ import { useEventListener } from '@vueuse/core';
 import styles from '../Popover.module.scss'
 import Pane from "../Pane/Pane.vue";
 import PositionedOverlay from "@ncpl-polaris/components/PositionedOverlay/PositionedOverlay.vue"
-import { motion } from '@shopify/polaris-tokens';
+import { useTheme } from '../../context';
 
 
 enum TransitionStatus {
@@ -64,6 +64,7 @@ defineOptions({
 const emit = defineEmits(['close', 'update:active']);
 const props = defineProps<PopoverOverlayProps>()
 
+const theme = useTheme();
 const overlayRef = ref<HTMLElement>();
 const contentNode = ref<HTMLDivElement>();
 

@@ -16,8 +16,9 @@
       <Icon :source="SearchMinor" />
     </span>
 
-    <button type="button" ref="buttonField" :aria-label="i18n.translate('Polaris.TopBar.SearchField.clearButtonLabel')"
-      :class="styles.Clear" @click="handleClear">
+    <button v-if="modelValue !== ''" type="button" ref="buttonField"
+      :aria-label="i18n.translate('Polaris.TopBar.SearchField.clearButtonLabel')" :class="styles.Clear"
+      @click="handleClear">
       <Icon :source="CircleCancelMinor" />
     </button>
     <div :class="classNames(styles.Backdrop, showFocusBorder && styles.BackdropShowFocusBorder)" />

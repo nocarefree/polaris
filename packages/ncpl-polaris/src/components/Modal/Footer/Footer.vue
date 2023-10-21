@@ -1,40 +1,26 @@
 <template>
-  <HorizontalStack gap="4" block-align="center">
-    <Box :border-color="polarisSummerEditions2023 ? 'border' : 'border-subdued'" border-block-start-width="1"
-      :minHeight="polarisSummerEditions2023 ? undefined : 'var(--p-space-16)'" padding="4"
-      :padding-inline-start="polarisSummerEditions2023 ? undefined : '5'"
-      :padding-inline-end="polarisSummerEditions2023 ? undefined : '5'" width="100%">
-      <HorizontalStack gap="4" block-align="center" align="space-between">
+  <InlineStack gap="400" block-align="center">
+    <Box border-color="border" border-block-start-width="025" padding="400" width="100%">
+      <InlineStack gap="400" block-align="center" align="space-between">
         <Box>
           <slot></slot>
         </Box>
-        <HorizontalStack v-if="primaryAction || (secondaryActions && secondaryActions.length > 0)" gap="2">
-          <template v-if="secondaryActions && secondaryActions.length > 0">
-            <Button v-for="{ content, onAction, ...action } in secondaryActions" @click="onAction" v-bind="action">
-              {{ content }}
-            </Button>
-          </template>
-          <template v-if="primaryAction">
-            <Button v-for="{ content, onAction, ...action } in [primaryAction]" @click="onAction" v-bind="action" primary>
-              {{ content }}
-            </Button>
-          </template>
-        </HorizontalStack>
-      </HorizontalStack>
+        <InlineStack v-if="primaryAction || secondaryActions" gap="200">
+          <component v-if="secondaryActions" :is="buttonsFrom(secondaryActions, {variant: 'primary'})" />
+          <component v-if="primaryAction" :is="buttonsFrom(primaryAction)" />
+        </InlineStack>
+      </InlineStack>
     </Box>
-  </HorizontalStack>
+  </InlineStack>
 </template>
 <script setup lang="ts">
 import type { FooterProps } from './Footer'
-import HorizontalStack from '@ncpl-polaris/components/HorizontalStack';
-import Box from '@ncpl-polaris/components/Box';
-import Button from '@ncpl-polaris/components/Button';
-import { useFeatures } from '../../context';
+import InlineStack from '../../InlineStack';
+import Box from '../../Box';
+import { buttonsFrom } from "../../Button/utils"
 
 defineOptions({
   name: 'NpModalFooter',
 })
 defineProps<FooterProps>()
-
-const { polarisSummerEditions2023 } = useFeatures();
 </script>

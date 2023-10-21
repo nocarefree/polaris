@@ -38,10 +38,10 @@ const _style = computed(() => {
     borderInlineStartWidth,
     borderInlineEndWidth,
     borderRadius,
-    borderRadiusEndStart,
-    borderRadiusEndEnd,
-    borderRadiusStartStart,
-    borderRadiusStartEnd,
+    borderEndStartRadius,
+    borderEndEndRadius,
+    borderStartStartRadius,
+    borderStartEndRadius,
     color,
     minHeight,
     minWidth,
@@ -100,17 +100,17 @@ const _style = computed(() => {
     '--pc-box-border-radius': borderRadius
       ? `var(--p-border-radius-${borderRadius})`
       : undefined,
-    '--pc-box-border-radius-end-start': borderRadiusEndStart
-      ? `var(--p-border-radius-${borderRadiusEndStart})`
+    '--pc-box-border-end-start-radius': borderEndStartRadius
+      ? `var(--p-border-radius-${borderEndStartRadius})`
       : undefined,
-    '--pc-box-border-radius-end-end': borderRadiusEndEnd
-      ? `var(--p-border-radius-${borderRadiusEndEnd})`
+    '--pc-box-border-end-end-radius': borderEndEndRadius
+      ? `var(--p-border-radius-${borderEndEndRadius})`
       : undefined,
-    '--pc-box-border-radius-start-start': borderRadiusStartStart
-      ? `var(--p-border-radius-${borderRadiusStartStart})`
+    '--pc-box-border-start-start-radius': borderStartStartRadius
+      ? `var(--p-border-radius-${borderStartStartRadius})`
       : undefined,
-    '--pc-box-border-radius-start-end': borderRadiusStartEnd
-      ? `var(--p-border-radius-${borderRadiusStartEnd})`
+    '--pc-box-border-start-end-radius': borderStartEndRadius
+      ? `var(--p-border-radius-${borderStartEndRadius})`
       : undefined,
     '--pc-box-border-width': borderWidth
       ? `var(--p-border-width-${borderWidth})`

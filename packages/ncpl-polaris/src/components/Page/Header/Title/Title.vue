@@ -12,14 +12,13 @@
     styles.SubTitle,
     compactTitle && styles.SubtitleCompact,
   )">
-    <Text as="p" :variant="polarisSummerEditions2023 ? 'bodySm' : undefined">
+    <Text as="p" variant="bodySm">
       {{ subtitle }}
     </Text>
   </div>
 </template>
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useFeatures } from "../../../context"
 import { classNames } from "@ncpl-polaris/utils"
 import Text from "@ncpl-polaris/components/Text"
 import type { PageHeaderTitleProps } from './Title'
@@ -29,8 +28,6 @@ defineOptions({
   name: 'NpPageHeaderTitle',
 })
 const props = defineProps<PageHeaderTitleProps>()
-
-const { polarisSummerEditions2023 } = useFeatures();
 
 const className = computed(() => {
   return classNames(

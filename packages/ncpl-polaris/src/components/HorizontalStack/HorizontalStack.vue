@@ -8,7 +8,7 @@ import { computed } from "vue";
 import type { HorizontalStackProps } from "./HorizontalStack";
 import { getResponsiveProps } from "@ncpl-polaris/utils";
 import styles from "./HorizontalStack.module.scss";
-import type { AttrsType } from "@ncpl-polaris/components/types"
+import type { AttrsType } from "../types"
 
 defineOptions({
   name: "NpHorizontalStack",

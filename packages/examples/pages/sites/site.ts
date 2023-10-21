@@ -5,6 +5,14 @@ interface ModelType {
     [key: string]: any;
 };
 
+interface ResourceModel {
+    total: number;
+    data: any[];
+    current_page: number;
+    per_page: number;
+    last_page: number;
+}
+
 export function useModel(model: ModelType) {
     const oldModel = JSON.parse(JSON.stringify(model));
     const data = shallowReactive(model)
@@ -26,12 +34,25 @@ export function useModel(model: ModelType) {
     }
 }
 
+interface SiteModel {
+    id: number;
+    name: number;
+    path: number;
+    note: string;
+    date: string;
+    status?: string;
+}
+
+interface SiteResourceModel extends Omit<ResourceModel, 'data'> {
+    data: SiteModel[];
+}
+
 export const useStore = defineStore('sites', {
     // 推荐使用 完整类型推断的箭头函数
     state: () => {
         return {
-            loading: false,
-            resources: null
+            loading: false as Boolean,
+            resources: null as (SiteResourceModel | null),
         }
     },
     actions: {

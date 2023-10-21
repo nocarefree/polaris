@@ -1,4 +1,5 @@
 import type { Key } from '../types';
+import type { Component } from "vue"
 
 interface AccessibilityLabels {
     previous: string;
@@ -26,4 +27,8 @@ export interface PaginationProps {
     accessibilityLabel?: string;
     /** Accessible labels for the buttons and UnstyledLinks */
     accessibilityLabels?: AccessibilityLabels;
+    /** Text to provide more context in between the arrow buttons */
+    label?: string | Component;
+    /** Layout structure of the component */
+    type?: 'page' | 'table';
 }

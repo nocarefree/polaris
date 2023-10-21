@@ -13,7 +13,7 @@ import { computed, Fragment, h, ref } from 'vue'
 import type { SecondaryNavigationProps } from './SecondaryNavigation'
 import Collapsible from '@ncpl-polaris/components/Collapsible'
 import styles from '../../Navigation.module.scss'
-import { useId, useNavigation, useFeatures } from '@ncpl-polaris/components/context'
+import { useId, useNavigation } from '@ncpl-polaris/components/context'
 import { classNames } from '@ncpl-polaris/utils'
 import { isEqual } from "lodash";
 
@@ -22,7 +22,6 @@ defineOptions({
 })
 const props = defineProps<SecondaryNavigationProps>()
 const navigation = useNavigation();
-const { polarisSummerEditions2023 } = useFeatures();
 const hoveredItem = ref<any>();
 
 const _id = useId();
@@ -46,13 +45,10 @@ const nodes = computed(() => {
       item.onClick?.();
     };
 
-    const shouldShowVerticalLine = polarisSummerEditions2023
-      ? index < matchedItemPosition
-      : false;
+    const shouldShowVerticalLine = index < matchedItemPosition;
 
     return h(props.itemComponent, {
-      key: label, ...rest, label, showVerticalLine: shouldShowVerticalLine, showVerticalHoverPointer:
-        polarisSummerEditions2023 && index === hoveredItemPosition,
+      key: label, ...rest, label, showVerticalLine: shouldShowVerticalLine, showVerticalHoverPointer: index === hoveredItemPosition,
       onMouseenter: item.disabled ? undefined : () => hoveredItem.value = item,
       onMouseleave: item.disabled ? undefined : () => hoveredItem.value = null,
       matches: isEqual(item, longestMatch),

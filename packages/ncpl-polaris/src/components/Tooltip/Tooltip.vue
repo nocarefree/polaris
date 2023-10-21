@@ -1,13 +1,24 @@
 <template>
-  <component :is="wrapper" @mouseleave="handleMouseLeave" @mouseenter="handleMouseEnterFix"
+  <component :is="activatorWrapper" @mouseleave="handleMouseLeave" @mouseenter="handleMouseEnterFix"
     @mousedown="persistOnClick ? togglePersisting() : undefined" ref="activatorContainer" @keyup="handleKeyUp"
     :class="wrapperClassNames">
     <slot></slot>
     <Portal id-prefix="tooltip">
-      <TooltipOverlay v-bind="overlayProps">
+      <TooltipOverlay
+        :id="id"
+        :preferred-position="preferredPosition"
+        :activator="activatorNode"
+        :active="_active"
+        :accessibility-label="accessibilityLabel"
+        :prevent-interaction="dismissOnMouseOut"
+        :width="width"
+        :padding="padding"
+        :border-radius="borderRadius"
+        :z-index-override="zIndexOverride"
+        :instant="!shouldAnimate"
+      >
         <slot v-if="$slots.content" name="content"></slot>
-        <template v-else-if="typeof content == 'string'">{{ content }}</template>
-        <component v-else :is="content"></component>
+        <component v-else :is="()=>[content]"></component>
       </TooltipOverlay>
     </Portal>
   </component>
@@ -16,7 +27,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import type { TooltipProps } from './Tooltip'
-import { useFeatures, useId } from '../context';
+import { useId } from '../context';
 import Portal from "@ncpl-polaris/components/Portal";
 import TooltipOverlay from "./TooltipOverlay/TooltipOverlay.vue";
 import styles from './Tooltip.module.scss';
@@ -24,10 +35,18 @@ import { classNames } from "@ncpl-polaris/utils";
 import { findFirstFocusableNode } from "@ncpl-polaris/utils/focus"
 import { useEventListener } from "@vueuse/core";
 
+const HOVER_OUT_TIMEOUT = 150;
+
 defineOptions({
   name: 'NpTooltip',
 })
-const props = defineProps<TooltipProps>()
+const props = withDefaults(defineProps<TooltipProps>(), {
+  preferredPosition: 'above',
+  activatorWrapper: 'span',
+  width: 'default',
+  padding: 'default',
+  borderRadius: '200',
+})
 const emit = defineEmits(['open', 'close']);
 
 const id = useId();
@@ -37,12 +56,6 @@ const _active = ref<boolean>(Boolean(props.active));
 const mouseEntered = ref<boolean>(false)
 const hoverDelayTimeout = ref<any>()
 const persist = ref(Boolean(props.active) && Boolean(props.persistOnClick))
-
-const { polarisSummerEditions2023 } = useFeatures();
-
-const wrapper = computed(() => {
-  return props.activatorWrapper || 'span';
-})
 
 const activatorNode = computed(() => {
   return activatorContainer.value?.firstElementChild;
@@ -66,28 +79,10 @@ const firstFocusable = computed(() => {
   return undefined;
 })
 
-const overlayProps = computed(() => {
-  const { preferredPosition = 'above', accessibilityLabel, dismissOnMouseOut, width = 'default', padding = 'default', borderRadius, zIndexOverride } = props;
-  return {
-    id: id.value,
-    preferredPosition,
-    accessibilityLabel,
-    activator: activatorNode.value,
-    active: _active.value,
-    preventInteraction: dismissOnMouseOut,
-    width,
-    padding,
-    borderRadius: borderRadius || (polarisSummerEditions2023 ? '2' : '1'),
-    zIndexOverride,
-    instant: shouldAnimate.value,
-    onmouseleave: handleMouseLeave,
-    onmouseover: handleMouseEnterFix
-  }
-})
 
 const wrapperClassNames = computed(() => {
   return classNames(
-    wrapper.value == 'div' && styles.TooltipContainer,
+    props.activatorWrapper == 'div' && styles.TooltipContainer,
     props.hasUnderline && styles.HasUnderline,
   );
 })
@@ -113,6 +108,9 @@ const handleBlur = () => {
 const handleClose = () => {
   //shouldAnimate.value = false;
   emit('close');
+  a = setTimeout(() => {
+    //removePresence('tooltip');
+  }, HOVER_OUT_TIMEOUT);
 }
 const handleMouseLeave = () => {
   if (hoverDelayTimeout.value) {
@@ -183,5 +181,6 @@ useEventListener(firstFocusable, 'blur', () => {
     togglePersisting();
   }
 })
+
 
 </script>

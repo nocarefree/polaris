@@ -5,9 +5,7 @@
       <div :class="styles.ActivatorWrapper">
         <button type="button" :class="classNames(
           styles.Activator,
-          userMenu &&
-          polarisSummerEditions2023 &&
-          styles['Activator-userMenu'],
+          userMenu && styles['Activator-userMenu'],
         )" @click="() => { $emit('open'), $emit('update:open', true) }" :aria-label="accessibilityLabel">
           <slot name="activatorContent"></slot>
         </button>
@@ -37,14 +35,10 @@ import Message from "./Message"
 import { classNames } from "@ncpl-polaris/utils"
 import styles from './Menu.module.scss'
 
-import { useFeatures } from '../../context'
-
 defineOptions({
   name: 'NpMenu',
 })
 defineProps<MenuProps>();
 
 defineEmits(['open', 'close', 'update:open'])
-
-const { polarisSummerEditions2023 } = useFeatures();
 </script>

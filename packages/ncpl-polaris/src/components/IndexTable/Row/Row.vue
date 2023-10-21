@@ -1,6 +1,6 @@
 <template>
-  <component :as="indexTableContext.condensed ? 'li' : 'tr'" :key="id" :className="rowClassName"
-    @mouseenter="hovered = true" @mouseLeave="hovered = false" @click="handleRowClick" :ref="setTrRef">
+  <component :is="Boolean(indexTableContext.condensed) ? 'li' : 'tr'" :key="id" :className="rowClassName"
+    @mouseenter="hovered = true" @mouseleave="hovered = false" @click="handleRowClick" :ref="setTrRef">
 
     <Checkbox v-if="indexTableContext.selectable" />
     <slot></slot>
@@ -12,6 +12,7 @@ import type { IndexTableRowProps } from './Row'
 import styles from '../IndexTable.module.scss'
 import { classNames, variationName } from "@ncpl-polaris/utils"
 import { SelectionType } from "../IndexTable"
+import Checkbox from "../Checkbox"
 import { useIndexTable, indexTableRowContext } from "../../context"
 
 defineOptions({
@@ -49,7 +50,7 @@ const setTrRef = (node: HTMLTableRowElement & HTMLLIElement) => {
   }
 }
 
-const handleInteraction = (event: MouseEvent) => {
+const handleInteraction = (event: MouseEvent | MouseEvent) => {
   event.stopPropagation();
 
   if (('key' in event && event.key !== ' ')) return;
@@ -93,13 +94,12 @@ const handleRowClick = (event: MouseEvent) => {
   }
 };
 
-const indexTableRowValue = computed(() => {
-  return {
-    itemId: props.id,
-    selected: props.selected,
-    disabled: props.disabled,
-    position: props.position,
-  }
-})
-indexTableRowContext.provide(indexTableRowValue)
+
+const indexTableRowProvide = computed(() => ({
+  itemId: props.id,
+  selected: props.selected,
+  disabled: props.disabled,
+  position: props.position,
+}))
+indexTableRowContext.provide(indexTableRowProvide)
 </script>

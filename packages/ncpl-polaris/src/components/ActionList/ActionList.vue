@@ -1,7 +1,7 @@
 <template>
   <Box ref="actionListRef" :as="hasMultipleSections ? 'ul' : 'div'"
     :role="hasMultipleSections && actionRole === 'menuitem' ? 'menu' : undefined"
-    :tabIndex="hasMultipleSections && actionRole === 'menuitem' ? -1 : undefined">
+    :tab-index="hasMultipleSections && actionRole === 'menuitem' ? -1 : undefined">
     <Section v-for="(section, index) in finalSections" :key="getKey(index, section)" :section="section"
       :has-multiple-sections="hasMultipleSections" :action-role="actionRole" @actionAnyItem="() => $emit('actionAnyItem')"
       :is-first="index === 0">

@@ -1,14 +1,14 @@
 <template>
   <div :class="classNames(styles.Toast, error && styles.error)">
     <div v-if="error" :class="styles.LeadingIcon">
-      <NpIcon :source="AlertMinor" color="base" />
+      <Icon :source="AlertMinor" tone="base" />
     </div>
-    <NpHorizontalStack block-align="center">
-      <NpText as="span" font-weight="medium">{{ content }}</NpText>
-    </NpHorizontalStack>
+    <InlineStack block-align="center">
+      <Text as="span" font-weight="medium">{{ content }}</Text>
+    </InlineStack>
     <div v-if="action">
-      <NpButton plain monochrome size="slim" @click="action?.onAction">
-        {{ action.content }}</NpButton
+      <Button plain monochrome size="slim" @click="action?.onAction">
+        {{ action.content }}</Button
       >
     </div>
     <button
@@ -16,18 +16,16 @@
       :class="styles.toastProps"
       @click="(e) => $emit('dismiss',e)"
     >
-      <NpIcon :source="CancelSmallMinor" />
+      <Icon :source="CancelSmallMinor" />
     </button>
   </div>
 </template>
 <script setup lang="ts">
   import { onMounted } from "vue";
-  import {
-    NpIcon,
-    NpHorizontalStack,
-    NpButton,
-    NpText,
-  } from "@ncpl-polaris/components";
+  import InlineStack from "../../InlineStack"
+  import Icon from "../../Icon"
+  import Button from "../../Button"
+  import Text from "../../Text"
   import { toastProps, DEFAULT_TOAST_DURATION, DEFAULT_TOAST_DURATION_WITH_ACTION } from "./Toast";
   import { AlertMinor, CancelSmallMinor } from "@ncpl/ncpl-icons";
   import { classNames } from "@ncpl-polaris/utils"
