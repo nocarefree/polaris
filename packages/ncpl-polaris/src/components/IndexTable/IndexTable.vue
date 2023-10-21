@@ -88,7 +88,6 @@ interface TableHeadingRect {
   offsetLeft: number;
 }
 
-
 defineOptions({
   name: 'NpIndexTable',
 })
