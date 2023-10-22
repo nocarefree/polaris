@@ -1,10 +1,6 @@
 <template>
-  <UnstyledButton :class="classNames(
-    styles.DirectionButton,
-    active && styles['DirectionButton-active'],
-  )" @click="e => $emit('click', value)">
-    <Icon :source="direction === 'asc' ? ArrowUpMinor : ArrowDownMinor"
-      tone="base" />
+  <UnstyledButton :class="classNames(styles.DirectionButton, active && styles['DirectionButton-active'])">
+    <Icon :source="direction === 'asc' ? ArrowUpMinor : ArrowDownMinor" tone="base" />
     <span :class="styles.Label">
       <slot></slot>
     </span>
@@ -22,7 +18,6 @@ type DirectionButtonDirection = 'asc' | 'desc';
 defineProps<{
   active: boolean;
   direction: DirectionButtonDirection;
-  value: string;
 }>()
 
 </script>

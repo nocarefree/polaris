@@ -1,12 +1,12 @@
 <template>
   <li>
-    <Bleed :margin-block-end="helpText ? { xs: '1', md: '0' } : { xs: '0' }">
+    <Bleed :margin-block-end="helpText ? { xs: '100', md: '0' } : { xs: '0' }">
       <component :is="allowMultiple ? Checkbox : RadioButton" :name="name" :value="value" :id="id" :label="label"
         :disabled="disabled" :fill="{ xs: true, sm: false }" :checked="isSelected" :help-text="helpText"
         @change="$emit('change')" :aria-described-by="error && describedByError ? errorTextID(name) : null" />
       <div v-if="renderedChildren" :class="styles.ChoiceChildren">
-        <Box :padding-block-start="{ xs: '4', md: '0' }">
-          <component :is="renderedChildren"></component>
+        <Box :padding-block-start="{ xs: '400', md: '0' }">
+          <slot></slot>
         </Box>
       </div>
     </Bleed>
@@ -25,6 +25,8 @@ import Bleed from "../Bleed"
 defineOptions({
   name: 'NpChoiceList',
 })
+
+defineEmits(['change'])
 
 interface ChoiceListItemProps extends ChoiceListItem { isSelected: boolean; name: string; error?: Boolean; allowMultiple?: Boolean }
 

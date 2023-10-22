@@ -4,36 +4,22 @@
     <template #activator>
       <Tooltip :content="i18n.translate('Polaris.IndexFilters.SortButton.tooltip')" preferred-position="above"
         :hover-delay="400">
-        <Button
-        size="slim"
-        :icon="SortMinor"
-        @click="active = !active"
-        :disabled="disabled"
-        :accessibility-label="i18n.translate('Polaris.IndexFilters.SortButton.ariaLabel')"
-        />
+        <Button size="slim" :icon="SortMinor" @click="active = !active" :disabled="disabled"
+          :accessibility-label="i18n.translate('Polaris.IndexFilters.SortButton.ariaLabel')" />
       </Tooltip>
     </template>
-    <Box min-width="148px" 
-      padding-inline-start="300"
-      padding-inline-end="300"
-      padding-block-start="200"
-      padding-block-end="200"
-      border-block-end-width="025"
-      border-color="border-subdued">
+    <Box min-width="148px" padding-inline-start="300" padding-inline-end="300" padding-block-start="200"
+      padding-block-end="200" border-block-end-width="025" border-color="border-subdued">
       <ChoiceList :title="i18n.translate('Polaris.IndexFilters.SortButton.title')" :choices="choiceListChoices"
         :selected="selected" @change="handleChangeChoiceList" />
     </Box>
-    <Box 
-      padding-inline-start="150"
-      padding-inline-end="150"
-      padding-block-start="200"
-      padding-block-end="200">
-      <DirectionButton direction="asc" :active="selected[1] === SortButtonDirection.Asc" @click="handleChangeDirection"
-        :value="selectedChoices?.[0]?.value">
+    <Box padding-inline-start="150" padding-inline-end="150" padding-block-start="200" padding-block-end="200">
+      <DirectionButton direction="asc" :active="selected[1] === SortButtonDirection.Asc"
+        @click="handleChangeDirection(selectedChoices?.[0]?.value)" :value="selectedChoices?.[0]?.value">
         {{ selectedChoices?.[0]?.directionLabel }}
       </DirectionButton>
-      <DirectionButton direction="desc" :active="selected[1] === SortButtonDirection.Desc" @click="handleChangeDirection"
-        :value="selectedChoices?.[1]?.value">
+      <DirectionButton direction="desc" :active="selected[1] === SortButtonDirection.Desc"
+        @click="handleChangeDirection(selectedChoices?.[0]?.value)" :value="selectedChoices?.[1]?.value">
         {{ selectedChoices?.[1]?.directionLabel }}
       </DirectionButton>
     </Box>
@@ -100,10 +86,10 @@ const handleChangeChoiceList = (sel: string[]) => {
   emit('change', sel)
 }
 
-const handleChangeDirection = (sel: string[]) => {
-  const [, direction] = sel[0].split(' ');
+const handleChangeDirection = (sel: string) => {
+  const [, direction] = sel.split(' ');
   emit('changeDirection', direction);
-  emit('change', sel)
+  emit('change', [sel])
 }
 
 </script>

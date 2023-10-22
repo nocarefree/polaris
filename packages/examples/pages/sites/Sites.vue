@@ -103,7 +103,7 @@ const sortOptions = [
     { label: 'Total', value: 'total desc', directionLabel: 'Descending' },
 ];
 const mode = ref('DEFAULT');
-const sortSelected = ['order asc']
+const sortSelected = ref(['order asc'])
 const queryValue = '';
 const selected = ref(0)
 const accountStatus = ref([])
