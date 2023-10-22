@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="type == 'table'" :aria-label="navLabel" :ref="node" :className="classNames(styles.Pagination, styles.table)">
+  <nav v-if="type == 'table'" :aria-label="navLabel" :ref="node" :class="classNames(styles.Pagination, styles.table)">
     <Box background="bg-surface-secondary" padding-bloc-start="150" padding-block-end="150" padding-inline-start="300"
       padding-inline-end="200">
       <InlineStack :align="labelComponent ? 'space-between' : 'end'" block-align="center">

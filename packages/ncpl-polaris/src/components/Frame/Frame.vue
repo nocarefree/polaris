@@ -14,7 +14,7 @@
       <slot name="topBar"></slot>
     </div>
     <TrapFocus v-if="$slots.navigation" :trapping="mobileNavShowing">
-      <CSSTransition :in="showMobileNavigation" :node-ref="navigationNode" :classNames="navTransitionClasses"
+      <CSSTransition :in="showMobileNavigation" :node-ref="navigationNode" :class="navTransitionClasses"
         :timeout="parseInt(theme.motion['motion-duration-300'], 10)">
         <div id="AppFrameNav" ref="navigationNode" :class="navClassName" v-bind="mobileNavAttributes"
           @keydown.escape="e => $emit('update:showMobileNavigation', false)">

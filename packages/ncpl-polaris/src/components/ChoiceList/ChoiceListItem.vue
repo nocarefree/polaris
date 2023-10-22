@@ -4,7 +4,7 @@
       <component :is="allowMultiple ? Checkbox : RadioButton" :name="name" :value="value" :id="id" :label="label"
         :disabled="disabled" :fill="{ xs: true, sm: false }" :checked="isSelected" :help-text="helpText"
         @change="$emit('change')" :aria-described-by="error && describedByError ? errorTextID(name) : null" />
-      <div v-if="renderedChildren" :className="styles.ChoiceChildren">
+      <div v-if="renderedChildren" :class="styles.ChoiceChildren">
         <Box :padding-block-start="{ xs: '4', md: '0' }">
           <component :is="renderedChildren"></component>
         </Box>
