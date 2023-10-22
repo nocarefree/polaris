@@ -1,5 +1,5 @@
 <template>
-  <ConditionalWrapper :is="helpText || hasError">
+  <ConditionalWrapper :condition="Boolean(helpText || hasError)">
     <template #wrapper="{ children }">
       <div>
         <component :is="children"></component>
@@ -15,12 +15,11 @@
         </div>
       </div>
     </template>
-    <label :className="className" :htmlFor="id" @click="e => $emit('click', e)"
-      :style="sanitizeCustomProperties(labelStyle)">
-      <span :className="styles.Control">
+    <label :class="className" :htmlFor="id" @click="e => $emit('click', e)" :style="sanitizeCustomProperties(labelStyle)">
+      <span :class="styles.Control">
         <slot></slot>
       </span>
-      <span :className="styles.Label">
+      <span :class="styles.Label">
         <span>{{ label }}</span>
       </span>
     </label>

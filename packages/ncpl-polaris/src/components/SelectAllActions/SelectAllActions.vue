@@ -1,6 +1,6 @@
 <template>
   <transition>
-    <div :className="wrapperClasses">
+    <div :class="wrapperClasses">
       <CheckableButton v-bind="checkableButtonProps" @toggleAll="$emit('toggleAll')" />
       <div v-if="paginatedSelectAllAction" :class="styles.PaginatedSelectAll">
         <UnstyledButton paginated-select-all-action :class="styles.AllAction" @click="paginatedSelectAllAction.onAction"

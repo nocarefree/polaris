@@ -53,24 +53,27 @@
       <MyTransition :timeout="TRANSITION_DURATION">
         <template #default="{ state }">
           <div v-if="mode === IndexFiltersMode.Filtering" ref="filteringRef">
-            <Filters :model-value="modelValue" :placeholder="placeholder"
-              @update:modelValue="value => $emit('update:modelValue', value)"
-              @queryClear="value => $emit('queryClear', value)" @queryFocus="handleQueryFocus"
-              @queryBlur="handleQueryBlur" @addFilterClick="e => $emit('addFilterClick', e)" :filters="filters"
-              :applied-filters="appliedFilters" @clearAll="$emit('clearAll')" :disable-filters="disabled"
+            <Filters :model-value="modelValue" 
+              :placeholder="placeholder" :disable-filters="disabled"
               :hide-filters="hideFilters" :hide-query-field="hideQueryField"
               :disable-query-field="disabled || disableQueryField" :loading="loading || isActionLoading"
               :focused="filtersFocused" :mounted-state="mdDown ? undefined : state" borderless-query-field
+              :filters="filters" :applied-filters="appliedFilters"
+              @update:modelValue="value => $emit('update:modelValue', value)"
+              @queryClear="value => $emit('queryClear', value)" @queryFocus="handleQueryFocus"
+              @queryBlur="handleQueryBlur" @addFilterClick="e => $emit('addFilterClick', e)" @clearAll="$emit('clearAll')"
               @closeOnChildOverlayClick="closeOnChildOverlayClick">
-              <InlineStack gap="200" align="start" block-align="center">
-                <div :style="{ ...defaultStyle, ...transitionStyles[state] }">
-                  <UpdateButtons :primary-action="enhancedPrimaryAction" :cancel-action="enhancedCancelAction"
-                    :view-names="viewNames" :disabled="disabled" />
-                </div>
-                <SortButton v-if="sortOptions?.length" :choices="sortOptions" :selected="sortSelected!"
-                  @change="handleChangeSortButton" @changeKey="e => $emit('sortKeyChange', e)"
-                  @changeDirection="e => $emit('sortDirectionChange', e)" :disabled="disabled" />
-              </InlineStack>
+              <div :class="styles.ButtonWrap">
+                <InlineStack gap="200" align="start" block-align="center">
+                  <div :style="{ ...defaultStyle, ...transitionStyles[state] }">
+                    <UpdateButtons :primary-action="enhancedPrimaryAction" :cancel-action="enhancedCancelAction"
+                      :view-names="viewNames" :disabled="disabled" />
+                  </div>
+                  <SortButton v-if="sortOptions?.length" :choices="sortOptions" :selected="sortSelected!"
+                    @change="handleChangeSortButton" @changeKey="e => $emit('sortKeyChange', e)"
+                    @changeDirection="e => $emit('sortDirectionChange', e)" :disabled="disabled" />
+                </InlineStack>
+              </div>
             </Filters>
           </div>
         </template>
@@ -79,7 +82,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { type IndexFiltersProps, IndexFiltersMode } from './IndexFilters';
 import { classNames } from "@ncpl-polaris/utils";
 import { useIsSticky } from "./useIsSticky";
@@ -166,21 +169,21 @@ const onExecutedCancelAction = () => {
   emit('update:mode', IndexFiltersMode.Default);
 }
 
-const enhancedPrimaryAction = () => {
+const enhancedPrimaryAction = computed(() => {
   return props.primaryAction
     ? {
       ...props.primaryAction,
       onAction: useExecutedCallback(props.primaryAction.onAction),
     }
     : undefined;
-}
+});
 
-const enhancedCancelAction = () => {
+const enhancedCancelAction = computed(() => {
   return {
     ...props.cancelAction,
     onAction: onExecutedCancelAction,
   };
-}
+})
 
 const handleQueryFocus = () => {
   filtersFocused.value = true;
@@ -215,4 +218,13 @@ useEventListener(window, 'keydown', (event) => {
     event.preventDefault();
   }
 });
+
+
+watch(() => props.mode, () => {
+  if (props.mode === IndexFiltersMode.Filtering) {
+    filtersFocused.value = true;
+  } else {
+    filtersFocused.value = false;
+  }
+}, { flush: 'post', immediate: true })
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <component :is="Boolean(indexTableContext.condensed) ? 'li' : 'tr'" :key="id" :className="rowClassName"
+  <component :is="Boolean(indexTableContext.condensed) ? 'li' : 'tr'" :key="id" :class="rowClassName"
     @mouseenter="hovered = true" @mouseleave="hovered = false" @click="handleRowClick" :ref="setTrRef">
 
     <Checkbox v-if="indexTableContext.selectable" />

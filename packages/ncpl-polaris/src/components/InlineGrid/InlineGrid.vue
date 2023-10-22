@@ -7,12 +7,17 @@
 import { computed } from 'vue'
 import type { InlineGridProps } from './InlineGrid'
 import styles from './InlineGrid.module.scss'
-import { sanitizeCustomProperties } from "@ncpl-polaris/utils/css"
+import { sanitizeCustomProperties, getResponsiveValue, getResponsiveProps } from "@ncpl-polaris/utils/css"
+import type { ResponsiveValue, ResponsiveProp } from '@ncpl-polaris/utils/css';
+
+type ColumnsAlias = 'oneThird' | 'oneHalf' | 'twoThirds';
+type ColumnsType = number | string | ColumnsAlias[];
+type Columns = ResponsiveProp<ColumnsType>;
 
 defineOptions({
   name: 'NpInlineGrid',
 })
-defineProps<InlineGridProps>()
+const props = defineProps<InlineGridProps>()
 
 const style = computed(() => ({
   ...getResponsiveValue(

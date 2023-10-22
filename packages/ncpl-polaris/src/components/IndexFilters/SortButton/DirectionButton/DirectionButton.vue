@@ -1,5 +1,5 @@
 <template>
-  <UnstyledButton :className="classNames(
+  <UnstyledButton :class="classNames(
     styles.DirectionButton,
     active && styles['DirectionButton-active'],
   )" @click="e => $emit('click', value)">

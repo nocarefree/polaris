@@ -7,7 +7,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { LayoutProps } from './Layout'
 import styles from './Layout.module.scss'
 import Section from "./Section"

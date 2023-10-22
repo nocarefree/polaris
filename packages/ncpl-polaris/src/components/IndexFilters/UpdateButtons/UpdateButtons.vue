@@ -1,43 +1,50 @@
 <template>
-  <Button v-if="!primaryAction" variant="tertiary" size="micro" @click="cancelAction.onAction" :disabled="disabled">
-    {{ i18n.translate('Polaris.IndexFilters.UpdateButtons.cancel') }}
-  </Button>
-  <InlineStack v-else align="start" blockAlign="center" gap="100">
-    <Button v-if="!primaryAction" variant="tertiary" size="micro" @click="cancelAction.onAction" :disabled="disabled">
-      {{ i18n.translate('Polaris.IndexFilters.UpdateButtons.cancel') }}
-    </Button>
-    <Modal v-if="primaryAction.type === 'save-as'" v-model:open="savedViewModalOpen"
-      :title="i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.title')" :primary-action="{
-        onAction: handlePrimaryAction,
-        content: i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.save'),
-        disabled: Boolean(isPrimaryActionDisabled)
-      }" :secondary-actions="[{
+  <ConditionalWrapper :condition="Boolean(primaryAction)">
+    <template #wrapper="{ children }">
+      <InlineStack align="start" blockAlign="center" gap="100">
+        <component :is="children"></component>
+
+
+        <ConditionalWrapper :condition="primaryAction?.type === 'save-as'">
+          <template #wrapper="{ children }">
+            <Modal v-if="primaryAction?.type === 'save-as'" v-model:open="savedViewModalOpen"
+              :title="i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.title')" :primary-action="{
+                onAction: handlePrimaryAction,
+                content: i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.save'),
+                disabled: Boolean(isPrimaryActionDisabled)
+              }" :secondary-actions="[{
   onAction: () => { savedViewModalOpen = false; },
   content: i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.cancel'),
 }]">
-      <template #activator>
-        <InlineStack>
+              <template #activator>
+                <InlineStack>
+                  <component :is="children"></component>
+                </InlineStack>
+              </template>
+              <ModalSection>
+                <Form @submit="handlePrimaryAction">
+                  <FormLayout>
+                    <div ref="container">
+                      <TextField :label="i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.label',)"
+                        v-model="savedViewName" auto-complete="off" :max-length="MAX_VIEW_NAME_LENGTH"
+                        show-character-count
+                        :error="hasSameNameError ? i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.sameName', { name: savedViewName }) : undefined" />
+                    </div>
+                  </FormLayout>
+                </Form>
+              </ModalSection>
+            </Modal>
+          </template>
           <Button size="micro" @click="handleClickSaveButton" :disabled="primaryAction?.disabled || disabled">
             {{ buttonText }}
           </Button>
-        </InlineStack>
-      </template>
-      <ModalSection>
-        <Form @submit="handlePrimaryAction">
-          <FormLayout>
-            <div ref="container">
-              <TextField :label="i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.label',)"
-                v-model="savedViewName" auto-complete="off" :max-length="MAX_VIEW_NAME_LENGTH" show-character-count
-                :error="hasSameNameError ? i18n.translate('Polaris.IndexFilters.UpdateButtons.modal.sameName', { name: savedViewName }) : undefined" />
-            </div>
-          </FormLayout>
-        </Form>
-      </ModalSection>
-    </Modal>
-    <Button v-else size="micro" @click="handleClickSaveButton" :disabled="primaryAction?.disabled || disabled">
-      {{ buttonText }}
+        </ConditionalWrapper>
+      </InlineStack>
+    </template>
+    <Button variant="tertiary" size="micro" @click="cancelAction.onAction" :disabled="disabled">
+      {{ i18n.translate('Polaris.IndexFilters.UpdateButtons.cancel') }}
     </Button>
-  </InlineStack>
+  </ConditionalWrapper>
 </template>
 <script setup lang="ts">
 import { ref, computed, watchEffect } from 'vue';
@@ -49,9 +56,11 @@ import InlineStack from "../../InlineStack";
 import Form from "../../Form";
 import FormLayout from "../../FormLayout";
 import TextField from "../../TextField";
+import ConditionalWrapper from '../../ConditionalWrapper';
 import { useI18n } from '../../context';
 import { useIsTouchDevice } from "@ncpl-polaris/utils";
 import { focusFirstFocusableNode } from "@ncpl-polaris/utils/focus"
+
 
 const MAX_VIEW_NAME_LENGTH = 40;
 

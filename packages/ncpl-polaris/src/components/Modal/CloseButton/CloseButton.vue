@@ -12,6 +12,5 @@ defineOptions({
   name: 'NpModalCloseButton',
 })
 defineProps<CloseButtonProps>()
-
 const i18n = useI18n();
 </script>

@@ -42,9 +42,11 @@ import { useI18n } from "../context";
 
 const DEFAULT_SIZE = "medium";
 
+
 const props = withDefaults(defineProps<ButtonProps>(), {
   size: DEFAULT_SIZE,
 })
+
 const slots = useSlots();
 const i18n = useI18n();
 
@@ -84,13 +86,13 @@ const className = computed(() => {
     variant === 'monochromePlain' && styles.plain,
     tone === 'critical' && styles.critical,
     tone === 'success' && styles.success,
-    isDisabled && styles.disabled,
+    isDisabled.value && styles.disabled,
     loading && styles.loading,
     pressed && !disabled && !url && styles.pressed,
     size && size !== DEFAULT_SIZE && styles[variationName('size', size)],
     textAlign && styles[variationName('textAlign', textAlign)],
     fullWidth && styles.fullWidth,
-    icon && slots.default == null && styles.iconOnly,
+    (icon || slots.icon) && slots.default == null && styles.iconOnly,
     removeUnderline && styles.removeUnderline,
   )
 });

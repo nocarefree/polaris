@@ -196,7 +196,6 @@ const handleMeasurement = (measurements: TabMeasurements) => {
     containerWidth,
   );
 
-  console.log(visibleTabs, hiddenTabs)
   state.visibleTabs = visibleTabs;
   state.hiddenTabs = hiddenTabs;
   state.disclosureWidth = disclosureWidth;

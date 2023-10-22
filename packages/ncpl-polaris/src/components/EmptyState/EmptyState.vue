@@ -5,7 +5,7 @@
         { source: image, descriptor: '568w' },
         { source: largeImage, descriptor: '1136w' },
       ]" sizes="(max-width: 568px) 60vw" />
-      <Image v-else :className="imageContainedClass" role="presentation" alt="" :source="image" />
+      <Image v-else :class="imageContainedClass" role="presentation" alt="" :source="image" />
       <Box v-if="secondaryActionMarkup || primaryActionMarkup || $slots.footer || $slots.default || $slots.heading"
         :max-width="fullWidth ? '100%' : '400px'">
         <BlockStack inline-align="center">

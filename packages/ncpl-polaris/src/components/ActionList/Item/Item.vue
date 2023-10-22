@@ -11,8 +11,8 @@
         <span v-else-if="image" role="presentation" :class="styles.Prefix"
           :style="{ backgroundImage: `url(${image}` }"></span>
         <span :class="styles.Text">
-          <ConditionalWrapper :condition="helpText">
-            <TruncateText v-if="truncate && content">{content}</TruncateText>
+          <ConditionalWrapper :condition="Boolean(helpText)">
+            <TruncateText v-if="truncate && content" :content="content"></TruncateText>
             <template v-else>{{ ellipsis ? `${content}…` : content }}</template>
             <template #wrapper="{ children }">
               <Box>
@@ -38,6 +38,7 @@ import { computed } from "vue";
 import type { ActionListItemProps } from './Item'
 import UnstyledLink from "../../UnstyledLink";
 import InlineStack from "../../InlineStack";
+import TruncateText from "./TruncateText.vue"
 import Box from "../../Box";
 import Icon from "../../Icon";
 import Text from "../../Text";

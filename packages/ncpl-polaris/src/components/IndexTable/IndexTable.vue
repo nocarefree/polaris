@@ -368,8 +368,9 @@ const resizeTableHeadings = debounce(() => {
     return;
   }
 
-  const boundingRect =
-    scrollableContainerElement.value.getBoundingClientRect();
+  console.log(scrollableContainerElement.value)
+
+  const boundingRect = scrollableContainerElement.value.getBoundingClientRect();
   tablePosition.value = {
     top: boundingRect.top,
     left: boundingRect.left,

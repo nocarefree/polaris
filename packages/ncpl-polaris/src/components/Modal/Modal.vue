@@ -33,6 +33,7 @@
     </Dialog>
     <Backdrop v-if="open" @closing="setClosing" @click="onClose" />
   </Portal>
+  <slot name="activator"></slot>
 </template>
 <script setup lang="ts">
 import { ref, computed } from 'vue'

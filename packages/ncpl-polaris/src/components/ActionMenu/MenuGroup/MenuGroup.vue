@@ -7,7 +7,7 @@
       </SecondaryAction>
     </template>
     <ActionList :items="actions" :sections="sections" @actionAnyItem="handleClose" />
-    <div v-if="$slots.details" :className="styles.Details">
+    <div v-if="$slots.details" :class="styles.Details">
       <slot name="details"></slot>
     </div>
   </Popover>

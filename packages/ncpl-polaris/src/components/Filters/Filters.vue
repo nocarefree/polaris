@@ -32,14 +32,12 @@
       <div :class="classNames(styles.FiltersInner)">
         <div :class="classNames(styles.FiltersStickyArea)">
           <component :is="pinnedFiltersMarkup" />
-          <div v-if="shouldShowAddButton" :class="classNames(
-            styles.AddFilterActivator,
-            hasOneOrMorePinnedFilters && styles.AddFilterActivatorMultiple,
-          )">
+          <div v-if="shouldShowAddButton"
+            :class="classNames(styles.AddFilterActivator, hasOneOrMorePinnedFilters && styles.AddFilterActivatorMultiple)">
             <Popover :active="popoverActive && !disabled" @close="popoverActive = !popoverActive">
-              <template name="activator">
+              <template #activator>
                 <div>
-                  <UnstyledButton type="button" :className="styles.AddFilter" @click="handleAddFilterClick"
+                  <UnstyledButton type="button" :class="styles.AddFilter" @click="handleAddFilterClick"
                     :aria-label="i18n.translate('Polaris.Filters.addFilter')"
                     :disabled="disabled || (unsectionedFilters.length === 0 && sectionedFilters.length === 0) || disableFilters">
                     <Text :variant="labelVariant" as="span">
@@ -52,7 +50,7 @@
               <ActionList actionRole="menuitem" :items="unsectionedFilters" :sections="sectionedFilters" />
             </Popover>
           </div>
-          <div v-if="appliedFilters?.length || localPinnedFilters.length" :className="classNames(
+          <div v-if="appliedFilters?.length || localPinnedFilters.length" :class="classNames(
             styles.ClearAll,
             hasOneOrMorePinnedFilters &&
             shouldShowAddButton &&

@@ -16,7 +16,7 @@
                     <NpRangeSlider label="Opacity percentage" v-model="rangValue" output />
                 </NpLegacyCard>
                 <NpLegacyCard v-if="store.resources.data.length > 0">
-                    <NpIndexFilters :sort-options="sortOptions" query-placeholder="Searching in all"
+                    <NpIndexFilters :sort-options="sortOptions" placeholder="Searching in all"
                         :primary-action="primaryAction" :filters="filters"
                         :cancel-action="{ onAction: () => { }, disabled: false, loading: false }" :tabs="tabs"
                         can-create-new-view @createNewView="() => { }" @clearAll="() => { }" v-model:selected="selected"
@@ -102,7 +102,7 @@ const sortOptions = [
     { label: 'Total', value: 'total asc', directionLabel: 'Ascending' },
     { label: 'Total', value: 'total desc', directionLabel: 'Descending' },
 ];
-const mode = 'DEFAULT';
+const mode = ref('DEFAULT');
 const sortSelected = ['order asc']
 const queryValue = '';
 const selected = ref(0)

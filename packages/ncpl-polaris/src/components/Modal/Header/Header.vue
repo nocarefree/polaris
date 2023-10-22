@@ -1,7 +1,7 @@
 <template>
   <Box v-if="titleHidden || !$slots.default" position="absolute" :inset-inline-end="headerPaddingInline"
     :inset-block-start="headerPaddingBlock" z-index="1">
-    <CloseButton @click="onClose" />
+    <CloseButton @click="$emit('close')" />
   </Box>
   <Box padding-block-start="400" padding-block-end="400" :padding-inline-start="headerPaddingInline"
     :padding-inline-end="headerPaddingInline" border-block-end-width="025" border-color="border"
@@ -12,7 +12,7 @@
           <slot></slot>
         </Text>
       </InlineStack>
-      <CloseButton :pressed="closing" @click="onClose" />
+      <CloseButton :pressed="closing" @click="$emit('close')" />
     </InlineGrid>
   </Box>
 </template>

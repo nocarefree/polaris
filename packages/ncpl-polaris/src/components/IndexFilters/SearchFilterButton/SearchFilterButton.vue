@@ -1,8 +1,14 @@
 <template>
   <Tooltip preferred-position="above" :hover-delay="400">
     <div :style="style">
-      <Button size="slim" @click="e => $emit('click')" :disabled="disabled" :icon="iconSource"
-        :accessibility-label="label" />
+      <Button size="slim" @click="e => $emit('click')" :disabled="disabled" :accessibility-label="label">
+        <template #icon>
+          <InlineStack gap="0">
+            <Icon v-if="!hideQueryField" :source="SearchMinor" tone="base" />
+            <Icon v-if="!hideFilters" :source="FilterMinor" tone="base" />
+          </InlineStack>
+        </template>
+      </Button>
     </div>
     <template #content>
       <Text as="span" variant="bodyMd" alignment="center">
@@ -12,7 +18,6 @@
   </Tooltip>
 </template>
 <script setup lang="ts">
-import { defineComponent, h } from "vue"
 import type { IndexFiltersSearchFilterButtonProps } from './SearchFilterButton'
 import Tooltip from "../../Tooltip";
 import Button from "../../Button";
@@ -24,27 +29,6 @@ import { SearchMinor, FilterMinor } from "@ncpl/ncpl-icons";
 defineOptions({
   name: 'NpIndexFiltersSearchFilterButton',
 })
-const props = defineProps<IndexFiltersSearchFilterButtonProps>()
-
+defineProps<IndexFiltersSearchFilterButtonProps>()
 defineEmits(['click'])
-
-
-const iconSource = defineComponent({
-  setup() {
-    return () => h(InlineStack, { gap: "0" }, {
-      default: () => {
-        let children: any = [];
-        if (props.hideQueryField) {
-          children.push(h(Icon, { source: SearchMinor, tone: 'base' }));
-        }
-
-        if (props.hideFilters) {
-          children.push(h(Icon, { source: FilterMinor, tone: 'base' }));
-        }
-
-        return children;
-      }
-    });
-  }
-});
 </script>

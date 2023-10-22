@@ -40,7 +40,7 @@
       </template>
 
       <component :is="urlIfNotDisabledOrSelected ? UnstyledLink: UnstyledButton" :id="id" :class="tabClassName"
-        :tabIndex="tabIndex" :aria-selected="selected" :aria-controls="panelId" :aria-label="accessibilityLabel"
+        :tab-index="tabIndex" :aria-selected="selected" :aria-controls="panelId" :aria-label="accessibilityLabel"
         :role="tabIndexOverride == null ? 'tab' : undefined" :disabled="disabled" :url="urlIfNotDisabledOrSelected"
         @focus="emit('focus')" @mouseup="event => event.target.blur()" @click="handleClick" @keydown="handleKeyDown">
         <InlineStack gap="200" align="center" block-align="center" :wrap="false">
@@ -48,7 +48,7 @@
             <component v-if="icon" :is="icon"></component>
             <template v-else>{{ content }}</template>
           </Text>
-          <Badge v-if="badge" :status="selected ? undefined: 'new'">{{ badge }}</Badge>
+          <Badge v-if="badge" :status="selected ? undefined : 'new'">{{ badge }}</Badge>
         </InlineStack>
         <div v-if="selected && actions?.length" :class="classNames(styles.IconWrap)">
           <Icon :source="ChevronDownMinor" />
@@ -81,6 +81,7 @@ import { ChevronDownMinor, InfoMinor, DuplicateMinor, EditMinor, Columns3Minor, 
 
 defineOptions({
   name: 'NpTabsTab',
+  inheritAttrs: false,
 })
 const emit = defineEmits(['action', 'focus', 'togglePopover', 'toggleModal']);
 const props = defineProps<TabProps>()
@@ -125,7 +126,7 @@ const tabIndex = computed(() => {
   }
   return tabIndex;
 });
-const labelVariant = computed(() =>  mdDown.value ? 'bodyLg' : 'bodySm');
+const labelVariant = computed(() => mdDown.value ? 'bodyLg' : 'bodySm');
 const formattedActions = computed(() => {
 
   const actionContent = {

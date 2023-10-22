@@ -3,7 +3,7 @@
     :padding-inline-start="{ xs: '400', sm: '0' }" :padding-inline-end="{ xs: '400', sm: '0' }"
     :visually-hidden="titleHidden">
     <div :class="headerClassNames">
-      <component :is="contentRender"></component>
+      <component :is="()=>contentRender"></component>
     </div>
   </Box>
 </template>
@@ -71,8 +71,9 @@ const additionalNavigationMarkup = computed(() => slots.additionalNavigation ? (
 
 const actionMenuMarkup = computed(() => {
   if (Array.isArray(props.secondaryActions) && props.secondaryActions.length > 0) {
+    const secondaryActions = props.secondaryActions
     return () => h(ActionMenu, {
-      actions: props.secondaryActions!,
+      actions: secondaryActions,
       groups: props.actionGroups,
       rollup: mediaQuery.isNavigationCollapsed,
       rollupActionsLabel: props.title ? i18n.value.translate('Polaris.Page.Header.rollupActionsLabel', { title: props.title }) : undefined,
