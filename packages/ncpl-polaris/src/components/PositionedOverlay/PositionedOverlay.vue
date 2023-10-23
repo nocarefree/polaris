@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, onMounted, onUnmounted, nextTick } from 'vue';
 import type { CSSProperties, MaybeRef } from "vue"
-import type { PositionedOverlayProps, OverlayDetails } from './PositionedOverlay'
+import type { PositionedOverlayProps } from './PositionedOverlay'
 import { useScrollable } from "../context"
 import { dataPolarisTopBar, layer } from "../shared"
 import styles from './PositionedOverlay.module.scss'
