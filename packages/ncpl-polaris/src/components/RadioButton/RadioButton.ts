@@ -20,7 +20,7 @@ export interface RadioButtonProps extends ChoiceBleedProps {
     /** Name for form input */
     name?: string;
     /** Value for form input */
-    modelValue?: string;
+    value?: string;
     /** Grow to fill the space. Equivalent to width: 100%; height: 100% */
     fill?: ResponsiveProp<boolean>;
     /** Additional text to aide in use */

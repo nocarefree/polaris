@@ -4,8 +4,8 @@
       {{ title }}
     </Box>
     <BlockStack as="ul" :gap="{ xs: '400', md: '0' }">
-      <ChoiceListItem v-for="choice in choices" v-bind="choice" :allowMultiple="allowMultiple" :name="finalName"
-        :isSelected="choiceIsSelected(choice, selected)" @change="handleChange(choice)">
+      <ChoiceListItem v-for="choice in choices" v-bind="choice" :allow-multiple="allowMultiple" :name="finalName"
+        :is-selected="choiceIsSelected(choice, selected)" @change="handleChange(choice)">
       </ChoiceListItem>
     </BlockStack>
     <Box v-if="error" :padding-block-start="{ xs: '0', md: '100' }" padding-block-end="200">

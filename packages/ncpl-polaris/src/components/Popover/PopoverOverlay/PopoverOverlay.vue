@@ -23,7 +23,7 @@
               styles.Content,
               fullHeight && styles['Content-fullHeight'],
               fluidContent && styles['Content-fluidContent'],
-            )" :style="measuring ? undefined : { height: desiredHeight }" ref="contentNode">
+            )" :style="measuring ? undefined : { height: `${desiredHeight}px` }" ref="contentNode">
               <RenderPopoverContent>
                 <slot></slot>
               </RenderPopoverContent>

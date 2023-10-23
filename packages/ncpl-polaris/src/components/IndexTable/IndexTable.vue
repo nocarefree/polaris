@@ -24,7 +24,8 @@
           :class="classNames(styles.CondensedList, hasZebraStriping && styles.ZebraStriping)" ref="stickyWrapper">
           <slot></slot>
         </ul>
-        <ScrollContainer v-else ref="scrollableContainerElement" @scroll="handleScrollContainerScroll">
+        <ScrollContainer v-else :ref="(e: any) => scrollableContainerElement = e?.$el"
+          @scroll="handleScrollContainerScroll">
           <table ref="tableElement" :class="tableClassNames">
             <thead>
               <tr :class="styles.HeadingRow">
@@ -367,8 +368,6 @@ const resizeTableHeadings = debounce(() => {
   if (!tableElement.value || !scrollableContainerElement.value) {
     return;
   }
-
-  console.log(scrollableContainerElement.value)
 
   const boundingRect = scrollableContainerElement.value.getBoundingClientRect();
   tablePosition.value = {

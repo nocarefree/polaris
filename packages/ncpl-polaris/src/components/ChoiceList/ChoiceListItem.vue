@@ -3,8 +3,9 @@
     <Bleed :margin-block-end="helpText ? { xs: '100', md: '0' } : { xs: '0' }">
       <component :is="allowMultiple ? Checkbox : RadioButton" :name="name" :value="value" :id="id" :label="label"
         :disabled="disabled" :fill="{ xs: true, sm: false }" :checked="isSelected" :help-text="helpText"
-        @change="$emit('change')" :aria-described-by="error && describedByError ? errorTextID(name) : null" />
-      <div v-if="renderedChildren" :class="styles.ChoiceChildren">
+        @update:model-value="e => $emit('change', e)"
+        :aria-described-by="error && describedByError ? errorTextID(name) : null" />
+      <div v-if="$slots.default" :class="styles.ChoiceChildren">
         <Box :padding-block-start="{ xs: '400', md: '0' }">
           <slot></slot>
         </Box>
@@ -13,7 +14,6 @@
   </li>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { ChoiceListItem } from './ChoiceList';
 import styles from './ChoiceList.module.scss'
 import { errorTextID } from '../InlineError';
@@ -30,11 +30,6 @@ defineEmits(['change'])
 
 interface ChoiceListItemProps extends ChoiceListItem { isSelected: boolean; name: string; error?: Boolean; allowMultiple?: Boolean }
 
-const props = defineProps<ChoiceListItemProps>()
-
-const renderedChildren = computed(() => {
-  return props.renderChildren ? props.renderChildren(props.isSelected) : null
-})
-
+defineProps<ChoiceListItemProps>()
 
 </script>

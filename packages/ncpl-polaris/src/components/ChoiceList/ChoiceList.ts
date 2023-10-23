@@ -13,8 +13,6 @@ export interface ChoiceListItem {
     helpText?: Component | string;
     /** Indicates that the choice is aria-describedBy the error message */
     describedByError?: boolean;
-    /**  Method to render children with a choice */
-    renderChildren?(isSelected: boolean): Component | false;
 }
 
 

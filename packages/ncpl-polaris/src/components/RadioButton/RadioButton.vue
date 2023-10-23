@@ -4,9 +4,14 @@
     :bleed-block-start="bleedBlockStart" :bleed-block-end="bleedBlockEnd" :bleed-inline-start="bleedInlineStart"
     :bleed-inline-end="bleedInlineEnd">
     <span :class="styles.RadioButton">
-      <input :id="uniqId" :name="nameProp" :value="modelValue" type="radio" :checked="checked" :disabled="disabled"
-        :class="classNames(styles.Input)" @input="e => $emit('update:model-value', (e.target as HTMLInputElement)?.value)"
-        @change="e => $emit('change', (e.target as HTMLInputElement)?.value)" @focus="e => $emit('focus', e)"
+      <input 
+        :id="uniqId" 
+        :name="nameProp" 
+        :value="value" type="radio" 
+        :checked="checked" 
+        :disabled="disabled"
+        :class="classNames(styles.Input)" 
+        @change="e => $emit('change', (e.target as HTMLInputElement)?.checked)" @focus="e => $emit('focus', e)"
         @blur="e => $emit('blur', e)" :aria-describedby="_ariaDescribedBy" ref="inputNode" />
       <span :class="styles.Backdrop" />
     </span>
@@ -23,7 +28,7 @@ import { classNames } from "@ncpl-polaris/utils";
 defineOptions({
   name: 'NpRadioButton',
 })
-defineEmits(['focus', 'blur', 'change', 'update:model-value'])
+defineEmits(['focus', 'blur', 'change'])
 const props = defineProps<RadioButtonProps>()
 const uniqId = useId(toRef(props, 'id'));
 const nameProp = computed(() => {

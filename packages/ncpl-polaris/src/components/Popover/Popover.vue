@@ -4,7 +4,7 @@
     <Portal v-if="activatorNode" id-prefix="popover">
       <PopoverOverlay ref="overlayRef" :id="id" :activator="activatorNode" :prefer-input-activator="preferInputActivator"
         @close="handleClose" :active="active" @update:active="e => $emit('update:active', e)" :fixed="fixed"
-        :z-index-override="zIndexOverride" :autofocus-target="autofocusTarget" v-bind="$attrs">
+        :z-index-override="zIndexOverride" :autofocus-target="autofocusTarget" v-bind="overlayProps">
         <slot></slot>
       </PopoverOverlay>
     </Portal>
@@ -22,8 +22,7 @@ import { findFirstFocusableNodeIncludingDisabled, focusNextFocusableNode } from 
 
 
 defineOptions({
-  name: 'NpPopover',
-  inheritAttrs: false,
+  name: 'NpPopover'
 })
 const props = defineProps<PopoverProps>()
 const emit = defineEmits(['close', 'update:active']);
@@ -34,6 +33,19 @@ const activatorContainer = ref<HTMLElement>();
 
 const activatorNode = computed(() => {
   return activatorContainer.value?.firstElementChild as HTMLElement;
+})
+
+const overlayProps = computed(() => {
+  const {
+    activatorWrapper,
+    preventFocusOnClose,
+    active,
+    fixed,
+    preferInputActivator = true,
+    zIndexOverride,
+    ...rest
+  } = props;
+  return rest;
 })
 
 const handleClose = (source: PopoverCloseSource) => {

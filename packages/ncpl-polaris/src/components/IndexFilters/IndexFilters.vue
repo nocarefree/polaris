@@ -53,8 +53,7 @@
       <MyTransition :timeout="TRANSITION_DURATION">
         <template #default="{ state }">
           <div v-if="mode === IndexFiltersMode.Filtering" ref="filteringRef">
-            <Filters :model-value="modelValue" 
-              :placeholder="placeholder" :disable-filters="disabled"
+            <Filters :model-value="modelValue" :placeholder="placeholder" :disable-filters="disabled"
               :hide-filters="hideFilters" :hide-query-field="hideQueryField"
               :disable-query-field="disabled || disableQueryField" :loading="loading || isActionLoading"
               :focused="filtersFocused" :mounted-state="mdDown ? undefined : state" borderless-query-field

@@ -14,12 +14,12 @@
         :selected="selected" @change="handleChangeChoiceList" />
     </Box>
     <Box padding-inline-start="150" padding-inline-end="150" padding-block-start="200" padding-block-end="200">
-      <DirectionButton direction="asc" :active="selected[1] === SortButtonDirection.Asc"
+      <DirectionButton direction="asc" :active="_selected[1] === SortButtonDirection.Asc"
         @click="handleChangeDirection(selectedChoices?.[0]?.value)" :value="selectedChoices?.[0]?.value">
         {{ selectedChoices?.[0]?.directionLabel }}
       </DirectionButton>
-      <DirectionButton direction="desc" :active="selected[1] === SortButtonDirection.Desc"
-        @click="handleChangeDirection(selectedChoices?.[0]?.value)" :value="selectedChoices?.[1]?.value">
+      <DirectionButton direction="desc" :active="_selected[1] === SortButtonDirection.Desc"
+        @click="handleChangeDirection(selectedChoices?.[1]?.value)" :value="selectedChoices?.[1]?.value">
         {{ selectedChoices?.[1]?.directionLabel }}
       </DirectionButton>
     </Box>
@@ -47,13 +47,13 @@ const emit = defineEmits(['change', 'changeKey', 'changeDirection'])
 
 const i18n = useI18n();
 const active = ref(false);
-const selected = computed(() => props.selected[0].split(' '))
+const _selected = computed(() => props.selected[0].split(' '))
 
 
 const selectedChoices = computed(
   () => props.choices.filter((choice) => {
     const [currentKey] = choice.value.split(' ');
-    return currentKey === selected.value[0];
+    return currentKey === _selected.value[0];
   })
 );
 
@@ -62,7 +62,7 @@ const choiceListChoices = computed(() => {
     (acc: ChoiceListProps['choices'], curr) => {
       const alreadyExists = acc.some((option) => option.label === curr.label);
       const [, currentValueDirection] = curr.value.split(' ');
-      const isSameDirection = currentValueDirection === selected.value[1];
+      const isSameDirection = currentValueDirection === _selected.value[1];
       if (!alreadyExists) {
         return [...acc, curr];
       }
