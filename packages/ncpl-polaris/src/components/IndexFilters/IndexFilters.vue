@@ -53,12 +53,12 @@
       <MyTransition :timeout="TRANSITION_DURATION">
         <template #default="{ state }">
           <div v-if="mode === IndexFiltersMode.Filtering" ref="filteringRef">
-            <Filters :model-value="modelValue" :placeholder="placeholder" :disable-filters="disabled"
+            <Filters :query-value="queryValue" :query-placeholder="queryPlaceholder" :disable-filters="disabled"
               :hide-filters="hideFilters" :hide-query-field="hideQueryField"
               :disable-query-field="disabled || disableQueryField" :loading="loading || isActionLoading"
               :focused="filtersFocused" :mounted-state="mdDown ? undefined : state" borderless-query-field
               :filters="filters" :applied-filters="appliedFilters"
-              @update:modelValue="value => $emit('update:modelValue', value)"
+              @update:query-value="value => $emit('update:queryValue', value)"
               @queryClear="value => $emit('queryClear', value)" @queryFocus="handleQueryFocus"
               @queryBlur="handleQueryBlur" @addFilterClick="e => $emit('addFilterClick', e)" @clearAll="$emit('clearAll')"
               @closeOnChildOverlayClick="closeOnChildOverlayClick">
@@ -109,7 +109,7 @@ const props = defineProps<IndexFiltersProps>()
 const emit = defineEmits([
   'update:mode',
   'update:selected',
-  'update:modelValue',
+  'update:queryValue',
   'update:sortSelected',
   'sortKeyChange',
   'sortDirectionChange',

@@ -26,11 +26,16 @@ const tableRowRef = ref();
 const primaryLinkElement = ref();
 
 const indexTableContext = useIndexTable();
+const selected = computed(() =>
+  indexTableContext.value.selected && (
+    indexTableContext.value.selected === 'All' || indexTableContext.value.selected.includes(props.id)
+  )
+);
 
 const rowClassName = computed(() => classNames(
   styles.TableRow,
   indexTableContext.value.selectable && indexTableContext.value.condensed && styles.condensedRow,
-  props.selected && styles['TableRow-selected'],
+  selected.value && styles['TableRow-selected'],
   props.subdued && styles['TableRow-subdued'],
   hovered.value && !indexTableContext.value.condensed && styles['TableRow-hovered'],
   props.disabled && styles['TableRow-disabled'],
@@ -58,7 +63,7 @@ const handleInteraction = (event: MouseEvent | MouseEvent) => {
     ? SelectionType.Multi
     : SelectionType.Single;
 
-  emit('selectionChange', selectionType, !props.selected, props.id, props.position);
+  indexTableContext.value.selectionChange(selectionType, !selected.value, props.id, props.position);
 }
 
 const handleRowClick = (event: MouseEvent) => {
@@ -97,7 +102,7 @@ const handleRowClick = (event: MouseEvent) => {
 
 const indexTableRowProvide = computed(() => ({
   itemId: props.id,
-  selected: props.selected,
+  selected: selected.value,
   disabled: props.disabled,
   position: props.position,
 }))

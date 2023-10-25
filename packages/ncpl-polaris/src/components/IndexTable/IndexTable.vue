@@ -22,7 +22,9 @@
         </StickyHeader>
         <ul v-if="condensed" :data-selectmode="Boolean(selectMode)"
           :class="classNames(styles.CondensedList, hasZebraStriping && styles.ZebraStriping)" ref="stickyWrapper">
-          <slot></slot>
+          <template v-for="(row, index) in rows">
+            <slot :row="row" :index="index"></slot>
+          </template>
         </ul>
         <ScrollContainer v-else :ref="(e: any) => scrollableContainerElement = e?.$el"
           @scroll="handleScrollContainerScroll">
@@ -45,7 +47,9 @@
               </tr>
             </thead>
             <tbody :ref="e => setTableBodyRef">
-              <slot></slot>
+              <template v-for="(row, index) in rows">
+                <slot :row="row" :index="index"></slot>
+              </template>
             </tbody>
           </table>
         </ScrollContainer>
@@ -96,15 +100,19 @@ defineOptions({
 const SCROLL_BAR_PADDING = 4;
 const SCROLL_BAR_DEBOUNCE_PERIOD = 300;
 
-const emit = defineEmits(['selectionChange'])
+const emit = defineEmits(['selectionChange', 'update:selected'])
 const props = withDefaults(defineProps<IndexTableProps>(), {
-  selectedItemsCount: 0,
   selectable: true,
   promotedBulkActions: () => [],
   bulkActions: () => [],
   lastColumnSticky: false,
   defaultSortDirection: 'descending',
+  rows: () => [],
+  selected: () => [],
 })
+
+const itemCount = computed(() => props.rows.length);
+const selectedItemsCount = computed(() => props.selected === 'All' ? props.selected : props.selected.length)
 
 const i18n = useI18n();
 const isMounted = ref(false)
@@ -124,14 +132,14 @@ const scrollingWithBar = ref(false);
 const canFitStickyColumn = ref(true);
 const canScrollRight = ref(true);
 const isSortable = computed(() => props.sortable?.some((value) => value))
-const selectMode = computed(() => props.selectedItemsCount === 'All' || props.selectedItemsCount > 0);
-const shouldShowActions = computed(() => !props.condensed || props.selectedItemsCount);
+const selectMode = computed(() => selectedItemsCount.value === 'All' || selectedItemsCount.value > 0);
+const shouldShowActions = computed(() => !props.condensed || selectedItemsCount.value);
 const promotedActions = computed(() => shouldShowActions.value ? props.promotedBulkActions : []);
 const bulkActionsSelectable = computed(() => Boolean(
   props.promotedBulkActions.length > 0 || props.bulkActions.length > 0,
 ))
 const actions = computed(() => shouldShowActions.value ? props.bulkActions : []);
-const shouldShowBulkActions = computed(() => bulkActionsSelectable.value && props.selectedItemsCount);
+const shouldShowBulkActions = computed(() => bulkActionsSelectable.value && selectedItemsCount.value);
 const computedResourceName = computed(() => {
   return props.resourceName
     ? props.resourceName
@@ -179,9 +187,8 @@ const bulkActionClassNames = computed(() => classNames(
 ))
 
 const bulkActionsAccessibilityLabel = computed(() => {
-  const { itemCount, selectedItemsCount } = props;
-  const totalItemsCount = itemCount;
-  const allSelected = selectedItemsCount === totalItemsCount;
+  const totalItemsCount = itemCount.value;
+  const allSelected = selectedItemsCount.value === totalItemsCount;
 
   if (totalItemsCount === 1 && allSelected) {
     return i18n.value.translate(
@@ -201,7 +208,7 @@ const bulkActionsAccessibilityLabel = computed(() => {
     return i18n.value.translate(
       'Polaris.IndexProvider.a11yCheckboxDeselectAllMultiple',
       {
-        itemsLength: itemCount,
+        itemsLength: itemCount.value,
         resourceNamePlural: resourceNamePlural.value,
       },
     );
@@ -209,7 +216,7 @@ const bulkActionsAccessibilityLabel = computed(() => {
     return i18n.value.translate(
       'Polaris.IndexProvider.a11yCheckboxSelectAllMultiple',
       {
-        itemsLength: itemCount,
+        itemsLength: itemCount.value,
         resourceNamePlural: resourceNamePlural.value,
       },
     );
@@ -217,13 +224,12 @@ const bulkActionsAccessibilityLabel = computed(() => {
 })
 
 const bulkSelectState = computed(() => {
-  const { selectedItemsCount, itemCount } = props;
   let bulkSelectState: boolean | 'indeterminate' | undefined = 'indeterminate';
-  if (!selectedItemsCount || selectedItemsCount === 0) {
+  if (!selectedItemsCount.value || selectedItemsCount.value === 0) {
     bulkSelectState = undefined;
   } else if (
-    selectedItemsCount === SELECT_ALL_ITEMS ||
-    selectedItemsCount === itemCount
+    selectedItemsCount.value === SELECT_ALL_ITEMS ||
+    selectedItemsCount.value === itemCount.value
   ) {
     bulkSelectState = true;
   }
@@ -337,11 +343,11 @@ const resizeTableScrollBar = () => {
 
 
 const handleSelectAllItemsInStore = () => {
-  emit('selectionChange', props.selectedItemsCount === SELECT_ALL_ITEMS ? SelectionType.Page : SelectionType.All, true,);
+  emit('selectionChange', selectedItemsCount.value === SELECT_ALL_ITEMS ? SelectionType.Page : SelectionType.All, true,);
 }
 
 function getPaginatedSelectAllAction() {
-  const { selectable, hasMoreItems, paginatedSelectAllActionText, itemCount, selectedItemsCount } = props;
+  const { selectable, hasMoreItems, paginatedSelectAllActionText } = props;
   if (!selectable || !hasBulkActions.value || !hasMoreItems) {
     return;
   }
@@ -349,12 +355,12 @@ function getPaginatedSelectAllAction() {
   const customActionText =
     paginatedSelectAllActionText ??
     i18n.value.translate('Polaris.IndexTable.selectAllItems', {
-      itemsLength: itemCount,
+      itemsLength: itemCount.value,
       resourceNamePlural: computedResourceName.value.plural.toLocaleLowerCase(),
     });
 
   const actionText =
-    selectedItemsCount === SELECT_ALL_ITEMS
+    selectedItemsCount.value === SELECT_ALL_ITEMS
       ? i18n.value.translate('Polaris.IndexTable.undo')
       : customActionText;
 
@@ -478,6 +484,21 @@ const handleResize = () => {
 }
 
 
+const selectionChange = (type: any, checked: boolean, id: string | number, index: number) => {
+
+  let selected = [];
+  if (props.selected === 'All') {
+    selected = props.rows.filter(i => i.id != id).map((i) => i.id);
+  } else {
+    if (checked) {
+      selected = [...props.selected, id]
+    } else {
+      selected = props.selected.filter(i => i != id);
+    }
+  }
+  emit('update:selected', selected)
+}
+
 const indexTableProvide = computed(() => {
   return {
     ...props,
@@ -486,15 +507,16 @@ const indexTableProvide = computed(() => {
     shouldShowBulkActions: shouldShowBulkActions.value,
     bulkActionsAccessibilityLabel: bulkActionsAccessibilityLabel.value,
     bulkSelectState: bulkSelectState.value,
-    paginatedSelectAllText: `All ${props.itemCount}+ ${computedResourceName.value.plural} are selected`,
+    paginatedSelectAllText: `All ${itemCount.value}+ ${computedResourceName.value.plural} are selected`,
     paginatedSelectAllAction: getPaginatedSelectAllAction(),
+    selectionChange: selectionChange
   }
 })
 indexTableContext.provide(indexTableProvide);
 
 useEventListener(window, 'resize', handleResize)
 
-watch(() => props.itemCount, computeTableDimensions, { flush: 'post' });
+watch(() => props.rows, computeTableDimensions, { flush: 'post' });
 
 onMounted(() => {
   isMounted.value = true;

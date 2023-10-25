@@ -3,8 +3,7 @@
     <Bleed :margin-block-end="helpText ? { xs: '100', md: '0' } : { xs: '0' }">
       <component :is="allowMultiple ? Checkbox : RadioButton" :name="name" :value="value" :id="id" :label="label"
         :disabled="disabled" :fill="{ xs: true, sm: false }" :checked="isSelected" :help-text="helpText"
-        @update:model-value="e => $emit('change', e)"
-        :aria-described-by="error && describedByError ? errorTextID(name) : null" />
+        @change="e => $emit('change', e)" :aria-described-by="error && describedByError ? errorTextID(name) : null" />
       <div v-if="$slots.default" :class="styles.ChoiceChildren">
         <Box :padding-block-start="{ xs: '400', md: '0' }">
           <slot></slot>

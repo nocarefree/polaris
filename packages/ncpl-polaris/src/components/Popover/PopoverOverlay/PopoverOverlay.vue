@@ -1,42 +1,36 @@
 <template>
-  <transition :css="false" :duration="parseInt(theme.motion['motion-duration-100'], 10)"
-    @before-enter="transitionStatus === TransitionStatus.Entered"
-    @after-enter="transitionStatus = TransitionStatus.Entered"
-    @before-leave="transitionStatus = TransitionStatus.Entering"
-    @after-leave="transitionStatus = TransitionStatus.Exiting">
-    <PositionedOverlay v-if="active" ref="overlayRef" :full-width="fullWidth" :active="active" :activator="activator"
-      :prefer-input-activator="preferInputActivator" :preferred-position="preferredPosition"
-      :preferred-alignment="preferredAlignment" :fixed="fixed" @scrollOut="handleScrollOut" :class="className"
-      :z-index-override="zIndexOverride">
-      <template #default="{ measuring, desiredHeight, positioning }">
-        <div :class="classNames(
-          styles.Popover,
-          positioning === 'above' && styles.positionedAbove,
-          fullWidth && styles.fullWidth,
-          measuring && styles.measuring,
-          hideOnPrint && styles['PopoverOverlay-hideOnPrint'],
-        )
-          " v-bind="overlay.props">
-          <div :class="styles.FocusTracker" tabIndex="0" @focus="handleFocusFirstItem"></div>
-          <div :class="styles.ContentContainer">
-            <div :id="id" :tab-index="autofocusTarget === 'none' ? undefined : -1" :class="classNames(
-              styles.Content,
-              fullHeight && styles['Content-fullHeight'],
-              fluidContent && styles['Content-fluidContent'],
-            )" :style="measuring ? undefined : { height: `${desiredHeight}px` }" ref="contentNode">
-              <RenderPopoverContent>
-                <slot></slot>
-              </RenderPopoverContent>
-            </div>
+  <PositionedOverlay v-if="active" ref="overlayRef" :full-width="fullWidth" :active="active" :activator="activator"
+    :prefer-input-activator="preferInputActivator" :preferred-position="preferredPosition"
+    :preferred-alignment="preferredAlignment" :fixed="fixed" @scrollOut="handleScrollOut" :class="className"
+    :z-index-override="zIndexOverride">
+    <template #default="{ measuring, desiredHeight, positioning }">
+      <div :class="classNames(
+        styles.Popover,
+        positioning === 'above' && styles.positionedAbove,
+        fullWidth && styles.fullWidth,
+        measuring && styles.measuring,
+        hideOnPrint && styles['PopoverOverlay-hideOnPrint'],
+      )
+        " v-bind="overlay.props">
+        <div :class="styles.FocusTracker" tabIndex="0" @focus="handleFocusFirstItem"></div>
+        <div :class="styles.ContentContainer">
+          <div :id="id" :tab-index="autofocusTarget === 'none' ? undefined : -1" :class="classNames(
+            styles.Content,
+            fullHeight && styles['Content-fullHeight'],
+            fluidContent && styles['Content-fluidContent'],
+          )" :style="measuring ? undefined : { height: `${desiredHeight}px` }" ref="contentNode">
+            <RenderPopoverContent>
+              <slot></slot>
+            </RenderPopoverContent>
           </div>
-          <div :class="styles.FocusTracker" tabIndex="0" @focus="handleFocusLastItem"></div>
         </div>
-      </template>
-    </PositionedOverlay>
-  </transition>
+        <div :class="styles.FocusTracker" tabIndex="0" @focus="handleFocusLastItem"></div>
+      </div>
+    </template>
+  </PositionedOverlay>
 </template>
 <script setup lang="ts">
-import { ref, computed, h, defineComponent, onMounted, Fragment, onUpdated } from 'vue'
+import { ref, computed, h, defineComponent, onMounted, Fragment, watch, onUnmounted, nextTick } from 'vue'
 import type { Ref } from 'vue';
 import { classNames, elementChildren } from "@ncpl-polaris/utils"
 import { findFirstKeyboardFocusableNode } from "@ncpl-polaris/utils/focus"
@@ -173,17 +167,49 @@ const focusContent = () => {
   });
 }
 
+const changeTransitionStatus = (status: TransitionStatus, cb?: () => void) => {
+  transitionStatus.value = status
+  // Forcing a reflow to enable the animation
+  contentNode.value && contentNode.value.getBoundingClientRect();
+  cb && nextTick(cb);
+}
+
+
+
 onMounted(() => {
   if (props.active) {
     focusContent();
+    changeTransitionStatus(TransitionStatus.Entered);
   }
 });
 
-onUpdated(() => {
-  if (props.active) {
-    focusContent();
+let enteringTimer: any;
+const clearTransitionTimeout = () => {
+  if (enteringTimer) {
+    window.clearTimeout(enteringTimer);
   }
-})
+}
+
+watch(() => props.active, (val: boolean, oldVal: boolean) => {
+  if (val && !oldVal) {
+    focusContent();
+    changeTransitionStatus(TransitionStatus.Entering, () => {
+      clearTransitionTimeout();
+      enteringTimer = window.setTimeout(() => {
+        transitionStatus.value = TransitionStatus.Entered;
+      }, parseInt(theme.value.motion['motion-duration-100'], 10));
+    });
+  }
+
+  if (!val && oldVal) {
+    clearTransitionTimeout();
+    transitionStatus.value = TransitionStatus.Exited;
+  }
+}, { flush: 'post' })
+
+onUnmounted(() => {
+  clearTransitionTimeout();
+});
 
 useEventListener(window, 'click', handleClick);
 useEventListener(window, 'touchstart', handleClick);

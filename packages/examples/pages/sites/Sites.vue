@@ -16,26 +16,27 @@
                     <NpRangeSlider label="Opacity percentage" v-model="rangValue" output />
                 </NpLegacyCard>
                 <NpLegacyCard v-if="store.resources.data.length > 0">
-                    <NpIndexFilters :sort-options="sortOptions" placeholder="Searching in all"
-                        :primary-action="primaryAction" :filters="filters"
+                    <NpIndexFilters :sort-options="sortOptions" query-placeholder="Searching in all"
+                        :primary-action="primaryAction" :filters="filters" :appliedFilters="appliedFilters"
                         :cancel-action="{ onAction: () => { }, disabled: false, loading: false }" :tabs="tabs"
                         can-create-new-view @createNewView="() => { }" @clearAll="() => { }" v-model:selected="selected"
                         v-model:mode="mode" v-model:sort-selected="sortSelected" v-model:query-value="queryValue" />
-                    <NpIndexTable v-bind="indexTable"
-                        :selected-items-count="allResourcesSelected ? 'all' : selectedResources.length"
-                        :item-count="store.resources.total" @selectionChange="onSelectionChange">
-                        <NpIndexTableRow v-for="(site, index) in store.resources.data" :id="site.id" :key="site.id"
-                            :selected="selectedResources.includes(site.id) !== false" :position="index">
-                            <NpIndexTableCell>
-                                <NpText variant="bodyMd" font-weight="bold" as="span">
-                                    {{ site.name }}
-                                </NpText>
-                            </NpIndexTableCell>
-                            <NpIndexTableCell>{{ site.date }}</NpIndexTableCell>
-                            <NpIndexTableCell>{{ site.path }}</NpIndexTableCell>
-                            <NpIndexTableCell>{{ site.note }}</NpIndexTableCell>
-                            <NpIndexTableCell>{{ site.status || '' }}</NpIndexTableCell>
-                        </NpIndexTableRow>
+                    <NpIndexTable v-bind="indexTable" v-model:selected="selectedResources" :rows="store.resources.data">
+                        <template #default="{ index, row: site }">
+                            <NpIndexTableRow :id="site.id" :position="index">
+                                <NpIndexTableCell>
+                                    <NpText variant="bodyMd" font-weight="bold" as="span">
+                                        {{ site.name }}
+                                    </NpText>
+                                </NpIndexTableCell>
+                                <NpIndexTableCell>{{ site.date }}</NpIndexTableCell>
+                                <NpIndexTableCell>{{ site.path }}</NpIndexTableCell>
+                                <NpIndexTableCell>{{ site.note }}</NpIndexTableCell>
+                                <NpIndexTableCell>
+                                    <NpBadge progress="partiallyComplete">Partially paid</NpBadge>
+                                </NpIndexTableCell>
+                            </NpIndexTableRow>
+                        </template>
                     </NpIndexTable>
                 </NpLegacyCard>
                 <NpLegacyCard v-else sectioned>
@@ -50,7 +51,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, computed, h } from "vue"
-import { NpRangeSlider, NpChoiceList, NpTextField, NpEmptyState, NpLayout, NpLayoutSection, NpPage, NpLegacyCard, NpSkeletonPage, NpLoading, NpIndexTable, NpIndexTableRow, NpIndexTableCell, NpText, NpIndexFilters } from "@ncpl/ncpl-polaris"
+import { NpBadge, NpRangeSlider, NpChoiceList, NpTextField, NpEmptyState, NpLayout, NpLayoutSection, NpPage, NpLegacyCard, NpSkeletonPage, NpLoading, NpIndexTable, NpIndexTableRow, NpIndexTableCell, NpText, NpIndexFilters } from "@ncpl/ncpl-polaris"
 import { useRouter } from 'vue-router'
 import { useStore } from "./site"
 
@@ -88,6 +89,7 @@ const indexTable = {
 }
 
 const onSelectionChange = (type) => {
+    console.log(type)
     allResourcesSelected.value = type;
 }
 
@@ -106,8 +108,9 @@ const mode = ref('DEFAULT');
 const sortSelected = ref(['order asc'])
 const queryValue = '';
 const selected = ref(0)
-const accountStatus = ref([])
-const moneySpent = ref()
+const accountStatus = ref<[string] | undefined>()
+const moneySpent = ref<[number, number] | undefined>()
+const taggedWith = ref('');
 
 const primaryAction = computed(() => {
     return selected.value === 0 ? {
@@ -176,11 +179,11 @@ const tabs = computed(() => {
     }));
 });
 
-const filters = [
+const filters = ref([
     {
         key: 'accountStatus',
         label: 'Account status',
-        filter: h(NpChoiceList, {
+        filter: () => h(NpChoiceList, {
             title: "Account status",
             titleHidden: true,
             choices: [
@@ -189,8 +192,8 @@ const filters = [
                 { label: 'Invited', value: 'invited' },
                 { label: 'Declined', value: 'declined' },
             ],
-            selected: accountStatus || [],
-            onChange: () => { },
+            selected: accountStatus.value || [],
+            'onUpdate:selected': (e) => { accountStatus.value = e },
             allowMultiple: true
         }
         ),
@@ -199,10 +202,10 @@ const filters = [
     {
         key: 'taggedWith',
         label: 'Tagged with',
-        filter: h(NpTextField, {
+        filter: () => h(NpTextField, {
             label: "Tagged with",
-            value: '',
-            onChange: () => { },
+            modelValue: '',
+            'onUpdate:modelValue': (e) => { taggedWith.value = e },
             autoComplete: "off",
             labelHidden: true
         }),
@@ -211,18 +214,63 @@ const filters = [
     {
         key: 'moneySpent',
         label: 'Money spent',
-        filter: h(NpRangeSlider, {
+        filter: () => h(NpRangeSlider, {
             label: "Money spent is between",
             labelHidden: true,
-            value: moneySpent || [0, 500],
+            modelValue: moneySpent.value,
+            'onUpdate:modelValue': (e) => { moneySpent.value = e },
             prefix: "$",
             output: true,
             min: 0,
             max: 2000,
             step: 1,
-            onChange: () => { },
+            onChange: (e) => {
+
+            },
         })
     },
-];
+]);
 
+
+const appliedFilters = computed(() => {
+    let appliedFilters: any = []
+    if (accountStatus.value && accountStatus.value.length > 0) {
+        const key = 'accountStatus';
+        appliedFilters.push({
+            key,
+            label: disambiguateLabel(key, accountStatus.value),
+            onRemove: () => accountStatus.value = undefined,
+        });
+    }
+    if (moneySpent.value) {
+        const key = 'moneySpent';
+        appliedFilters.push({
+            key,
+            label: disambiguateLabel(key, moneySpent.value),
+            onRemove: () => moneySpent.value = undefined,
+        });
+    }
+    if (taggedWith.value) {
+        const key = 'taggedWith';
+        appliedFilters.push({
+            key,
+            label: disambiguateLabel(key, taggedWith.value),
+            onRemove: taggedWith.value = '',
+        });
+    }
+    return appliedFilters;
+})
+
+function disambiguateLabel(key: string, value: string | any[]): string {
+    switch (key) {
+        case 'moneySpent':
+            return `Money spent is between $${value[0]} and $${value[1]}`;
+        case 'taggedWith':
+            return `Tagged with ${value}`;
+        case 'accountStatus':
+            return (value as string[]).map((val) => `Customer ${val}`).join(', ');
+        default:
+            return value as string;
+    }
+}
 </script>

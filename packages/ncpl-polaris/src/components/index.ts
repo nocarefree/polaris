@@ -76,6 +76,7 @@ export * from './Loading';
 export * from './IndexFilters';
 export * from './Tabs';
 export * from './Filters';
+export * from './Filters/FilterPill';
 export * from './ChoiceList';
 export * from './Bleed';
 export * from './RadioButton';

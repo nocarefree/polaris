@@ -5,7 +5,7 @@
     </Box>
     <BlockStack as="ul" :gap="{ xs: '400', md: '0' }">
       <ChoiceListItem v-for="choice in choices" v-bind="choice" :allow-multiple="allowMultiple" :name="finalName"
-        :is-selected="choiceIsSelected(choice, selected)" @change="handleChange(choice)">
+        :is-selected="choiceIsSelected(choice)" @change="e => handleChange(choice, e)">
       </ChoiceListItem>
     </BlockStack>
     <Box v-if="error" :padding-block-start="{ xs: '0', md: '100' }" padding-block-end="200">
@@ -35,14 +35,14 @@ const finalName = computed(() => {
 });
 
 
-const handleChange = (choice: Choice) => {
-  let selected = updateSelectedChoices(choice, true, props.selected, props.allowMultiple)
+const handleChange = (choice: Choice, checked: boolean) => {
+  let selected = updateSelectedChoices(choice, checked, props.selected, props.allowMultiple)
   emit('change', selected, finalName.value);
   emit('update:selected', selected)
 }
 
-function choiceIsSelected({ value }: Choice, selected: string[]) {
-  return props.selected.includes(value);
+function choiceIsSelected({ value }: Choice) {
+  return props.selected?.includes(value);
 }
 
 function updateSelectedChoices(

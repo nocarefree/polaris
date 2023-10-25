@@ -37,9 +37,9 @@ export interface FilterInterface {
 
 export type FiltersProps = {
     /** Currently entered text in the query field */
-    modelValue?: string;
+    queryValue?: string;
     /** Placeholder text for the query field. */
-    placeholder?: string;
+    queryPlaceholder?: string;
     /** Whether the query field is focused. */
     focused?: boolean;
     /** Available filters added to the filter bar. Shortcut filters are pinned to the front of the bar. */

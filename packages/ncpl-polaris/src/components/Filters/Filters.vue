@@ -10,9 +10,9 @@
             }
             : undefined
             ">
-            <SearchField :model-value="modelValue" @update:model-value="e => $emit('update:modelValue', e)"
+            <SearchField :model-value="queryValue" @update:model-value="e => $emit('update:queryValue', e)"
               @focus="e => $emit('queryFocus', e)" @blur="e => $emit('queryBlur', e)" @clear="e => $emit('queryClear', e)"
-              :placeholder="placeholder" :focused="focused" :disabled="disabled || disableQueryField"
+              :placeholder="queryPlaceholder" :focused="focused" :disabled="disabled || disableQueryField"
               :borderless-query-field="borderlessQueryField" />
           </div>
           <div :class="styles.Spinner">
@@ -34,7 +34,7 @@
           <component :is="pinnedFiltersMarkup" />
           <div v-if="shouldShowAddButton"
             :class="classNames(styles.AddFilterActivator, hasOneOrMorePinnedFilters && styles.AddFilterActivatorMultiple)">
-            <Popover :active="popoverActive && !disabled" @close="popoverActive = !popoverActive">
+            <Popover :active="popoverActive && !disabled" @close="togglePopoverActive">
               <template #activator>
                 <div>
                   <UnstyledButton type="button" :class="styles.AddFilter" @click="handleAddFilterClick"
@@ -47,7 +47,7 @@
                   </UnstyledButton>
                 </div>
               </template>
-              <ActionList actionRole="menuitem" :items="unsectionedFilters" :sections="sectionedFilters" />
+              <ActionList action-role="menuitem" :items="unsectionedFilters" :sections="sectionedFilters" />
             </Popover>
           </div>
           <div v-if="appliedFilters?.length || localPinnedFilters.length" :class="classNames(
@@ -96,7 +96,7 @@ defineOptions({
   name: 'NpFilters',
 })
 
-const emit = defineEmits(['addFilterClick', 'queryChange', 'queryClear', 'queryBlur', 'queryFocus', 'clearAll', 'update:modelValue'])
+const emit = defineEmits(['addFilterClick', 'queryChange', 'queryClear', 'queryBlur', 'queryFocus', 'clearAll', 'update:queryValue'])
 const props = defineProps<FiltersProps>()
 const localPinnedFilters = ref<string[]>([])
 
@@ -190,6 +190,10 @@ const unpinnedFilters = computed(() => props.filters.filter(
   (filter) => !pinnedFilters.value.some(({ key }) => key === filter.key),
 ));
 
+const togglePopoverActive = () => {
+  popoverActive.value = !popoverActive.value;
+}
+
 const onFilterClick = ({ key, onAction }: FilterInterface) =>
   () => {
     // PopoverOverlay will cause a rerender of the component and nuke the
@@ -199,7 +203,7 @@ const onFilterClick = ({ key, onAction }: FilterInterface) =>
         ...new Set([...localPinnedFilters.value, key]),
       ];
       onAction?.();
-      popoverActive.value = true;
+      togglePopoverActive();
     }, 0);
   };
 
@@ -253,7 +257,6 @@ const pinnedFiltersMarkup = computed(() => {
       };
 
       return h(FilterPill, {
-        key: filterKey,
         ...pinnedFilter,
         initialActive: hasMounted.value && !pinnedFilter.pinned && !appliedFilter,
         label: appliedFilter?.label || pinnedFilter.label,
@@ -269,7 +272,7 @@ const pinnedFiltersMarkup = computed(() => {
 
 const handleAddFilterClick = () => {
   emit('addFilterClick');
-  popoverActive.value = true;
+  togglePopoverActive();
 };
 
 const handleClearAllFilters = () => {

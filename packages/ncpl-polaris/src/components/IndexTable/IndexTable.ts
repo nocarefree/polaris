@@ -20,7 +20,6 @@ export type Range = [number, number];
 
 export interface IndexProviderProps {
     selectable?: boolean;
-    itemCount: number;
     selectedItemsCount?: typeof SELECT_ALL_ITEMS | number;
     resourceName?: {
         singular: string;
@@ -89,11 +88,11 @@ export interface IndexTableProps extends IndexProviderProps {
      * The index of the heading that the table rows are sorted by.
      */
     sortColumnIndex?: number;
-    /** Callback fired on click or keypress of a sortable column heading. */
-    onSort?(headingIndex: number, direction: IndexTableSortDirection): void;
     /** Optional dictionary of sort toggle labels for each sortable column, with ascending and descending label,
      * with the key as the index of the column */
     sortToggleLabels?: IndexTableSortToggleLabels;
     /** Add zebra striping to table rows */
     hasZebraStriping?: boolean;
+    rows: any[];
+    selected?: number[] | string[] | 'All';
 }
