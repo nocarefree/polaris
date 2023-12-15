@@ -14,8 +14,9 @@ defineOptions({
 })
 const props = defineProps<{ idPrefix?: string }>();
 const emit = defineEmits(['portalCreated']);
-const container = usePortalsManager();
+const { container } = usePortalsManager();
 const portalId = useId(toRef(props, 'idPrefix'));
+
 
 onMounted(() => {
   emit('portalCreated');

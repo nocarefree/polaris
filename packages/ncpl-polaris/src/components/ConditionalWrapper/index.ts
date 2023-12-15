@@ -1,3 +1,6 @@
+import { withInstall } from '@ncpl-polaris/utils'
 import ConditionalWrapper from "./ConditionalWrapper.vue"
 
-export default ConditionalWrapper;
+export const NpConditionalWrapper = withInstall(ConditionalWrapper);
+export default NpConditionalWrapper;
+

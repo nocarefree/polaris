@@ -8,25 +8,29 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { CardProps } from './Card'
-import styles from './Card.module.scss'
 import ShadowBevel from "../ShadowBevel"
+import Box from "../Box"
 import { withinContentContext, useBreakpoints } from "../context"
 
 defineOptions({
   name: 'NpCard',
-})
-defineProps<CardProps>()
+});
+const props = withDefaults(defineProps<CardProps>(), {
+  background: 'bg-surface',
+  padding: () => ({ xs: '400' }),
+});
 
 const breakpoints = useBreakpoints();
 
 const borderRadius = computed(() => {
+  const { roundedAbove } = props;
   let hasBorderRadius = !roundedAbove;
 
   if (roundedAbove && breakpoints[`${roundedAbove}Up`]) {
     hasBorderRadius = true;
   }
   return hasBorderRadius ? '300' : '0'
-})
+});
 
-withinContentContext.inject(true)
+withinContentContext.provide(true)
 </script>

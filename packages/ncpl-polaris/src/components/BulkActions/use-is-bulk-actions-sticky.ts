@@ -60,7 +60,7 @@ export function useIsBulkActionsSticky(selectMode: MaybeRef<boolean>) {
   );
 
   onMounted(() => {
-    computeTableDimensions();
+    setTimeout(computeTableDimensions, 0)
 
     const observer = observerRef.value;
     if (!observer) {
@@ -72,8 +72,6 @@ export function useIsBulkActionsSticky(selectMode: MaybeRef<boolean>) {
     if (node) {
       observer.observe(node);
     }
-
-
     window.addEventListener('resize', debouncedComputeTableHeight);
 
   });

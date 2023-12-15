@@ -1,7 +1,11 @@
 import type { ExtractPropTypes, PropType } from "vue";
 import type { ToastProps } from "../Toast/Toast";
 
-export type ToastMessage = ToastProps & { id: string };
+export interface ToastID {
+  id: string;
+}
+
+export type ToastMessage = ToastProps & ToastID;
 
 export const toastMessagesProps = {
   toastMessages: {

@@ -41,7 +41,7 @@ import { useEventListener } from '@vueuse/core';
 import styles from '../Popover.module.scss'
 import Pane from "../Pane/Pane.vue";
 import PositionedOverlay from "@ncpl-polaris/components/PositionedOverlay/PositionedOverlay.vue"
-import { useTheme } from '../../context';
+import { useTheme, usePortalsManager } from '../../context';
 
 
 enum TransitionStatus {
@@ -57,6 +57,7 @@ defineOptions({
 
 const emit = defineEmits(['close', 'update:active']);
 const props = defineProps<PopoverOverlayProps>()
+const { container } = usePortalsManager();
 
 const theme = useTheme();
 const overlayRef = ref<HTMLElement>();
@@ -85,7 +86,7 @@ const RenderPopoverContent = defineComponent({
       const children = elementChildren(slots.default?.());
       const { captureOverscroll, sectioned } = props;
 
-      if (children[0].type == Pane.type) {
+      if (children[0].type.__name == Pane.__name) {
         return h(Fragment, children);
       } else {
         return h(Pane, { captureOverscroll, sectioned }, { default: () => children })
@@ -103,12 +104,14 @@ const handleScrollOut = () => {
   onClose(PopoverCloseSource.ScrollOut);
 }
 const handleClick = (event: Event) => {
+
   const target = event.target as HTMLElement;
   const composedPath = event.composedPath();
-  // const wasDescendant = preventCloseOnChildOverlayClick
-  //   ? wasPolarisPortalDescendant(composedPath, this.context!.container)
-  //   : wasContentNodeDescendant(composedPath, contentNode);
-  const wasDescendant = wasContentNodeDescendant(composedPath, contentNode);
+  //const preventCloseOnChildOverlayClick = props.preventCloseOnChildOverlayClick;
+  const wasDescendant = props.preventCloseOnChildOverlayClick
+    ? wasPolarisPortalDescendant(composedPath, container.value!)
+    : wasContentNodeDescendant(composedPath, contentNode);
+  //const wasDescendant = wasContentNodeDescendant(composedPath, contentNode);
   const isActivatorDescendant = nodeContainsDescendant(props.activator, target);
   if (
     wasDescendant ||
@@ -121,6 +124,9 @@ const handleClick = (event: Event) => {
   onClose(PopoverCloseSource.Click);
 }
 const handleEscape = (event: Event) => {
+  if (!props.active) {
+    return;
+  }
   const target = event.target as HTMLElement;
 
   const composedPath = event.composedPath();
@@ -184,10 +190,16 @@ onMounted(() => {
 });
 
 let enteringTimer: any;
+let listernObjs: (() => void)[] = [];
 const clearTransitionTimeout = () => {
   if (enteringTimer) {
     window.clearTimeout(enteringTimer);
   }
+
+  for (let ob of listernObjs) {
+    ob();
+  }
+  listernObjs = [];
 }
 
 watch(() => props.active, (val: boolean, oldVal: boolean) => {
@@ -195,9 +207,18 @@ watch(() => props.active, (val: boolean, oldVal: boolean) => {
     focusContent();
     changeTransitionStatus(TransitionStatus.Entering, () => {
       clearTransitionTimeout();
+
       enteringTimer = window.setTimeout(() => {
         transitionStatus.value = TransitionStatus.Entered;
       }, parseInt(theme.value.motion['motion-duration-100'], 10));
+
+      listernObjs.push(useEventListener(window, 'mousedown', handleClick));
+      listernObjs.push(useEventListener(window, 'touchstart', handleClick));
+      listernObjs.push(useEventListener(window, 'keydown', (e) => {
+        if (e.keyCode == Key.Escape) {
+          handleEscape(e)
+        }
+      }));
     });
   }
 
@@ -209,14 +230,6 @@ watch(() => props.active, (val: boolean, oldVal: boolean) => {
 
 onUnmounted(() => {
   clearTransitionTimeout();
-});
-
-useEventListener(window, 'click', handleClick);
-useEventListener(window, 'touchstart', handleClick);
-useEventListener(window, 'keydown', (e) => {
-  if (e.keyCode == Key.Escape) {
-    handleEscape(e)
-  }
 });
 
 
@@ -249,15 +262,15 @@ function nodeContainsDescendant(
   return false;
 }
 
-// function wasPolarisPortalDescendant(
-//   composedPath: readonly EventTarget[],
-//   portalsContainerElement: HTMLElement,
-// ): boolean {
-//   return composedPath.some(
-//     (eventTarget) =>
-//       eventTarget instanceof Node &&
-//       portalsContainerElement?.contains(eventTarget),
-//   );
-// }
+function wasPolarisPortalDescendant(
+  composedPath: readonly EventTarget[],
+  portalsContainerElement: HTMLElement,
+): boolean {
+  return composedPath.some(
+    (eventTarget) =>
+      eventTarget instanceof Node &&
+      portalsContainerElement?.contains(eventTarget),
+  );
+}
 
 </script>

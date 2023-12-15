@@ -3,4 +3,4 @@ import DataTable from './DataTable.vue'
 
 export const NpDataTable = withInstall(DataTable)
 export default NpDataTable
-export * from './DataTable'
+export * from './types'

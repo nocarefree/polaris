@@ -57,7 +57,3 @@ export interface ChoiceProps extends ChoiceBleedProps {
     /** Additional text to aide in use */
     helpText?: string | Component;
 }
-
-export function helpTextID(id: string) {
-    return `${id}HelpText`;
-}

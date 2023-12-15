@@ -1,4 +1,5 @@
 import type { Error } from "../types"
+
 export interface InlineErrorProps {
     /** Content briefly explaining how to resolve the invalid form field input. */
     message: Error;

@@ -1,43 +1,47 @@
 <template>
   <div ref="containerNode">
-    <transition :debounce="100" @before-enter="status = 'entering'" @enter="status = 'entered'"
-      @before-leave="status = 'exiting'" @after-leave="status = 'exited'">
-      <div v-if="selectMode" :class="groupClassName" ref="groupNode" :style="{ width }">
-        <div :class="styles.ButtonGroupWrapper" ref="buttonsNode">
-          <div :class="styles.ButtonGroupInner">
-            <InlineStack v-if="promotedActions && numberOfPromotedActionsToRender > 0 || hasPopover" gap="300">
-              <template v-for="action in promotedActions">
-                <BulkActionMenu v-if="instanceOfMenuGroupDescriptor(action)" v-bind="action"
-                  :isNewBadgeInBadgeActions="isNewBadgeInBadgeActions()" />
-                <BulkActionButton v-else :disabled="disabled" v-bind="action" @measurement="handleMeasurement" />
-              </template>
-              <div v-if="actionSections || rolledInPromotedActions.length > 0 || measuring" :class="styles.Popover"
-                ref="moreActionsNode">
-                <Popover :active="state.popoverVisible" preferred-alignment="right" @close="togglePopover">
-                  <template #activator>
-                    <BulkActionButton disclosure
-                      :show-content-in-button="!(promotedActions && numberOfPromotedActionsToRender > 0)"
-                      @action="togglePopover" :content="activatorLabel" :disabled="disabled"
-                      :indicator="isNewBadgeInBadgeActions()">
-                    </BulkActionButton>
-                  </template>
-                  <ActionList :sections="combinedActions" @actionAnyItem="togglePopover" />
-                </Popover>
-              </div>
-            </InlineStack>
+    <MyTransition :timeout="100">
+      <template #default="{ state: status }">
+        <div v-if="selectMode"
+          :class="classNames(styles.Group, !isSticky && styles['Group-not-sticky'], !state.measuring && isSticky && styles[`Group-${status}`], state.measuring && styles['Group-measuring'])"
+          ref="groupNode" :style="{ width: `${width}px` }">
+          <div :class="styles.ButtonGroupWrapper" ref="buttonsNode">
+            <div :class="styles.ButtonGroupInner">
+              <InlineStack v-if="promotedActions && numberOfPromotedActionsToRender > 0 || hasPopover" gap="300">
+                <template v-for="action in promotedActions">
+                  <BulkActionMenu v-if="instanceOfMenuGroupDescriptor(action)" v-bind="action"
+                    :is-new-badge-in-badge-actions="isNewBadgeInBadgeActions()" />
+                  <BulkActionButton v-else :disabled="disabled" v-bind="action" @measurement="handleMeasurement" />
+                </template>
+                <div v-if="actionSections || rolledInPromotedActions.length > 0 || state.measuring"
+                  :class="styles.Popover" ref="moreActionsNode">
+                  <Popover :active="state.popoverVisible" preferred-alignment="right" @close="togglePopover">
+                    <template #activator>
+                      <BulkActionButton disclosure
+                        :show-content-in-button="!(promotedActions && numberOfPromotedActionsToRender > 0)"
+                        @action="togglePopover" :content="activatorLabel" :disabled="disabled"
+                        :indicator="isNewBadgeInBadgeActions()">
+                      </BulkActionButton>
+                    </template>
+                    <ActionList :sections="combinedActions" @actionAnyItem="togglePopover" />
+                  </Popover>
+                </div>
+              </InlineStack>
+            </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </template>
+    </MyTransition>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, reactive, watch, onMounted } from 'vue'
+import { ref, computed, reactive, watch, onMounted, onUpdated } from 'vue'
 import type { BulkActionsProps, BulkAction } from './BulkActions'
 import styles from './BulkActions.module.scss'
 import InlineStack from "../InlineStack"
 import Popover from "../Popover"
 import ActionList from "../ActionList"
+import MyTransition from "../Transition"
 import BulkActionMenu from "./BulkActionMenu"
 import BulkActionButton from "./BulkActionButton"
 import { classNames } from '@ncpl-polaris/utils'
@@ -70,11 +74,13 @@ const state = reactive({
   measuring: true,
   containerWidth: 0,
 })
-const measuring = ref(true)
 const moreActionsNode = ref();
 const buttonsNode = ref();
 const containerNode = ref();
-const status = ref('entering');
+
+onUpdated(() => {
+  console.log(state.measuring, props.isSticky)
+})
 
 const actionSections = computed<BulkActionListSection[] | undefined>(() => {
   const { actions } = props;
@@ -121,16 +127,6 @@ const rolledInPromotedActions = computed(() => {
   return rolledInPromotedActions.slice(numberOfPromotedActionsToRender.value);
 })
 
-const groupClassName = computed(() => {
-  const { isSticky } = props;
-  return classNames(
-    styles.Group,
-    !isSticky && styles['Group-not-sticky'],
-    !state.measuring && isSticky && styles[`Group-${status}`],
-    state.measuring && styles['Group-measuring'],
-  );
-})
-
 const activatorLabel = computed(() => {
   return !props.promotedActions ||
     (props.promotedActions && numberOfPromotedActionsToRender.value === 0 && !state.measuring)
@@ -142,8 +138,8 @@ const activatorLabel = computed(() => {
     );
 })
 
-const combinedActions = computed<ActionListSection[]>(() => {
-  let combinedActions: ActionListSection[] = [];
+const combinedActions = computed(() => {
+  let combinedActions: any[] = [];
 
   if (actionSections.value && rolledInPromotedActions.value.length > 0) {
     combinedActions = [...rolledInPromotedActions.value, ...actionSections.value];
@@ -152,7 +148,7 @@ const combinedActions = computed<ActionListSection[]>(() => {
   } else if (rolledInPromotedActions.value.length > 0) {
     combinedActions = [...rolledInPromotedActions.value];
   }
-  return combinedActions;
+  return combinedActions as ActionListSection[];
 })
 
 
@@ -177,7 +173,7 @@ const numberOfPromotedActionsToRender = computed(() => {
 
   if (
     containerWidthMinusAdditionalWidth >= bulkActionsWidth.value ||
-    measuring
+    state.measuring
   ) {
     return promotedActions.length;
   }

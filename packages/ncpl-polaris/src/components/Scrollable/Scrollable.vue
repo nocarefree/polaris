@@ -10,6 +10,7 @@ import { classNames, StickyManager } from "@ncpl-polaris/utils";
 import { stickyManagerContext, scrollableContext } from "../context";
 import { scrollableProps } from './Scrollable'
 import styles from './Scrollable.module.scss'
+import { debounce } from "@ncpl-polaris/utils/debounce";
 
 
 interface ScrollToOptions {
@@ -106,11 +107,23 @@ scrollableContext.provide(scrollTo);
 stickyManagerContext.provide(stickyManager)
 
 onMounted(() => {
-  stickyManager.setContainer(scrollArea.value);
-  handleScroll();
+  if (scrollArea.value) {
+    stickyManager.setContainer(scrollArea.value);
+    handleScroll();
+
+    const handleResize = debounce(handleScroll, 50, { trailing: true });
+
+    scrollArea.value.addEventListener('scroll', handleScroll);
+    globalThis.addEventListener('resize', handleResize);
+  }
+
 
   if (props.hint) {
     requestAnimationFrame(() => performScrollHint(scrollArea.value));
   }
+
+
+
+
 });
 </script>

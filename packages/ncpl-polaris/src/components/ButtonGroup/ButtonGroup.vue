@@ -20,9 +20,14 @@ import styles from './ButtonGroup.module.scss'
 defineOptions({
   name: 'NpButtonGroup',
 })
-defineProps<ButtonGroupProps>()
+withDefaults(defineProps<ButtonGroupProps>(), {
+  connectedTop: undefined,
+  fullWidth: undefined,
+  noWrap: undefined,
+})
 
 const slots = useSlots();
 const nodes = computed(() => elementChildren(slots.default?.()))
+
 
 </script>

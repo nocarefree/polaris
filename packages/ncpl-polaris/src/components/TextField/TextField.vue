@@ -27,7 +27,15 @@
         <div v-if="prefixComponent" :class="styles.Prefix" :id="`${inputId}-Prefix`" ref="prefixRef">
           <component :is="prefixComponent"></component>
         </div>
-        <component :is="inputMarkup"></component>
+
+        <div v-if="slots.verticalContent" :class="styles.VerticalContent" :id="`${inputId}-VerticalContent`"
+          ref="verticalContentRef" @click="handleClickChild">
+          <slot name="verticalContent"></slot>
+          <component :is="inputComponent"></component>
+        </div>
+        <component v-else :is="inputComponent"></component>
+
+
         <div v-if="suffixComponent" :class="styles.Suffix" :id="`${inputId}-Suffix`" ref="suffixRef">
           <component :is="suffixComponent"></component>
         </div>
@@ -58,7 +66,7 @@
   </Labelled>
 </template>
 <script setup lang="ts">
-import { computed, nextTick, ref, watchEffect, toRef, useSlots, h, shallowRef, cloneVNode } from 'vue'
+import { computed, nextTick, ref, watchEffect, toRef, useSlots, h, shallowRef, cloneVNode, watch, onBeforeUpdate, onUpdated } from 'vue'
 import type { TextFieldProps } from './TextField'
 import Labelled, { helpTextID } from '../Labelled';
 import { labelID } from '../Label'
@@ -79,9 +87,10 @@ defineOptions({
 })
 const props = withDefaults(defineProps<TextFieldProps>(), {
   modelValue: '',
-  type: 'text'
+  type: 'text',
+  focused: undefined,
 })
-const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'compositionstart', 'compositionupdate', 'compositionend', 'input', 'change']);
+const emit = defineEmits(['focus', 'blur', 'update:model-value', 'compositionstart', 'compositionupdate', 'compositionend', 'input', 'change']);
 const slots = useSlots();
 const i18n = useI18n();
 const inputRef = shallowRef<HTMLInputElement>();
@@ -89,9 +98,12 @@ const spinnerRef = ref();
 const suffixRef = ref();
 const prefixRef = ref();
 const verticalContentRef = ref();
-const focus = ref(props.focused)
+const focus = ref<boolean>(props.focused)
 const inputId = useId(toRef(props, 'id'));
 const isComposing = ref(false);
+const hasVerticalContent = ref<boolean>(Boolean(slots.verticalContent));
+const hasSuffix = ref<boolean>(Boolean(slots.suffix));
+const hasPrefix = ref<boolean>(Boolean(slots.prefix));
 
 
 const normalizedValue = computed(() => {
@@ -106,11 +118,11 @@ const characterCount = computed(() => {
 })
 
 const prefixComponent = computed(() => {
-  return slots.prefix ? slots.prefix : (props.prefix ? () => [props.prefix] : null);
+  return hasPrefix.value ? slots.prefix : (props.prefix ? () => [props.prefix] : null);
 })
 
 const suffixComponent = computed(() => {
-  return slots.suffix ? slots.suffix : (props.suffix ? () => [props.suffix] : null);
+  return hasSuffix.value ? slots.suffix : (props.suffix ? () => [props.suffix] : null);
 })
 
 const characterCountLabel = computed(() => {
@@ -149,7 +161,7 @@ const labelledBy = computed(() => {
     data.push(`${id}-Suffix`);
   }
 
-  if (slots.verticalContent) {
+  if (hasVerticalContent.value) {
     data.push(`${id}-VerticalContent`);
   }
 
@@ -188,13 +200,14 @@ const handleClick = (event: MouseEvent | TouchEvent) => {
     isVerticalContent(target) ||
     isInput(target) ||
     isSpinner(target) ||
-    focus
+    focus.value
   ) {
     return;
   }
 
   inputRef.value?.focus();
 }
+
 const handleClickChild = (event: MouseEvent | TouchEvent) => {
   let target = event.target as Element;
 
@@ -204,15 +217,15 @@ const handleClickChild = (event: MouseEvent | TouchEvent) => {
 
   if (
     isPrefixOrSuffix(target) ||
-    isVerticalContent(target)
+    isVerticalContent(target) ||
+    isInput(target) ||
+    focus.value
   ) {
     return;
   }
 
-  if (!isInput(target)) {
-    inputRef.value?.focus();
-  }
-
+  focus.value = true;
+  inputRef.value?.focus();
 }
 const handleClearButtonPress = () => { }
 const handleNumberChange = (steps: number, stepAmount?: number) => {
@@ -240,7 +253,7 @@ const handleNumberChange = (steps: number, stepAmount?: number) => {
     Math.max(numericValue + steps * stepAmount, Number(normalizedMin)),
   );
 
-  emit('update:modelValue', String(newValue.toFixed(decimalPlaces)));
+  emit('update:model-value', String(newValue.toFixed(decimalPlaces)));
 
 }
 
@@ -268,7 +281,14 @@ const handleButtonPress = (onChange: () => void) => {
 const handleButtonRelease = () => {
   clearTimeout(buttonPressTimer);
 }
-const handleKeyPress = () => { }
+const handleKeyPress = (event: KeyboardEvent) => {
+  // const { key, which } = event;
+  // const numbersSpec = /[\d.,eE+-]$/;
+  // const integerSpec = /[\deE+-]$/;
+
+
+  event.preventDefault();
+}
 const handleKeyDown = () => { }
 
 
@@ -297,7 +317,7 @@ const handleChange = (event: Event) => {
 }
 const handleInput = async (event: Event) => {
   //recordCursor()
-  emit('update:modelValue', (event.target as HTMLInputElement).value)
+  emit('update:model-value', (event.target as HTMLInputElement).value)
   emit('input', event)
 
   await nextTick()
@@ -308,18 +328,21 @@ const handleInput = async (event: Event) => {
 }
 
 const handleOnBlur = (event: FocusEvent) => {
-  focus.value = false;
-  emit('blur', event)
+  if (!verticalContentChanged) {
+    focus.value = false;
+    emit('blur', event)
+  }
+
 }
 
 const handleOnFocus = (event: FocusEvent) => {
   focus.value = true;
-  emit('focus', event)
-}
 
-const setInputFocusBlur = () => {
-  if (!inputRef.value || props.focused === undefined) return;
-  props.focused ? inputRef.value.focus() : inputRef.value.blur();
+  if (props.selectTextOnFocus && !props.suggestion) {
+    inputRef.value?.select();
+  }
+
+  emit('focus', event)
 }
 
 const inputVNode = computed(() => {
@@ -401,10 +424,12 @@ const inputComponent = computed(() => {
     'aria-required': requiredIndicator,
     ...normalizeAriaMultiline(multiline),
     onClick: handleClickChild,
-    onKeyPress: handleKeyPress,
-    onKeyDown: handleKeyDown,
+    onKeypress: handleKeyPress,
+    onKeydown: handleKeyDown,
     onChange: handleChange,
     onInput: handleInput,
+    onFocus: handleOnFocus,
+    onBlur: handleOnBlur,
     onCompositionstart: handleCompositionStart,
     onCompositionupdate: handleCompositionUpdate,
     onCompositionend: handleCompositionEnd,
@@ -412,34 +437,42 @@ const inputComponent = computed(() => {
   return inputVNode.value(attributes);
 })
 
-const inputMarkup = computed(() => {
-  return slots.verticalContent ?
-    h('div', { class: styles.VerticalContent, id: `${inputId.value}-VerticalContent`, ref: verticalContentRef, onClick: handleClickChild }, [
-      slots.verticalContent(),
-      inputComponent.value
-    ]) : inputComponent.value
-})
-
 watchEffect(() => {
   setNativeInputValue()
 }, { flush: 'post' })
 
+watch(() => props.focused, (newValue, oldValue) => {
+  if (newValue != undefined && newValue != oldValue) {
+    return props.focused ? inputRef.value?.focus() : inputRef.value?.blur();
+  }
+}, { flush: 'post' });
 
-watchEffect(setInputFocusBlur, { flush: 'post' });
 
+let verticalContentChanged = false;
+onBeforeUpdate(() => {
+  hasSuffix.value = Boolean(slots.suffix);
+  hasPrefix.value = Boolean(slots.prefix);
+
+  if (hasVerticalContent.value != Boolean(slots.verticalContent)) {
+    verticalContentChanged = true;
+    hasVerticalContent.value = Boolean(slots.verticalContent)
+  }
+})
+
+onUpdated(() => {
+  if (verticalContentChanged) {
+    verticalContentChanged = false;
+    nextTick(() => {
+      focus.value ? inputRef.value?.focus() : inputRef.value?.blur();
+    })
+  }
+})
 
 useEventListener(inputRef, 'wheel', (event: WheelEvent) => {
   if (document.activeElement === event.target && isNumericType.value) {
     event.stopPropagation();
   }
 }, { passive: true });
-
-
-
-useEventListener(inputRef, 'focus', handleOnFocus)
-useEventListener(inputRef, 'blur', handleOnBlur)
-
-
 
 
 

@@ -130,12 +130,12 @@ export const linkContext = {
 
 //FrameContext
 import type { FrameLogo } from "@ncpl-polaris/components/Frame/Frame";
-import type { ToastMessage } from "@ncpl-polaris/components/Frame/ToastManager/ToastManager";
+import type { ToastMessage, ToastID } from "@ncpl-polaris/components/Frame/ToastManager/ToastManager";
 
 export type FrameContext = {
   logo: Ref<FrameLogo | undefined>;
   showToast: (e: ToastMessage) => void;
-  hideToast: (e: ToastMessage) => void;
+  hideToast: (e: ToastID) => void;
   startLoading: () => void;
   stopLoading: () => void;
   setContextualSaveBar: (e: any) => void;
@@ -326,21 +326,31 @@ export function useFeatures() {
 }
 
 //PortalsManagerContext
-export const portalsManagerContextKey: InjectionKey<Ref<HTMLElement | undefined> | string> = Symbol(
-  "featuresContextKey"
+export interface PortalsManagerContextType {
+  container: Ref<HTMLElement | undefined>;
+}
+
+export const portalsManagerContextKey: InjectionKey<PortalsManagerContextType> = Symbol(
+  "portalsManagerContextKey"
 );
 
 export const portalsManagerContext = {
   inject: () => {
-    return inject(portalsManagerContextKey, 'body');
+    return inject(portalsManagerContextKey, null);
   },
-  provide: (value: Ref<HTMLElement | undefined>) => {
+  provide: (value: PortalsManagerContextType) => {
     provide(portalsManagerContextKey, value);
   },
 };
 export function usePortalsManager() {
-  const portal = portalsManagerContext.inject();
-  return portal;
+  const portalsManager = portalsManagerContext.inject();
+
+  if (!portalsManager) {
+    throw new Error(
+      'No portals manager was provided. Your application must be wrapped in an <AppProvider> component.',
+    );
+  }
+  return portalsManager;
 }
 
 //WithinFilterContext
@@ -362,11 +372,10 @@ export function useWithinFilter() {
 
 //IdContext
 let idInjection = 0;
-export const useId = (deterministicId?: MaybeRef<string | undefined>): Ref<string> => {
+export const useId = (deterministicId?: MaybeRef<string | undefined>, prefix: string = 'ncpl'): Ref<string> => {
   const idRef = computed(
     () => {
-      let prefix = unref(deterministicId) || 'ncpl';
-      return `${prefix}-${idInjection++}`;
+      return unref(deterministicId) || `${prefix}-${idInjection++}`;
     }
   )
   return idRef

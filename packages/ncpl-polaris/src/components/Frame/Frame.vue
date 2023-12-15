@@ -71,7 +71,7 @@ import ContextualSaveBar from "./ContextualSaveBar/ContextualSaveBar.vue";
 import LoadingBar from "./Loading/Loading.vue";
 import ToastManager from "./ToastManager/ToastManager.vue";
 import styles from "./Frame.module.scss";
-import type { ToastMessage } from "./ToastManager/ToastManager";
+import type { ToastMessage, ToastID } from "./ToastManager/ToastManager";
 import { useEventListener } from '@vueuse/core';
 
 defineOptions({
@@ -184,7 +184,7 @@ frameContext.provide({
       ? [...toastMessages.value]
       : [...toastMessages.value, e];
   },
-  hideToast: (e: ToastMessage) => {
+  hideToast: (e: ToastID) => {
     toastMessages.value = toastMessages.value.filter((i) => {
       return i.id != e.id;
     });

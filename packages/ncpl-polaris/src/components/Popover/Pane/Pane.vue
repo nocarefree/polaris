@@ -11,6 +11,7 @@ import type { PaneProps } from "./Pane"
 import { classNames } from "@ncpl-polaris/utils";
 import styles from '../Popover.module.scss';
 
+//defineOptions({ name: 'Pane' });
 const props = defineProps<PaneProps>();
 const emit = defineEmits(['scrolledToBottom']);
 
@@ -38,7 +39,7 @@ const WrapComponent = defineComponent({
       } else {
         content = slots;
       }
-      return props.fixed ? h('div', { class: className.value }, content) : h(Scrollable, { class: className.value, style: style.value, onScrolledToBottom }, content)
+      return props.fixed ? h('div', { class: className.value }, content) : h(Scrollable, { class: className.value, style: style.value, shadow: true, onScrolledToBottom }, content)
     }
   }
 })

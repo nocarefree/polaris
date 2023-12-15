@@ -1,7 +1,7 @@
 import type { Component } from "vue"
 import type { LabelProps } from "@ncpl-polaris/components/Label"
 
-import type { Action } from '../types';
+import type { Action, Error } from '../types';
 
 export type LabelledProps = {
     /** A unique identifier for the label */

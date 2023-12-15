@@ -1,6 +1,6 @@
 <template>
   <slot></slot>
-  <div id="PolarisPortalsContainer" ref="node"></div>
+  <div id="PolarisPortalsContainer" ref="container"></div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -10,8 +10,8 @@ defineOptions({
   name: 'NpPortalsManager',
 })
 
-const node = ref();
+const container = ref();
 
-portalsManagerContext.provide(node);
+portalsManagerContext.provide({ container });
 
 </script>

@@ -47,7 +47,7 @@ const handlePositioning = (stick: boolean, top = 0, left = 0, width = 0) => {
     })
   }
 
-  state.style = stick ? { position: 'fixed', top, left, width } : {};
+  state.style = stick ? { position: 'fixed', top: `${top}px`, left: `${left}px`, width: `${width}px` } : {};
 
 }
 

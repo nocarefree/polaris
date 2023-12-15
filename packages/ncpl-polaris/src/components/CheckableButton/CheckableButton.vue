@@ -1,8 +1,8 @@
 <template>
   <div :class="classNames(styles.CheckableButton)" @click="$emit('toggleAll')">
     <div :class="styles.Checkbox">
-      <Checkbox :label="accessibilityLabel" label-hidden :checked="selected" :disabled="disabled" @change="onToggleAll"
-        ref="checkBoxRef" />
+      <Checkbox :label="accessibilityLabel" label-hidden :checked="selected" :disabled="disabled"
+        @change="$emit('toggleAll')" ref="checkBoxRef" />
     </div>
     <span :class="styles.Label" :aria-live="ariaLive">
       {{ label }}
@@ -10,7 +10,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 import type { CheckableButtonProps } from './CheckableButton'
 import styles from './CheckableButton.module.scss'
 import { classNames } from "@ncpl-polaris/utils"
@@ -21,4 +21,12 @@ defineOptions({
 })
 defineEmits(['toggleAll'])
 defineProps<CheckableButtonProps>()
+
+const checkBoxRef = ref();
+
+defineExpose({
+  focus() {
+    checkBoxRef.value?.focus();
+  }
+})
 </script>

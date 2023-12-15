@@ -31,8 +31,16 @@ const classnames = computed(() => {
   let leaveFromClass;
   let leaveActiveClass;
   let leaveToClass;
+  let appearFromClass;
+  let appearActiveClass;
+  let appearToClass;
+
 
   if (typeof classNames !== 'string') {
+    appearFromClass = classNames.appear;
+    appearActiveClass = classNames.appearActive;
+    appearToClass = classNames.appearDone;
+
     enterFromClass = classNames.enter;
     enterActiveClass = classNames.enterActive;
     enterToClass = classNames.enterDone;
@@ -41,6 +49,10 @@ const classnames = computed(() => {
     leaveActiveClass = classNames.exitActive;
     leaveToClass = classNames.exitDone;
   } else {
+    appearFromClass = classNames + '-appear';
+    appearActiveClass = classNames + '-active-appear';
+    appearToClass = classNames + '-done-appear';
+
     enterFromClass = classNames + '-enter';
     enterActiveClass = classNames + '-active-enter';
     enterToClass = classNames + '-done-enter';
@@ -51,6 +63,9 @@ const classnames = computed(() => {
   }
 
   return {
+    appearFromClass,
+    appearActiveClass,
+    appearToClass,
     enterFromClass,
     enterActiveClass,
     enterToClass,

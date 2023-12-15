@@ -1,8 +1,8 @@
-import type {ComplexAction} from '../types';
-import { h ,type VNode} from "vue";
+import type { ComplexAction } from '../types';
+import { h, type VNode } from "vue";
 
 import Button from './Button.vue';
-import type {ButtonProps} from './Button';
+import type { ButtonProps } from './Button';
 
 export function buttonsFrom(
   action: ComplexAction,
@@ -25,9 +25,12 @@ export function buttonsFrom(
 }
 
 export function buttonFrom(
-  {content, onAction, ...action}: ComplexAction,
+  { content, onAction, plain, destructive, ...action }: ComplexAction,
   overrides?: Partial<ButtonProps>,
   key?: any,
 ) {
-  return h(Button, { key, onClick:onAction,...action, ...overrides},{default:()=>content});
+  const variant = plain ? 'plain' : (destructive ? 'primary' : undefined);
+  const tone = !overrides?.tone && destructive ? 'critical' : overrides?.tone;
+
+  return h(Button, { key, onClick: onAction, tone, variant, ...action, ...overrides }, { default: () => content });
 }

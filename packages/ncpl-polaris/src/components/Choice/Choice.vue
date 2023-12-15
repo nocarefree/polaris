@@ -20,7 +20,9 @@
         <slot></slot>
       </span>
       <span :class="styles.Label">
-        <span>{{ label }}</span>
+        <span>
+          <component :is="()=>label"></component>
+        </span>
       </span>
     </label>
   </ConditionalWrapper>
@@ -28,7 +30,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { ChoiceProps } from './Choice';
-import { helpTextID } from './Choice';
+import { helpTextID } from './utils';
 import ConditionalWrapper from '../ConditionalWrapper';
 import styles from './Choice.module.scss';
 import Text from "../Text";

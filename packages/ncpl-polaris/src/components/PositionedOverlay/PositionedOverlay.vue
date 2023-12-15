@@ -89,7 +89,7 @@ const _style = computed<CSSProperties>(() => {
   };
 });
 
-const handleMeasurement = () => {
+const handleMeasurement = (...avg: any) => {
   const { lockPosition, top } = state;
   observer.disconnect();
 

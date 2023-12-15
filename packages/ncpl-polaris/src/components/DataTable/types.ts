@@ -1,13 +1,4 @@
-import type { Component } from 'vue';
-
-export type TableRow =
-  | DataTableProps['headings']
-  | DataTableProps['rows']
-  | DataTableProps['totals'];
-
-export type TableData = string | number | Component;
-
-export type ColumnContentType = 'text' | 'numeric';
+import type { Component } from "vue";
 
 export type SortDirection = 'ascending' | 'descending' | 'none';
 export type VerticalAlign = 'top' | 'bottom' | 'middle' | 'baseline';
@@ -33,17 +24,21 @@ export interface DataTableState {
 }
 
 
-export interface DataTableProps {
-      /** List of data types, which determines content alignment for each column. Data types are "text," which aligns left, or "numeric," which aligns right. */
+export type TableData = string | number | Component;
+
+export type ColumnContentType = 'text' | 'numeric';
+
+export type DataTableProps = {
+  /** List of data types, which determines content alignment for each column. Data types are "text," which aligns left, or "numeric," which aligns right. */
   columnContentTypes: ColumnContentType[];
   /** List of column headings. */
-  headings: Component[];
+  headings: (Component | string)[];
   /** List of numeric column totals, highlighted in the table’s header below column headings. Use empty strings as placeholders for columns with no total. */
   totals?: TableData[];
   /** Custom totals row heading */
   totalsName?: {
-    singular: Component;
-    plural: Component;
+    singular: string;
+    plural: string;
   };
   /** Placement of totals row within table */
   showTotalsInFooter?: boolean;

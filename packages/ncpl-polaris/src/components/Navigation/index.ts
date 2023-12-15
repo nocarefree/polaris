@@ -6,3 +6,4 @@ export default NpNavigation
 
 
 export * from './Navigation'
+export * from "./Section"

@@ -25,10 +25,11 @@
 import { shallowRef, toRef, computed } from 'vue'
 import type { CheckboxProps } from './Checkbox'
 import Choice from '../Choice';
+import { helpTextID } from "../Choice/utils"
 import Icon from '../Icon';
-import styles from './Checkbox.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
-import { MinusMinor, TickSmallMinor } from "@ncpl/ncpl-icons"
+import styles from './Checkbox.module.scss';
+import { classNames } from "@ncpl-polaris/utils";
+import { MinusMinor, TickSmallMinor } from "@ncpl/ncpl-icons";
 import { errorTextID } from '../InlineError';
 import { useId, withinListboxContext } from "../context"
 
@@ -50,7 +51,7 @@ const _ariaDescribedBy = computed(() => {
     describedBy.push(errorTextID(uniqId.value));
   }
   if (helpText) {
-    describedBy.push(Choice.helpTextID(uniqId.value));
+    describedBy.push(helpTextID(uniqId.value));
   }
   if (ariaDescribedBy) {
     describedBy.push(ariaDescribedBy);
@@ -90,5 +91,11 @@ const handleOnClick = () => {
   emit('change', inputNode.value.checked, uniqId.value);
   inputNode.value.focus();
 };
+
+defineExpose({
+  focus: () => {
+    inputNode.value?.focus();
+  }
+})
 
 </script>

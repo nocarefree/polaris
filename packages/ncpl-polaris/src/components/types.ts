@@ -10,6 +10,8 @@ export type AttrsType = {
   [key: string]: string | number | undefined;
 };
 
+//export type ArrayElement<T> = T extends (infer U)[] ? U : never;
+
 export interface Action {
   /** A unique identifier for the action */
   id?: string;
@@ -40,6 +42,29 @@ export interface ItemURLDetails {
   external?: boolean;
 }
 
+export interface OptionDescriptor {
+  /** Value of the option */
+  value: string;
+  /** Display label for the option */
+  label: string | Component;
+  /** Whether the option is disabled or not */
+  disabled?: boolean;
+  /** Whether the option is active or not */
+  active?: boolean;
+  /** Unique identifier for the option */
+  id?: string;
+  /** Media to display to the left of the option content */
+  media?: Component;
+}
+
+export interface SectionDescriptor {
+  /** Collection of options within the section */
+  options: OptionDescriptor[];
+  /** Section title */
+  title?: string;
+}
+
+export type Descriptor = SectionDescriptor | OptionDescriptor;
 
 export interface Action {
   /** A unique identifier for the action */
@@ -127,7 +152,7 @@ export interface ActionListItemDescriptor
   accessibilityLabel?: string;
   /** @deprecated Badge component */
   badge?: {
-    status: 'new';
+    tone: 'new';
     content: string;
   };
   /** @deprecated Source of the icon */

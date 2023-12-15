@@ -6,7 +6,8 @@
   )">
     <div v-if="label || $slots.label" :class="styles.LabelWrapper">
       <Label :id="id" :required-indicator="requiredIndicator" v-bind="$attrs" :hidden="false">
-        <component v-if="label" :is="() => [label]"></component>
+        <template v-if="typeof label == 'string'">{{ label }}</template>
+        <component v-else="label" :is="label"></component>
         <slot v-else name="label"></slot>
       </Label>
       <component :is="actionComponent"></component>
@@ -39,7 +40,7 @@ defineOptions({
 const props = defineProps<LabelledProps>()
 
 const actionComponent = computed(() => {
-  return () => props.action ? h('div', { class: styles.Action }, [buttonFrom(props.action, { plain: true })]) : null
+  return () => props.action ? h('div', { class: styles.Action }, [buttonFrom(props.action, { variant: 'plain' })]) : null
 })
 
 </script>

@@ -10,17 +10,16 @@
         </Item>
       </template>
     </div>
-    <Box v-if="$slots.helpText" :id="`${id}HelpText`" padding-block-start="2" padding-inline-start="polarisSummerEditions2023
-      ? '2' : '5' " padding-block-end="0" padding-inline-end="polarisSummerEditions2023 ? '2' : '5' "
-      color="text-subdued">
+    <Box v-if="$slots.helpText" :id="`${id}HelpText`" padding-block-start="200" padding-inline-start="200"
+      padding-block-end="0" paddingInlineEnd="200" color="text-secondary">
       <slot name="helpText"></slot>
     </Box>
   </div>
 </template>
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
-import type { FormLayoutGroupProps } from './Group'
 import Item from '../Item';
+import Box from '../../Box';
 import styles from '../FormLayout.module.scss'
 import { classNames, elementChildren } from '../../../utils';
 import { useId } from '../../context';
@@ -28,7 +27,10 @@ import { useId } from '../../context';
 defineOptions({
   name: 'NpFormLayoutGroup',
 })
-const props = defineProps<FormLayoutGroupProps>()
+const props = defineProps<{
+  condensed?: boolean;
+  title?: string;
+}>()
 
 const id = useId();
 

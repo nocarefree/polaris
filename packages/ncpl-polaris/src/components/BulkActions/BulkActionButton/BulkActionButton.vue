@@ -2,14 +2,17 @@
   <div :class="styles.BulkActionButton" ref="bulkActionButton">
     <Tooltip v-if="isActivatorForMoreActionsPopover" :content="content" preferred-position="above">
       <Button :external="external" :url="url" :accessibility-label="isActivatorForMoreActionsPopover ? content :
-        accessibilityLabel" :disclosure="disclosure && showContentInButton" :onClick="onAction" :disabled="disabled"
-        size="slim" :icon="icon">
+        accessibilityLabel" :disclosure="disclosure && showContentInButton" @click="onAction" :disabled="disabled"
+        size="slim">
+        <template #icon>
+          <Icon :source="HorizontalDotsMinor" tone="base"></Icon>
+        </template>
         {{ buttonContent }}
       </Button>
     </Tooltip>
     <Button v-else :external="external" :url="url" :accessibility-label="isActivatorForMoreActionsPopover ? content :
-      accessibilityLabel" :disclosure="disclosure && showContentInButton" :onClick="onAction" :disabled="disabled"
-      size="slim" :icon="icon">
+      accessibilityLabel" :disclosure="disclosure && showContentInButton" @click="onAction" :disabled="disabled"
+      size="slim">
       {{ buttonContent }}
     </Button>
     <Indicator v-if="indicator" />
@@ -38,9 +41,6 @@ const isActivatorForMoreActionsPopover = computed(() => props.disclosure && !pro
 
 const buttonContent = computed(() => isActivatorForMoreActionsPopover.value ? undefined : props.content);
 
-const icon = computed(() => {
-  return isActivatorForMoreActionsPopover.value ? h(Icon, { source: HorizontalDotsMinor, color: "base" }) : undefined
-})
 
 onMounted(() => {
   if (bulkActionButton.value) {
