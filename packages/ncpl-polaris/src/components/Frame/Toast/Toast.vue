@@ -46,7 +46,7 @@ onMounted(() => {
     props.duration < DEFAULT_TOAST_DURATION_WITH_ACTION
   ) {
     // eslint-disable-next-line no-console
-    console.log(
+    console.warn(
       'Toast with action should persist for at least 10,000 milliseconds to give the merchant enough time to act on it.',
     );
   }

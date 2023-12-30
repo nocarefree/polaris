@@ -4,12 +4,12 @@
     <div :class="styles.ItemWrapper">
       <div :class="classNames(
         styles.ItemInnerWrapper,
-        (selected && childIsActive && styles['ItemInnerWrapper-open']) || (selected && !childIsActive && styles['ItemInnerWrapper-selected']),
+        (_selected && childIsActive && styles['ItemInnerWrapper-open']) || (_selected && !childIsActive && styles['ItemInnerWrapper-selected']),
         displayActionsOnHover &&
         styles['ItemInnerWrapper-display-actions-on-hover'],
         disabled && styles.ItemInnerDisabled
       )">
-        <ConditionalWrapper :condition="displayActionsOnHover && actions?.length && hasBadge">
+        <ConditionalWrapper :condition="Boolean(displayActionsOnHover && actions?.length && hasBadge)">
           <template #wrapper="{ children }">
             <span :class="styles.ItemWithFloatingActions">
               <component :is="children"></component>
@@ -25,7 +25,7 @@
             <UnstyledLink :url="url" :class="classNames(
               styles.Item,
               disabled && styles['Item-disabled'],
-              (selected || childIsActive) && styles['Item-selected'],
+              (_selected || childIsActive) && styles['Item-selected'],
               showExpanded && styles.subNavigationActive,
               childIsActive && styles['Item-child-active'],
               showVerticalLine && styles['Item-line'],
@@ -52,18 +52,18 @@
           </ConditionalWrapper>
           <span v-if="actions?.length" ::class="styles.SecondaryActions">
             <template v-for="{ url, accessibilityLabel, tooltip, icon, onClick } in actions">
-              <ConditionalWrapper :condition="tooltip">
+              <ConditionalWrapper :condition="Boolean(tooltip)">
                 <template #wrapper="{ children }">
                   <Tooltip v-bind="tooltip">
                     <component :is="children"></component>
                   </Tooltip>
                 </template>
-                <UnstyledLink v-if="url" external :url="url" :class="styles.SecondaryAction" :tabIndex="tabIndex"
+                <UnstyledLink v-if="url" external :url="url" :class="styles.SecondaryAction" :tab-index="tabIndex"
                   :aria-disabled="disabled" :aria-label="accessibilityLabel" @click="onClick">
                   <Icon :source="icon" />
                 </UnstyledLink>
-                <UnstyledButton v-else :class="styles.SecondaryAction" :tabIndex="tabIndex" :disabled="disabled"
-                  :accessibilityLabel="accessibilityLabel" @click="onClick">
+                <UnstyledButton v-else :class="styles.SecondaryAction" :tab-index="tabIndex" :disabled="disabled"
+                  :accessibility-label="accessibilityLabel" @click="onClick">
                   <Icon :source="icon" />
                 </UnstyledButton>
               </ConditionalWrapper>
@@ -78,7 +78,7 @@
       </div>
     </div>
     <SecondaryNavigation v-if="subNavigationItems.length > 0" :item-component="Item" :icon="icon"
-      :longestMatch="matchingSubNavigationItems.sort(({ url: firstUrl }, { url: secondUrl }) => secondUrl.length - firstUrl.length)[0]"
+      :longest-match="matchingSubNavigationItems.sort(({ url: firstUrl }, { url: secondUrl }) => secondUrl.length - firstUrl.length)[0]"
       :sub-navigation-items="subNavigationItems" :show-expanded="showExpanded" :truncate-text="truncateText"
       :secondary-navigation-id="secondaryNavigationId" />
   </li>
@@ -90,7 +90,7 @@
         selected && styles['ItemInnerWrapper-selected'],
       )">
         <button type="button"
-          :class="classNames(styles.ListItem, Boolean(actions && actions.length) && styles['ListItem-hasAction'])"
+          :class="classNames(styles.Item, disabled && styles['Item-disabled'], selected && styles['Item-selected'],)"
           :disabled="disabled" :aria-disabled="disabled" :aria-label="accessibilityLabel" @click="onClick">
           <div v-if="iconSource" :class="classNames(styles.Icon, shouldResizeIcon && styles['Icon-resized'])">
             <Icon :source="iconSource" />
@@ -163,7 +163,6 @@ const hasBadge = computed(() => props.new || props.badge);
 
 const matchState = computed(() => {
   const { url, matches, exactMatch, matchPaths, excludePaths } = props;
-
   return matchStateForItem(
     { url, matches, exactMatch, matchPaths, excludePaths },
     navigation.location,
@@ -183,13 +182,13 @@ const matchingSubNavigationItems = computed(() =>
 
 const childIsActive = computed(() => matchingSubNavigationItems.value.length > 0);
 
-const _selected = computed(() =>
-  !Boolean(props.selected)
+const _selected = computed(() => {
+  return !Boolean(props.selected)
     ? matchState.value === MatchState.MatchForced ||
     matchState.value === MatchState.MatchUrl ||
     matchState.value === MatchState.MatchPaths
     : props.selected
-);
+});
 
 const showExpanded = computed(() => _selected.value || props.expanded || childIsActive.value);
 const iconSource = computed(() => props.selected || childIsActive.value ? props.matchedItemIcon ?? props.icon : props.icon);

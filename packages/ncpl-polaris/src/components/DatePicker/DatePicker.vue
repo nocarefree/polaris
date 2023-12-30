@@ -174,7 +174,6 @@ const handleMonthChangeClick = (month: number, year: number) => {
   focusDate.value = undefined;
   calMonth.value = month;
   calYear.value = year;
-  console.log(month, year)
   emit('monthChange', month, year);
 }
 const handleDateSelection = (range: Range) => {

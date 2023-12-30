@@ -1,6 +1,7 @@
 /**
  * Actions
  */
+export * from "./AccountConnection"
 export * from "./Button";
 export * from './ButtonGroup';
 export * from './PageActions';
@@ -165,5 +166,4 @@ export * from './LegacyStack/Item'
 export * from "./ConditionalWrapper"
 
 export * from "./context";
-
-
+export * from './SettingAction'

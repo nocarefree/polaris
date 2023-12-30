@@ -1,8 +1,11 @@
 <template>
   <div :class="pageClassName">
-    <Header v-if="hasHeaderContent" v-bind="headerProps">
+    <Header v-if="hasHeaderContent || $slots.primaryAction" v-bind="headerProps">
       <template v-if="$slots.titleMetadata" #titleMetadata>
         <slot name="titleMetadata"></slot>
+      </template>
+      <template v-if="$slots.primaryAction" #primaryAction>
+        <slot name="primaryAction"></slot>
       </template>
     </Header>
     <div :class="contentClassName">

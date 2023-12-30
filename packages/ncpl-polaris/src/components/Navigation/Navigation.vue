@@ -43,7 +43,6 @@ const navigationProvide = reactive({
   onDismiss: toRef(props, 'onDismiss'),
 });
 
-
 navigationContext.provide(navigationProvide);
 withinContentContext.provide();
 </script>

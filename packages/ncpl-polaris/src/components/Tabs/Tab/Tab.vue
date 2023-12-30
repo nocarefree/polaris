@@ -21,7 +21,7 @@
         <DuplicateModal v-if="duplicateAction" :open="activeModalType === 'duplicate'"
           :name="i18n.translate('Polaris.Tabs.Tab.copy', { name: content })" @close="activeModalType = null"
           @clickPrimaryAction="(e, done) => duplicateAction?.onPrimaryAction?.(e, done)"
-          :is-modal-loading="isModalLoading" :viewNames="viewNames || []" />
+          :is-modal-loading="isModalLoading" :view-names="viewNames || []" />
         <Modal v-if="deleteAction" :open="activeModalType === 'delete'" @close="activeModalType = null" :primary-action="{
           content: i18n.translate('Polaris.Tabs.Tab.deleteModal.delete'),
           onAction: () => { deleteAction?.onPrimaryAction?.(props.content, () => { }), activeModalType = null },

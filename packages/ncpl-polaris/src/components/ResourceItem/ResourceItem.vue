@@ -202,7 +202,6 @@ const handleSelection = (value: boolean, shiftKey: boolean) => {
 }
 
 const handleLargerSelectionArea = (event: Event) => {
-  console.log(1);
   stopPropagation(event as MouseEvent);
   handleSelection(!selected.value, (event as MouseEvent).shiftKey);
 };

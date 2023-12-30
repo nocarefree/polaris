@@ -93,6 +93,6 @@ export interface IndexTableProps extends IndexProviderProps {
     sortToggleLabels?: IndexTableSortToggleLabels;
     /** Add zebra striping to table rows */
     hasZebraStriping?: boolean;
-    rows: any[];
+    itemCount: number;
     selected?: number[] | string[] | 'All';
 }

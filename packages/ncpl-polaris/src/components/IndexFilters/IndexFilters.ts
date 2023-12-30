@@ -30,7 +30,7 @@ export interface IndexFiltersProps extends Omit<FiltersProps, 'focused' | 'child
   /** The primary action to display  */
   primaryAction?: IndexFiltersPrimaryAction;
   /** The cancel action to display */
-  cancelAction: IndexFiltersCancelAction;
+  cancelAction?: IndexFiltersCancelAction;
   /** The current mode of the IndexFilters component. Used to determine which view to show */
   mode: IndexFiltersMode;
   /** Will disable all the elements within the IndexFilters component */

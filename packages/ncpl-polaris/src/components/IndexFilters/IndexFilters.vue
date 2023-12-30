@@ -164,7 +164,7 @@ const useExecutedCallback = (action?: ExecutedCallback) => (name: string) => {
 }
 
 const onExecutedCancelAction = () => {
-  props.cancelAction.onAction?.();
+  props.cancelAction?.onAction?.();
   emit('update:mode', IndexFiltersMode.Default);
 }
 

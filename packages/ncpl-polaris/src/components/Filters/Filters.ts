@@ -15,7 +15,7 @@ export interface FilterInterface {
     /** The label for the filter */
     label: string;
     /** The markup for the given filter */
-    filter: Component;
+    //filter: Component;
     /** Whether or not the filter should have a shortcut popover displayed */
     shortcut?: boolean;
     /** Whether or not the filter should be pinned, permanently displaying the filter */

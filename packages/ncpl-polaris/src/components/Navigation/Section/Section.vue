@@ -16,10 +16,7 @@
       </template>
     </li>
 
-    <Item v-for="({ onClick, label, subNavigationItems, ...rest }, index) in items"
-      :subNavigationItems="subNavigationItems" :key="label" :label="label" v-bind="rest"
-      :expanded="expandedIndex === index" @toggleExpandedState="() => handleToggleExpandedState(index)"
-      @click="() => handleClick(onClick, subNavigationItems != null && subNavigationItems.length > 0)" />
+    <Item v-for="(item, index) in items" v-bind.prop="itemProps(item, index)" />
 
     <li v-if="rollup && iniItems.rollupItems.length > 0" :class="styles.RollupSection">
       <Collapsible :id="additionalItemsId" :open="expanded">
@@ -48,10 +45,10 @@ import type { NavigationSectionProps } from './Section'
 import type { ItemProps } from '../types';
 import Item from '../Item'
 import { classNames } from "@ncpl-polaris/utils";
-import Text from "@ncpl-polaris/components/Text";
-import Icon from "@ncpl-polaris/components/Icon";
-import Collapsible from "@ncpl-polaris/components/Collapsible";
-import Tooltip from "@ncpl-polaris/components/Tooltip";
+import Text from "../../Text";
+import Icon from "../../Icon";
+import Collapsible from "../../Collapsible";
+import Tooltip from "../../Tooltip";
 
 import { useId, useMediaQuery } from "../../context";
 import { HorizontalDotsMinor } from "@ncpl/ncpl-icons";
@@ -86,6 +83,21 @@ const iniItems = computed(() => {
     rollupItems: [],
   };
 })
+
+const itemProps = (item: any, index: number) => {
+  const { onClick, label, subNavigationItems, ...rest } = item;
+
+  return {
+    subNavigationItems,
+    label,
+    matches: undefined,
+    key: label,
+    ...rest,
+    expanded: expandedIndex.value === index,
+    onToggleExpandedState: () => handleToggleExpandedState(index),
+    onClick: () => handleClick(onClick, subNavigationItems != null && subNavigationItems.length > 0),
+  } as ItemProps
+}
 
 // const additionalItemsId = useId();
 

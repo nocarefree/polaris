@@ -1,12 +1,12 @@
 <template>
-  <component :is="linkComponent || 'a'" v-bind="_attrs">
+  <a :href="url" v-bind="_attrs" @click="onClick">
     <slot></slot>
-  </component>
+  </a>
 </template>
 
 <script setup lang="ts">
-import { computed, useAttrs, unref } from "vue"
-import { linkContext } from '../context';
+import { computed, useAttrs, unref, getCurrentInstance } from "vue"
+import { linkContext, routerContext } from '../context';
 import { UnstyledLinkProps } from "./UnstyledLink"
 import { unstyled } from "@ncpl-polaris/components/shared"
 
@@ -14,10 +14,22 @@ defineOptions({
   name: 'NpUnstyledLink',
 })
 
+
 const props = defineProps<UnstyledLinkProps>()
 const attrs = useAttrs();
+const instance = getCurrentInstance()!
+const router = instance.appContext.config.globalProperties.$router;
 const linkComponent = linkContext.inject();
+const hasRouter = routerContext.inject();
 
+const onClick = (event: Event) => {
+  if (hasRouter && router) {
+    router.push(props.url)
+    event.preventDefault();
+    return false;
+  }
+
+}
 
 const _attrs = computed(() => {
   let _linkComponent = unref(linkComponent);
@@ -25,7 +37,7 @@ const _attrs = computed(() => {
     return { ...attrs, ...unstyled.props };
   }
 
-  let { external, url, target: targetProp } = props;
+  let { external, target: targetProp } = props;
   let target;
 
   if (external) {
@@ -37,7 +49,6 @@ const _attrs = computed(() => {
   return {
     target,
     ...attrs,
-    href: url,
     rel,
     ...unstyled.props,
   };

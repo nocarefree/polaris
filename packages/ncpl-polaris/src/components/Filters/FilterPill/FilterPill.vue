@@ -32,7 +32,7 @@
       <div :class="styles.PopoverWrapper">
         <PopoverSection>
           <BlockStack gap="100">
-            <component :is="filter"></component>
+            <slot></slot>
             <div v-if="!hideClearButton" :class="styles.ClearButtonWrapper">
               <Button @click="handleClear" variant="plain" :disabled="!selected" text-align="left">
                 {{ i18n.translate('Polaris.FilterPill.clear') }}

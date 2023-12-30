@@ -2,29 +2,27 @@
   <div :class="styles.IndexTable">
     <div :class="tableWrapperClassNames" ref="tableMeasurerRef">
       <Loading v-if="!shouldShowBulkActions && !condensed" :loading="loading"
-        :resourceNamePlural="resourceNamePlural.toLocaleLowerCase()"></Loading>
+        :resource-name-plural="resourceNamePlural.toLocaleLowerCase()"></Loading>
       <template v-if="itemCount > 0">
-        <StickyHeader v-if="stickyWrapper" :stickyWrapper="stickyWrapper">
+        <StickyHeader v-if="stickyWrapper" :sticky-wrapper="stickyWrapper">
           <template name="loading">
-            <Loading :resourceNamePlural="resourceNamePlural.toLocaleLowerCase()"></Loading>
+            <Loading :resource-name-plural="resourceNamePlural.toLocaleLowerCase()"></Loading>
           </template>
           <template v-if="$slots.sort" name="sort">
             <slot name="sort"></slot>
           </template>
           <slot name="bulkActions">
             <div v-if="shouldShowBulkActions && !condensed" :class="bulkActionClassNames"
-              :style="{ insetBlockStart: isBulkActionsSticky ? undefined : bulkActionsAbsoluteOffset, width: bulkActionsMaxWidth, insetInlineStart: isBulkActionsSticky ? bulkActionsOffsetLeft : undefined }">
+              :style="{ insetBlockStart: isBulkActionsSticky ? undefined : bulkActionsAbsoluteOffset, width: `${bulkActionsMaxWidth}px`, insetInlineStart: isBulkActionsSticky ? bulkActionsOffsetLeft : undefined }">
               <BulkActions :select-mode="selectMode" :promoted-actions="promotedActions" :actions="actions"
                 @selectModeToggle="condensed ? $emit('selectionChange', SelectionType.All, false) : undefined"
-                :isSticky="isBulkActionsSticky" :width="bulkActionsMaxWidth" />
+                :is-sticky="isBulkActionsSticky" :width="bulkActionsMaxWidth" />
             </div>
           </slot>
         </StickyHeader>
         <ul v-if="condensed" :data-selectmode="Boolean(selectMode)"
           :class="classNames(styles.CondensedList, hasZebraStriping && styles.ZebraStriping)" ref="stickyWrapper">
-          <template v-for="(row, index) in rows">
-            <slot :row="row" :index="index"></slot>
-          </template>
+          <slot></slot>
         </ul>
         <ScrollContainer v-else :ref="(e: any) => scrollableContainerElement = e?.$el"
           @scroll="handleScrollContainerScroll">
@@ -47,9 +45,7 @@
               </tr>
             </thead>
             <tbody :ref="e => setTableBodyRef">
-              <template v-for="(row, index) in rows">
-                <slot :row="row" :index="index"></slot>
-              </template>
+              <slot></slot>
             </tbody>
           </table>
         </ScrollContainer>
@@ -107,11 +103,9 @@ const props = withDefaults(defineProps<IndexTableProps>(), {
   bulkActions: () => [],
   lastColumnSticky: false,
   defaultSortDirection: 'descending',
-  rows: () => [],
   selected: () => [],
 })
 
-const itemCount = computed(() => props.rows.length);
 const selectedItemsCount = computed(() => props.selected === 'All' ? props.selected : props.selected.length)
 
 const i18n = useI18n();
@@ -187,7 +181,7 @@ const bulkActionClassNames = computed(() => classNames(
 ))
 
 const bulkActionsAccessibilityLabel = computed(() => {
-  const totalItemsCount = itemCount.value;
+  const totalItemsCount = props.itemCount;
   const allSelected = selectedItemsCount.value === totalItemsCount;
 
   if (totalItemsCount === 1 && allSelected) {
@@ -208,7 +202,7 @@ const bulkActionsAccessibilityLabel = computed(() => {
     return i18n.value.translate(
       'Polaris.IndexProvider.a11yCheckboxDeselectAllMultiple',
       {
-        itemsLength: itemCount.value,
+        itemsLength: props.itemCount,
         resourceNamePlural: resourceNamePlural.value,
       },
     );
@@ -216,7 +210,7 @@ const bulkActionsAccessibilityLabel = computed(() => {
     return i18n.value.translate(
       'Polaris.IndexProvider.a11yCheckboxSelectAllMultiple',
       {
-        itemsLength: itemCount.value,
+        itemsLength: props.itemCount,
         resourceNamePlural: resourceNamePlural.value,
       },
     );
@@ -229,7 +223,7 @@ const bulkSelectState = computed(() => {
     bulkSelectState = undefined;
   } else if (
     selectedItemsCount.value === SELECT_ALL_ITEMS ||
-    selectedItemsCount.value === itemCount.value
+    selectedItemsCount.value === props.itemCount
   ) {
     bulkSelectState = true;
   }
@@ -355,7 +349,7 @@ function getPaginatedSelectAllAction() {
   const customActionText =
     paginatedSelectAllActionText ??
     i18n.value.translate('Polaris.IndexTable.selectAllItems', {
-      itemsLength: itemCount.value,
+      itemsLength: props.itemCount,
       resourceNamePlural: computedResourceName.value.plural.toLocaleLowerCase(),
     });
 
@@ -507,7 +501,7 @@ const indexTableProvide = computed(() => {
     shouldShowBulkActions: shouldShowBulkActions.value,
     bulkActionsAccessibilityLabel: bulkActionsAccessibilityLabel.value,
     bulkSelectState: bulkSelectState.value,
-    paginatedSelectAllText: `All ${itemCount.value}+ ${computedResourceName.value.plural} are selected`,
+    paginatedSelectAllText: `All ${props.itemCount}+ ${computedResourceName.value.plural} are selected`,
     paginatedSelectAllAction: getPaginatedSelectAllAction(),
     selectionChange: selectionChange
   }

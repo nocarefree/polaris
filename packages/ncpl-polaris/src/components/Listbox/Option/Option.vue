@@ -11,7 +11,7 @@
           <component :is="children"></component>
         </UnstyledLink>
       </template>
-      <ConditionalWrapper :condition="isString">
+      <ConditionalWrapper :condition="isString()">
         <template #wrapper="{ children }">
           <TextOption :selected="selected" :disabled="disabled">
             <component :is="children"></component>
@@ -41,10 +41,10 @@ defineOptions({
 })
 const props = defineProps<ListboxOptionProps>()
 const slots = useSlots();
-const isString = computed(() => {
+const isString = () => {
   const children = slots.default?.();
-  return children && children.length == 0 && children[0].type == Text;
-})
+  return children && children.length < 2 && children[0].type == Text;
+}
 
 const domId = useId();
 const { onOptionSelect } = useListbox();
@@ -62,7 +62,6 @@ const sectionAttributes = computed(() => {
 });
 
 const handleOptionSelect = (event: MouseEvent | KeyboardEvent) => {
-  console.log('handleOptionSelect')
   event.preventDefault();
   event.stopPropagation();
   onAction && onAction();
@@ -77,7 +76,6 @@ const handleOptionSelect = (event: MouseEvent | KeyboardEvent) => {
 };
 
 const handleMouseDown = (event: MouseEvent) => {
-  console.log('handleMouseDown')
   event.preventDefault();
 };
 

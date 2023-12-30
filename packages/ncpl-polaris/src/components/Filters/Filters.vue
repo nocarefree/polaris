@@ -31,7 +31,11 @@
       :style="mountedState && !hideQueryField ? { ...defaultFilterStyles, ...transitionFilterStyles[mountedState] } : undefined">
       <div :class="classNames(styles.FiltersInner)">
         <div :class="classNames(styles.FiltersStickyArea)">
-          <component :is="pinnedFiltersMarkup" />
+
+          <FilterPill v-for="filter in pinnedFilters" v-bind="getFilterPillProps(filter)">
+            <slot :name="`filter_${filter.key}`"></slot>
+          </FilterPill>
+
           <div v-if="shouldShowAddButton"
             :class="classNames(styles.AddFilterActivator, hasOneOrMorePinnedFilters && styles.AddFilterActivatorMultiple)">
             <Popover :active="popoverActive && !disabled" @close="togglePopoverActive">
@@ -247,28 +251,46 @@ const hasOneOrMorePinnedFilters = computed(() => pinnedFilters.value.length >= 1
 
 const labelVariant = computed(() => mdDown ? 'bodyLg' : 'bodySm');
 
-const pinnedFiltersMarkup = computed(() => {
-  return () => pinnedFilters.value.map(
-    ({ key: filterKey, ...pinnedFilter }) => {
-      const appliedFilter = props.appliedFilters?.find(({ key }) => key === filterKey);
-      const handleFilterPillRemove = () => {
-        localPinnedFilters.value = localPinnedFilters.value.filter((key) => key !== filterKey);
-        appliedFilter?.onRemove(filterKey);
-      };
+const getFilterPillProps = ({ key: filterKey, ...pinnedFilter }: FilterInterface) => {
+  const appliedFilter = props.appliedFilters?.find(({ key }) => key === filterKey);
+  const handleFilterPillRemove = () => {
+    localPinnedFilters.value = localPinnedFilters.value.filter((key) => key !== filterKey);
+    appliedFilter?.onRemove(filterKey);
+  };
 
-      return h(FilterPill, {
-        ...pinnedFilter,
-        initialActive: hasMounted.value && !pinnedFilter.pinned && !appliedFilter,
-        label: appliedFilter?.label || pinnedFilter.label,
-        filterKey: filterKey,
-        selected: appliedFilterKeys.value?.includes(filterKey),
-        onRemove: handleFilterPillRemove,
-        disabled: pinnedFilter.disabled || props.disableFilters,
-        closeOnChildOverlayClick: props.closeOnChildOverlayClick,
-      });
-    }
-  );
-})
+  return {
+    ...pinnedFilter,
+    initialActive: hasMounted.value && !pinnedFilter.pinned && !appliedFilter,
+    label: appliedFilter?.label || pinnedFilter.label,
+    filterKey: filterKey,
+    selected: appliedFilterKeys.value?.includes(filterKey),
+    onRemove: handleFilterPillRemove,
+    disabled: pinnedFilter.disabled || props.disableFilters,
+    closeOnChildOverlayClick: props.closeOnChildOverlayClick,
+  };
+};
+// const pinnedFiltersMarkup = computed(() => {
+//   return () => pinnedFilters.value.map(
+//     ({ key: filterKey, ...pinnedFilter }) => {
+//       const appliedFilter = props.appliedFilters?.find(({ key }) => key === filterKey);
+//       const handleFilterPillRemove = () => {
+//         localPinnedFilters.value = localPinnedFilters.value.filter((key) => key !== filterKey);
+//         appliedFilter?.onRemove(filterKey);
+//       };
+
+//       return h(FilterPill, {
+//         ...pinnedFilter,
+//         initialActive: hasMounted.value && !pinnedFilter.pinned && !appliedFilter,
+//         label: appliedFilter?.label || pinnedFilter.label,
+//         filterKey: filterKey,
+//         selected: appliedFilterKeys.value?.includes(filterKey),
+//         onRemove: handleFilterPillRemove,
+//         disabled: pinnedFilter.disabled || props.disableFilters,
+//         closeOnChildOverlayClick: props.closeOnChildOverlayClick,
+//       });
+//     }
+//   );
+// })
 
 const handleAddFilterClick = () => {
   emit('addFilterClick');

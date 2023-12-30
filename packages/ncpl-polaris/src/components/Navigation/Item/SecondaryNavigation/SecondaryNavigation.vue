@@ -3,13 +3,17 @@
     styles['SecondaryNavigation-noIcon'])">
     <Collapsible :id="id" :open="showExpanded" :transition="false">
       <ul :class="styles.List">
-        <component :is="nodes"></component>
+        <component v-for="(item, index) in subNavigationItems" :is="itemComponent" v-bind="item"
+          :show-vertical-line="Boolean(index < matchedItemPosition)" :show-vertical-hover-pointer="index === hoveredIndex"
+          @mouseenter="() => item.disabled ? undefined : hoveredIndex = index"
+          @mouseleave="() => item.disabled ? undefined : hoveredIndex = null" :matches="isEqual(item, longestMatch)"
+          @click="() => { navigation.onDismiss?.(), item.onClick?.() }" :truncate-text="truncateText"></component>
       </ul>
     </Collapsible>
   </div>
 </template>
 <script setup lang="ts">
-import { computed, Fragment, h, ref } from 'vue'
+import { computed, shallowRef } from 'vue'
 import type { SecondaryNavigationProps } from './SecondaryNavigation'
 import Collapsible from '@ncpl-polaris/components/Collapsible'
 import styles from '../../Navigation.module.scss'
@@ -22,41 +26,13 @@ defineOptions({
 })
 const props = defineProps<SecondaryNavigationProps>()
 const navigation = useNavigation();
-const hoveredItem = ref<any>();
-
+const hoveredIndex = shallowRef<number | null>();
 const _id = useId();
 const id = computed(() => {
   return props.secondaryNavigationId || _id.value
 })
 
-const nodes = computed(() => {
-
-  const { subNavigationItems = [], longestMatch, truncateText } = props;
-  const matchedItemPosition = subNavigationItems.findIndex((item) =>
-    isEqual(item, longestMatch),
-  );
-  const hoveredItemPosition = subNavigationItems.findIndex((item) =>
-    isEqual(item, hoveredItem),
-  );
-  return h(Fragment, props.subNavigationItems.map((item, index) => {
-    const { label, ...rest } = item;
-    const onClick = () => {
-      navigation.onDismiss?.();
-      item.onClick?.();
-    };
-
-    const shouldShowVerticalLine = index < matchedItemPosition;
-
-    return h(props.itemComponent, {
-      key: label, ...rest, label, showVerticalLine: shouldShowVerticalLine, showVerticalHoverPointer: index === hoveredItemPosition,
-      onMouseenter: item.disabled ? undefined : () => hoveredItem.value = item,
-      onMouseleave: item.disabled ? undefined : () => hoveredItem.value = null,
-      matches: isEqual(item, longestMatch),
-      onClick: onClick,
-      truncateText: truncateText
-    });
-  }));
-})
-
-
+const matchedItemPosition = computed(() => props.subNavigationItems.findIndex((item) =>
+  isEqual(item, props.longestMatch),
+));
 </script>

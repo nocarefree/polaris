@@ -1,5 +1,5 @@
 <template>
-  <div :class="finalClassName" v-bind="{ ...scrollable.props }" ref="scrollArea" :tabIndex="focusable ? 0 : undefined">
+  <div :class="finalClassName" v-bind="scrollable.props" ref="scrollArea" :tabIndex="focusable ? 0 : undefined">
     <slot></slot>
   </div>
 </template>
@@ -54,12 +54,13 @@ const handleScroll = () => {
     const canScroll = Boolean(scrollHeight > clientHeight);
 
     topShadow.value = Boolean(scrollTop > 0);
-    bottomShadow.value = !Boolean(
+    const isAtBottomOfScroll = Boolean(
       scrollTop + clientHeight >= scrollHeight - LOW_RES_BUFFER,
     );
+    bottomShadow.value = !isAtBottomOfScroll;
 
 
-    if (canScroll && bottomShadow.value) {
+    if (canScroll && isAtBottomOfScroll) {
       emit('scrolledToBottom');
     }
   });

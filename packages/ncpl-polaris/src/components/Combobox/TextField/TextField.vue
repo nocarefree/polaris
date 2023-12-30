@@ -41,21 +41,18 @@ watchEffect(() => {
 })
 
 const handleFocus = (event: FocusEvent) => {
-  console.log('handleFocus')
   emit('focus', event);
   if (onTextFieldFocus) onTextFieldFocus();
   if (setTextFieldFocused) setTextFieldFocused(true);
 };
 
 const handleBlur = (event: FocusEvent) => {
-  console.log('handleBlur')
   emit('blur', event);
   if (onTextFieldBlur) onTextFieldBlur();
   if (setTextFieldFocused) setTextFieldFocused(false);
 };
 
 const handleChange = (value: string, id: string) => {
-  console.log('handleChange')
   emit('change', value, id);
   if (onTextFieldChange) onTextFieldChange(value);
 };

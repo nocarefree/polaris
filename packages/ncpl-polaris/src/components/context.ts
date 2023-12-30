@@ -11,6 +11,18 @@ import type {
 import type { StickyManager, ScrollLockManager, I18n } from "@ncpl-polaris/utils"
 import { scrollable } from "./shared";
 
+export const routerContextKey: InjectionKey<boolean> = Symbol(
+  "routerContextKey"
+);
+export const routerContext ={
+  inject: () => {
+    return inject(routerContextKey, false);
+  },
+  provide: (value: boolean = true) => {
+    provide(routerContextKey,value);
+  },
+}
+
 //theme
 import type { ThemeName, Theme } from '@shopify/polaris-tokens';
 import { themes } from '@shopify/polaris-tokens';
@@ -201,7 +213,9 @@ export const withinContentContext = {
     return inject(withinContentContextKey);
   },
   provide: (value = true) => {
-    provide(withinContentContextKey, value);
+    provide(withinContentContextKey, computed(() => {
+      return unref(value);
+    }));
   },
 };
 

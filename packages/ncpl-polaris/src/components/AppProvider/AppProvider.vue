@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, onMounted, computed } from "vue";
 import type { AppProviderProps } from "./AppProvider"
-import { i18nContext, mediaQueryContext, stickyManagerContext, scrollLockManagerContext, featuresContext, themeContext } from "../context";
+import { routerContext, i18nContext, mediaQueryContext, stickyManagerContext, scrollLockManagerContext, featuresContext, themeContext } from "../context";
 import FocusManager from "@ncpl-polaris/components/FocusManager";
 import PortalsManager from "@ncpl-polaris/components/PortalsManager";
 import { I18n, StickyManager, ScrollLockManager } from "@ncpl-polaris/utils";
@@ -40,6 +40,10 @@ const scrollLockManager = new ScrollLockManager();
 const theme = computed(() => {
   return props.theme || themeNameDefault;
 })
+
+if (props.router) {
+  routerContext.provide();
+}
 
 themeContext.provide(theme);
 i18nContext.provide(i18n);

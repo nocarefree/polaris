@@ -90,7 +90,6 @@ const stickyTableClassNames = computed(() => classNames(
 ));
 
 const selectAllActionsClassName = (isSticky: boolean) => {
-  console.log(isSticky)
   return classNames(
     styles.SelectAllActionsWrapper,
     indexTable.value.condensed && styles['StickyTableHeader-condensed'],

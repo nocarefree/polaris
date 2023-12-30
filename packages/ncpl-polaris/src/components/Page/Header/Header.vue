@@ -106,7 +106,7 @@ const pageTitleMarkup = computed(() =>
 )
 
 const primaryActionMarkup = computed(() => {
-  return props.primaryAction ? getPrimaryActionMarkup : null
+  return props.primaryAction || slots.primaryAction ? getPrimaryActionMarkup : null
 })
 
 const headerClassNames = computed(() => classNames(

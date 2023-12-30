@@ -27,7 +27,7 @@
             :class="classNames(styles.Tabs, fitted && styles.fitted, disclosureActivatorVisible && styles.fillSpace)"
             @focus="handleFocus" @blur="handleBlur" @keydown="handleKeyDown" @keyup="handleKeyPress"
             data-tabs-focus-catchment>
-            <Tab v-for="(tab, index) in computedTabs" v-bind="tab" :key="`${index}-${tab.id}`" :id="tab.id"
+            <Tab v-for="(tab, index) in computedTabs" v-bind="tab" :key="`${index}-${tab.id}`" :id="`tab_${tab.id}`"
               :panel-id="$slots.children ? (tab.panelId || `${tab.id}-panel`) : undefined"
               :disabled="disabled || tab.disabled" :sibling-tab-has-focus="state.tabToFocus > -1"
               :focused="index === state.tabToFocus" :selected="index === selected" @action="() => {
@@ -82,7 +82,7 @@
 
                   }
                 }" :icon="() => h(Icon, { source: PlusMinor, accessibilityLabel: createViewA11yLabel })"
-                :disabled="props.disabled" @togglePopover="(isOpen: boolean) => state.isTabPopoverOpen = isOpen"
+                :disabled="disabled" @togglePopover="(isOpen: boolean) => state.isTabPopoverOpen = isOpen"
                 @toggleModal="(isOpen: boolean) => state.isTabModalOpen = isOpen" :tab-index-override="0"></Tab>
             </ConditionalWrapper>
 

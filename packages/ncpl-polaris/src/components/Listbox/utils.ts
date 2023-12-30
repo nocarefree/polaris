@@ -19,7 +19,6 @@ export function scrollOptionIntoView(
 
     requestAnimationFrame(() => {
       scrollable.scrollBy({ top, behavior: 'auto' });
-      console.log({ top, behavior: 'auto' })
     });
   }
 }

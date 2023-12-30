@@ -13,4 +13,5 @@ export type AppProviderProps = {
   features?: FeaturesConfig;
   linkComponent?: Component;
   theme?: ThemeName;
+  router?: boolean;
 }

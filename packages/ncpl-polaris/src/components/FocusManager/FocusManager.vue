@@ -12,7 +12,6 @@ defineOptions({
 const trapFocusList = ref<string[]>([]);
 
 const add = (id: string) => {
-  console.log('FocusManager', id)
   trapFocusList.value = [...trapFocusList.value, id];
 }
 const remove = (id: string) => {

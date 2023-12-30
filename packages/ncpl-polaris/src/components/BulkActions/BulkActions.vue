@@ -78,10 +78,6 @@ const moreActionsNode = ref();
 const buttonsNode = ref();
 const containerNode = ref();
 
-onUpdated(() => {
-  console.log(state.measuring, props.isSticky)
-})
-
 const actionSections = computed<BulkActionListSection[] | undefined>(() => {
   const { actions } = props;
 

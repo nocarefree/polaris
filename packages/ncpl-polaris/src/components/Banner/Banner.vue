@@ -1,33 +1,60 @@
 <template>
-  <div :class="className" :tabIndex="0" ref="wrapperRef" :role="icon.ariaRoleType"
-    :aria-live="stopAnnouncements ? 'off' : 'polite'">
-    <div :class="styles.Dismiss">
-      <Button plain :icon="CancelSmallMinor" @click="$emit('dismiss')"
-        :accessibilityLabel="i18n.translate('Polaris.Banner.dismissButton')" />
-    </div>
-    <Box paddingInlineEnd="4">
-      <Icon :source="iconName" :tone="icon.iconColor" />
-    </Box>
+  <div :class="classNames(
+    styles.Banner,
+    shouldShowFocus && styles.keyFocused,
+    withinContentContainer ? styles.withinContentContainer : styles.withinPage,
+  )" :tabIndex="0" ref="wrapperRef" :role="tone === 'warning' || tone === 'critical' ? 'alert' : 'status'"
+    :aria-live="stopAnnouncements ? 'off' : 'polite'" @mouseup="handleMouseUp" @keyup="handleKeyUp" @blur="handleBlur">
 
-    <div :class="styles.ContentWrapper">
-      <Text v-if="title">{{ title }}</Text>
+    <component :is="layoutComponent" :background-color="bannerColors.background" :text-color="bannerColors.text">
       <slot></slot>
-    </div>
+      <template v-if="!hideIcon" #bannerIcon>
+        <span :class="styles[bannerColors.icon]">
+          <Icon :source="icon ?? bannerAttributes[bannerTone].icon" />
+        </span>
+      </template>
+      <template v-if="title" #bannerTitle>
+        <Text as="h2" variant="headingSm" break-word>
+          {{ title }}
+        </Text>
+      </template>
+      <template v-if="action || secondaryAction" #actionButtons>
+        <ButtonGroup>
+          <Button v-if="action" @click="action.onAction" v-bind="action">
+            {{ action.content }}
+          </Button>
+          <Button v-if="secondaryAction" @click="secondaryAction.onAction" v-bind="secondaryAction">
+            {{ secondaryAction.content }}
+          </Button>
+        </ButtonGroup>
+      </template>
+      <template v-if="dismissable">
+        <Button variant="tertiary" @click="$emit('dismiss')"
+          :accessibility-label="i18n.translate('Polaris.Banner.dismissButton')">
+          <template #icon>
+            <span :class="styles[isInlineIconBanner ? 'icon-secondary' : bannerColors.icon]">
+              <Icon :source="CancelMinor" />
+            </span>
+          </template>
+        </Button>
+      </template>
+    </component>
   </div>
 </template>
 <script setup lang="ts">
-import { provide, computed, ref } from 'vue';
-import Text from '@ncpl-polaris/components/Text';
-import Icon from '@ncpl-polaris/components/Icon';
-import { classNames, variationName } from '@ncpl-polaris/utils';
-import { useI18n, bannerContextKey } from "../context"
-import type { BannerProps, BannerAttributes } from "./Banner";
+import { provide, computed, unref } from 'vue';
+import Text from '../Text';
+import Icon from '../Icon';
+import Button from "../Button"
+import WithinContentContainerBanner from "./WithinContentContainerBanner.vue";
+import InlineIconBanner from "./InlineIconBanner.vue";
+import DefaultBanner from "./DefaultBanner.vue";
+import { classNames } from '@ncpl-polaris/utils';
+import { useI18n, bannerContextKey, withinContentContext } from "../context"
+import type { BannerProps } from "./Banner";
+import { useBannerFocus, bannerAttributes } from "./utils";
 import {
-  CancelSmallMinor,
-  CircleTickMajor,
-  CircleInformationMajor,
-  CircleAlertMajor,
-  DiamondAlertMajor,
+  CancelMinor,
 } from "@ncpl/ncpl-icons";
 
 import styles from "./Banner.module.scss";
@@ -35,70 +62,30 @@ import styles from "./Banner.module.scss";
 defineOptions({
   name: "NpBanner",
 });
-const props = defineProps<BannerProps>()
+defineEmits(['dismiss']);
+const props = withDefaults(defineProps<BannerProps>(), { tone: 'info' })
 const i18n = useI18n();
+const { wrapperRef, handleKeyUp, handleBlur, handleMouseUp, shouldShowFocus } = useBannerFocus();
+const _withinContentContext = withinContentContext.inject()
+const withinContentContainer = computed(() => unref(_withinContentContext))
+
+const bannerTone = computed(() => Object.keys(bannerAttributes).includes(props.tone) ? props.tone : 'info');
+
+const bannerColors = computed(() => bannerAttributes[bannerTone.value][withinContentContainer.value ? 'withinContentContainer' : 'withinPage']);
+
+const isInlineIconBanner = computed(() => !props.title && !withinContentContainer.value);
+
+const layoutComponent = computed(() => {
+  if (withinContentContainer.value) {
+    return WithinContentContainerBanner;
+  }
+  if (isInlineIconBanner) {
+    return InlineIconBanner;
+  }
+
+  return DefaultBanner;
+})
 
 provide(bannerContextKey, true);
 
-const useBannerAttributes = (
-  status: BannerProps["status"]
-): BannerAttributes => {
-  switch (status) {
-    case "success":
-      return {
-        defaultIcon: CircleTickMajor,
-        iconColor: "success",
-        ariaRoleType: "status",
-      };
-
-    case "info":
-      return {
-        defaultIcon: CircleInformationMajor,
-        iconColor: "highlight",
-        ariaRoleType: "status",
-      };
-
-    case "warning":
-      return {
-        defaultIcon: CircleAlertMajor,
-        iconColor: "warning",
-        ariaRoleType: "alert",
-      };
-
-    case "critical":
-      return {
-        defaultIcon: DiamondAlertMajor,
-        iconColor: "critical",
-        ariaRoleType: "alert",
-      };
-
-    default:
-      return {
-        defaultIcon: CircleInformationMajor,
-        iconColor: "base",
-        ariaRoleType: "status",
-      };
-  }
-}
-
-defineEmits(['dismiss']);
-const wrapperRef = ref(null);
-const icon = computed(() => {
-  return useBannerAttributes(props.status);
-})
-
-const iconName = computed(() => {
-  return props.icon || icon.value;
-});
-
-const className = computed(() =>
-  classNames(
-    styles.Banner,
-    status &&
-    styles[variationName('status', status)],
-    //   dismiss && styles.hasDismiss,
-    // shouldShowFocus && styles.keyFocused,
-    // withinContentContainer ? styles.withinContentContainer : styles.withinPage,
-  )
-)
 </script>

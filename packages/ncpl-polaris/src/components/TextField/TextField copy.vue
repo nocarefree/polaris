@@ -201,7 +201,6 @@ const handleClick = (event: MouseEvent | TouchEvent) => {
 }
 
 const handleClickChild = (event: MouseEvent | TouchEvent) => {
-  console.log('handleClickChild')
   let target = event.target as Element;
 
   if (!isSpinner(target) && !isInput(target)) {
@@ -314,7 +313,6 @@ const handleInput = async (event: Event) => {
 }
 
 const handleOnBlur = (event: FocusEvent) => {
-  console.log('handleOnBlur')
   focus.value = false;
   emit('blur', event)
 }
@@ -444,7 +442,6 @@ watchEffect(() => {
 
 watch(() => props.focused, (newValue, oldValue) => {
   if (newValue != undefined && newValue != oldValue) {
-    console.log(newValue)
     return props.focused ? inputRef.value?.focus() : inputRef.value?.blur();
   }
 }, { flush: 'post' });
