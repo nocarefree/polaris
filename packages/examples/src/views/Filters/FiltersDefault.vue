@@ -26,7 +26,13 @@
         </NpResourceItem>
       </template>
       <template #filterControl>
-        <NpFilters v-model:query-value="queryValue" :filters="filters">
+        <NpFilters v-model:query-value="search.queryValue" :filters="filters">
+          <template #filter="{ filter }">
+            <NpTextField v-if="filter.key == 'taggedWith'" label="Tagged with" v-model="search.filters.taggedWith"
+              auto-complete="off" label-hidden />
+            <NpChoiceList v-else title="Availability" title-hidden :choices="filterChoices[filter.key]"
+              v-model="search.filters[filter.key]" allow-multiple />
+          </template>
           <div :style="{ paddingLeft: '8px' }">
             <NpButton variant="tertiary"> Save</NpButton>
           </div>
@@ -36,24 +42,45 @@
   </NpCard>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-import { NpCard, NpResourceList, NpFilters, NpResourceItem, NpAvatar, NpButton } from "@ncpl/ncpl-polaris";
+import { ref, reactive } from "vue";
+import { NpCard, NpResourceList, NpFilters, NpResourceItem, NpAvatar, NpButton, NpChoiceList, NpTextField } from "@ncpl/ncpl-polaris";
 
 
-const taggedWith = ref<string>();
-const queryValue = ref<string>();
-
-const handleTaggedWithChange = (value: string) => taggedWith.value = value;
-const handleQueryValueChange = (value: string) => queryValue.value = value;
-const handleTaggedWithRemove = () => taggedWith.value = undefined;
-const handleQueryValueRemove = () => queryValue.value = undefined;
 
 const handleClearAll = () => {
-  handleTaggedWithRemove();
-  handleQueryValueRemove();
+
 };
 
+const search = reactive({
+  queryValue: '',
+  filters: {
+    taggedWith: '',
+    availability: [],
+    productType: [],
+  }
+});
+
+const filterChoices = {
+  availability: [
+    { label: 'Online Store', value: 'Online Store' },
+    { label: 'Point of Sale', value: 'Point of Sale' },
+    { label: 'Buy Button', value: 'Buy Button' },
+  ],
+  productType: [
+    { label: 'T-Shirt', value: 'T-Shirt' },
+    { label: 'Accessory', value: 'Accessory' },
+    { label: 'Gift card', value: 'Gift card' },
+  ]
+}
+
 const filters = [
+  {
+    key: 'availability',
+    label: 'Availability',
+  }, {
+    key: 'productType',
+    label: 'Product type',
+  },
   {
     key: 'taggedWith',
     label: 'Tagged with',

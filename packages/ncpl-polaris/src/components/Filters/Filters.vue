@@ -32,7 +32,10 @@
       <div :class="classNames(styles.FiltersInner)">
         <div :class="classNames(styles.FiltersStickyArea)">
 
-          <FilterPill v-for="filter in pinnedFilters" v-bind="getFilterPillProps(filter)" />
+          <FilterPill v-for="(filter, index) in pinnedFilters" v-bind="getFilterPillProps(filter)">
+            <slot name="filter" :index="index" :filter="filter"></slot>
+          </FilterPill>
+
           <div v-if="shouldShowAddButton"
             :class="classNames(styles.AddFilterActivator, hasOneOrMorePinnedFilters && styles.AddFilterActivatorMultiple)">
             <Popover :active="popoverActive && !disabled" @close="togglePopoverActive">
@@ -96,9 +99,6 @@ import { PlusMinor } from "@ncpl/ncpl-icons"
 defineOptions({
   name: 'NpFilters',
 })
-
-
-define
 
 const emit = defineEmits(['addFilterClick', 'queryChange', 'queryClear', 'queryBlur', 'queryFocus', 'clearAll', 'update:queryValue'])
 const props = defineProps<FiltersProps>()
