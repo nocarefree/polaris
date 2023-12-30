@@ -32,10 +32,7 @@
       <div :class="classNames(styles.FiltersInner)">
         <div :class="classNames(styles.FiltersStickyArea)">
 
-          <FilterPill v-for="filter in pinnedFilters" v-bind="getFilterPillProps(filter)">
-            <slot :name="`filter_${filter.key}`"></slot>
-          </FilterPill>
-
+          <FilterPill v-for="filter in pinnedFilters" v-bind="getFilterPillProps(filter)" />
           <div v-if="shouldShowAddButton"
             :class="classNames(styles.AddFilterActivator, hasOneOrMorePinnedFilters && styles.AddFilterActivatorMultiple)">
             <Popover :active="popoverActive && !disabled" @close="togglePopoverActive">
@@ -78,7 +75,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted, h } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import type { FiltersProps, FilterInterface } from './Filters'
 import styles from './Filters.module.scss'
 import InlineStack from "../InlineStack"
@@ -99,6 +96,9 @@ import { PlusMinor } from "@ncpl/ncpl-icons"
 defineOptions({
   name: 'NpFilters',
 })
+
+
+define
 
 const emit = defineEmits(['addFilterClick', 'queryChange', 'queryClear', 'queryBlur', 'queryFocus', 'clearAll', 'update:queryValue'])
 const props = defineProps<FiltersProps>()
