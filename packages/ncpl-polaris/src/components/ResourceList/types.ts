@@ -27,7 +27,7 @@ export type ResourceListProps = {
     /** Actions available on the currently selected items */
     bulkActions?: BulkActionsProps['actions'];
     /** Collection of IDs for the currently selected items */
-    selectedItems?: ResourceListSelectedItems;
+    selected?: ResourceListSelectedItems;
     /** Whether or not the list has filter(s) applied */
     isFiltered?: boolean;
     /** Renders a Select All button at the top of the list and checkboxes in front of each list item. For use when bulkActions aren't provided. **/

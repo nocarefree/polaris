@@ -6,7 +6,7 @@
           <component :is="children"></component>
           <InlineStack :wrap="false" gap="400" block-align="center">
             <ButtonGroup v-if="actions">
-              <component :is="buttonsFrom(actions, {variant: 'plain'})"></component>
+              <component :is="()=>buttonsFrom(actions!, {variant: 'plain'})"></component>
             </ButtonGroup>
             <slot></slot>
           </InlineStack>

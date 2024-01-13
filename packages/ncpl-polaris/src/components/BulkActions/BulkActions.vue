@@ -35,7 +35,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, reactive, watch, onMounted, onUpdated } from 'vue'
+import { ref, computed, reactive, watch, onMounted } from 'vue'
 import type { BulkActionsProps, BulkAction } from './BulkActions'
 import styles from './BulkActions.module.scss'
 import InlineStack from "../InlineStack"

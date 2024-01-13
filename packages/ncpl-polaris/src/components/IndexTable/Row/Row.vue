@@ -2,7 +2,7 @@
   <component :is="Boolean(indexTableContext.condensed) ? 'li' : 'tr'" :key="id" :class="rowClassName"
     @mouseenter="hovered = true" @mouseleave="hovered = false" @click="handleRowClick" :ref="setTrRef">
 
-    <Checkbox v-if="indexTableContext.selectable" />
+    <Checkbox v-if="indexTableContext.selectable" :accessibility-label="accessibilityLabel" />
     <slot></slot>
   </component>
 </template>
@@ -11,7 +11,7 @@ import { ref, computed } from 'vue'
 import type { IndexTableRowProps } from './Row'
 import styles from '../IndexTable.module.scss'
 import { classNames, variationName } from "@ncpl-polaris/utils"
-import { SelectionType } from "../IndexTable"
+import { SelectionType } from "../types"
 import Checkbox from "../Checkbox"
 import { useIndexTable, indexTableRowContext } from "../../context"
 
@@ -32,18 +32,23 @@ const selected = computed(() =>
   )
 );
 
-const rowClassName = computed(() => classNames(
-  styles.TableRow,
-  indexTableContext.value.selectable && indexTableContext.value.condensed && styles.condensedRow,
-  selected.value && styles['TableRow-selected'],
-  props.subdued && styles['TableRow-subdued'],
-  hovered.value && !indexTableContext.value.condensed && styles['TableRow-hovered'],
-  props.disabled && styles['TableRow-disabled'],
-  props.status && styles[variationName('status', props.status)],
-  !indexTableContext.value.selectable &&
-  !primaryLinkElement.value &&
-  styles['TableRow-unclickable'],
-))
+const rowClassName = computed(() => {
+  const { rowType, disabled, tone } = props;
+  const { condensed, selectable } = indexTableContext.value;
+  return classNames(
+    styles.TableRow,
+    rowType === 'subheader' && styles['TableRow-subheader'],
+    rowType === 'child' && styles['TableRow-child'],
+    selectable && condensed && styles.condensedRow,
+    selected.value && styles['TableRow-selected'],
+    hovered.value && !condensed && styles['TableRow-hovered'],
+    disabled && styles['TableRow-disabled'],
+    tone && styles[variationName('tone', tone)],
+    !selectable &&
+    !primaryLinkElement.value &&
+    styles['TableRow-unclickable'],
+  );
+})
 
 const setTrRef = (node: HTMLTableRowElement & HTMLLIElement) => {
   tableRowRef.value = node;
@@ -55,15 +60,21 @@ const setTrRef = (node: HTMLTableRowElement & HTMLLIElement) => {
   }
 }
 
-const handleInteraction = (event: MouseEvent | MouseEvent) => {
+const handleInteraction = (event: MouseEvent | KeyboardEvent) => {
   event.stopPropagation();
 
   if (('key' in event && event.key !== ' ')) return;
-  const selectionType = event.shiftKey
-    ? SelectionType.Multi
-    : SelectionType.Single;
+  let selectionType = SelectionType.Single
 
-  indexTableContext.value.selectionChange(selectionType, !selected.value, props.id, props.position);
+  if (event.shiftKey) {
+    selectionType = SelectionType.Multi;
+  } else if (props.selectionRange) {
+    selectionType = SelectionType.Range;
+  }
+
+  const selection = props.selectionRange ?? props.id;
+
+  indexTableContext.value.selectionChange(selectionType, !selected.value, selection, props.position);
 }
 
 const handleRowClick = (event: MouseEvent) => {
@@ -105,6 +116,7 @@ const indexTableRowProvide = computed(() => ({
   selected: selected.value,
   disabled: props.disabled,
   position: props.position,
+  onInteraction: handleInteraction,
 }))
 indexTableRowContext.provide(indexTableRowProvide)
 </script>

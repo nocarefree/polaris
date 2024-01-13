@@ -3,7 +3,7 @@
     <div aria-live="polite">{{ loading ? loading : null }}</div>
   </Text>
 
-  <ul v-if="$slots.default" :tabIndex="0" role="listbox" :class="styles.Listbox"
+  <ul v-if="$slots.default" :tabindex="0" role="listbox" :class="styles.Listbox"
     :aria-label="inCombobox ? undefined : accessibilityLabel" :aria-labelledby="textFieldLabelId"
     :aria-busy="Boolean(loading)" :aria-activedescendant="activeOption && activeOption.domId" :id="listId"
     @focus="inCombobox ? undefined : handleFocus" @blur="inCombobox ? undefined : handleBlur" ref="listboxRef">

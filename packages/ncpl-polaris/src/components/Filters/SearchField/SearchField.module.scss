@@ -1,72 +1,7 @@
-@import '../../../styles/common';
-
-.SearchField {
-  position: relative;
-  display: flex;
-  padding-block: var(--p-space-025);
-  margin-left: var(--p-space-050);
-}
-
-.Label {
-  /* stylelint-disable-next-line polaris/legacy/polaris/at-rule-disallowed-list -- Label needs to be hidden */
-  @include visually-hidden;
-}
-
-.Input {
-  /* stylelint-disable-next-line polaris/typography/polaris/at-rule-disallowed-list -- Matching custom input with TextField */
-  @include text-style-input;
-  flex: 1;
-  border: var(--p-border-width-025) solid var(--p-color-input-border);
-  border-radius: var(--p-border-radius-100);
-  border-color: var(--p-color-input-border);
-  padding-inline: var(--p-space-150);
-  width: 100%;
-
-  &:hover {
-    border-color: var(--p-color-input-border-hover);
-    background-color: var(--p-color-input-bg-surface-hover);
+/* Increase specificity for icon override in Filters */
+.Spinner.Spinner {
+  svg {
+    display: block;
+    fill: var(--p-color-bg-fill-brand);
   }
-
-  &:active,
-  &:focus {
-    border-color: var(--p-color-input-border-active);
-    border-width: var(--p-border-width-025);
-    background-color: var(--p-color-input-bg-surface-active);
-  }
-
-  &:disabled {
-    background-color: var(--p-color-bg-fill-disabled);
-  }
-}
-
-.borderless {
-  border-width: 0;
-
-  &:hover,
-  &:active,
-  &:focus {
-    border-width: 0;
-  }
-}
-
-.focused:not(:disabled) {
-  outline: var(--p-border-width-050) solid var(--p-color-border-focus);
-  outline-offset: var(--p-space-025);
-}
-
-.ClearButton {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  background: none;
-  border: none;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity var(--p-motion-duration-150) var(--p-motion-ease-in-out);
-  cursor: pointer;
-}
-
-.ClearButton-focused {
-  opacity: 1;
-  pointer-events: auto;
 }

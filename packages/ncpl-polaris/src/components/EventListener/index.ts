@@ -1,17 +1,21 @@
 import { defineComponent, onBeforeUnmount, onMounted, onUpdated } from "vue";
-
-
-
-interface EventListenerProps {
-    event: string;
-    capture?: boolean;
-    handler(event: Event): void;
-    passive?: boolean;
-}
+import type { PropType } from 'vue';
 
 
 export default defineComponent({
-    setup(props: EventListenerProps) {
+    props: {
+        event: {
+            type: String,
+            required: true
+        },
+        handler: {
+            type: Function as PropType<(event: Event) => void>,
+            required: true,
+        },
+        capture: Boolean,
+        passive: Boolean,
+    },
+    setup(props) {
         onMounted(() => {
             const { event, handler, capture, passive } = props;
             window.addEventListener(event, handler, { capture, passive });
@@ -27,7 +31,8 @@ export default defineComponent({
             const { event, handler, capture } = props;
             window.removeEventListener(event, handler, capture);
         })
-
-        return () => null;
-    }
+    },
+    render() {
+        return null;
+    },
 })

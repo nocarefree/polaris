@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
-import type { HeaderContentProps } from "./HeaderContent";
+import type { HeaderContentProps } from "../types";
 import HasSortable from "./HasSortable.vue";
 import LegacyStack from "../../LegacyStack";
 import Badge from "../../Badge";

@@ -48,4 +48,6 @@ export interface SelectProps {
     error?: Error | boolean;
     /** Visual required indicator, add an asterisk to label */
     requiredIndicator?: boolean;
+    /** Indicates the tone of the select */
+    tone?: 'magic';
 }

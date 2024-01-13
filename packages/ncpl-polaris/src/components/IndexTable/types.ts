@@ -1,9 +1,39 @@
+import type { NonEmptyArray } from "../types";
+import type { Component } from "vue";
+import type { Width } from '../Tooltip';
+import { BulkActionsProps } from "../BulkActions";
 
-import { BulkActionsProps } from "../BulkActions"
 
-import type { NonEmptyArray } from "../types"
+export type IndexTableSortDirection = 'ascending' | 'descending';
 
-import type { IndexTableHeading, IndexTableSortDirection } from "./HeadingContent/HeaderContent"
+export interface IndexTableHeading {
+    id?: string;
+    title: string | Component;
+    /**
+     * Adjust horizontal alignment of header content.
+     * @default 'start'
+     */
+    alignment?: 'start' | 'center' | 'end';
+    flush?: boolean;
+    new?: boolean;
+    hidden?: boolean;
+    tooltipWidth?: Width;
+    tooltipPersistsOnClick?: boolean;
+    /**
+     * The direction to sort the table rows on first click or keypress of this column heading.
+     * When not specified, the value from IndexTable.defaultSortDirection will be used.
+     */
+    defaultSortDirection?: IndexTableSortDirection;
+}
+
+export type HeaderContentProps = IndexTableHeading & {
+    sortable?: boolean;
+    sortTooltipContent?: string | Component;
+    alignment?: string;
+    index?: number;
+    defaultSortDirection?: string;
+    tooltipContent?: string | Component;
+}
 
 export type IndexSelectedItems = string[] | 'All';
 
@@ -14,6 +44,7 @@ export enum SelectionType {
     Page = 'page',
     Multi = 'multi',
     Single = 'single',
+    Range = 'range',
 }
 
 export type Range = [number, number];
@@ -93,6 +124,7 @@ export interface IndexTableProps extends IndexProviderProps {
     sortToggleLabels?: IndexTableSortToggleLabels;
     /** Add zebra striping to table rows */
     hasZebraStriping?: boolean;
-    itemCount: number;
-    selected?: number[] | string[] | 'All';
+    //itemCount: number;
+    selected?: string[] | 'All';
+    rows?: { id: string, [key: string]: any }[];
 }

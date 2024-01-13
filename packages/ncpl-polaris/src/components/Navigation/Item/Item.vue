@@ -31,7 +31,7 @@
               showVerticalLine && styles['Item-line'],
               matches && styles['Item-line-pointer'],
               showVerticalHoverPointer && styles['Item-hover-pointer'],
-            )" :external="external" :tab-index="tabIndex" :aria-disabled="disabled" :aria-label="accessibilityLabel"
+            )" :external="external" :tabindex="tabIndex" :aria-disabled="disabled" :aria-label="accessibilityLabel"
               @click="onClick"
               v-bind="normalizeAriaAttributes(secondaryNavigationId, subNavigationItems.length > 0, showExpanded)">
               <div v-if="iconSource" :class="classNames(styles.Icon, shouldResizeIcon && styles['Icon-resized'])">
@@ -62,7 +62,7 @@
                   :aria-disabled="disabled" :aria-label="accessibilityLabel" @click="onClick">
                   <Icon :source="icon" />
                 </UnstyledLink>
-                <UnstyledButton v-else :class="styles.SecondaryAction" :tab-index="tabIndex" :disabled="disabled"
+                <UnstyledButton v-else :class="styles.SecondaryAction" :tabindex="tabIndex" :disabled="disabled"
                   :accessibility-label="accessibilityLabel" @click="onClick">
                   <Icon :source="icon" />
                 </UnstyledButton>

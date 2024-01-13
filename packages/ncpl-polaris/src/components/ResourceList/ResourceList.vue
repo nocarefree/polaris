@@ -6,7 +6,7 @@
     <div
       v-if="!($slots.emptyState && !itemsExist && !loading) && (showHeader !== false) && (showHeader || (isSelectable || (sortOptions && sortOptions.length > 0) || $slots.alternateTool)) && listRef"
       :class="styles.HeaderOuterWrapper">
-      <Sticky>
+      <Sticky :bounding-element="listRef">
         <template #default="{ isSticky }">
           <div :class="classNames(
             styles.HeaderWrapper,
@@ -35,12 +35,6 @@
                   @change="(selected: string, id: string) => $emit('sortChange', selected, id)" :value="sortValue"
                   :disabled="selectMode" />
               </div>
-              <div :class="styles.SelectButtonWrapper">
-                <Button v-if="isSelectable" :disabled="selectMode" :icon="EnableSelectionMinor" @click="() =>
-                  handleSelectMode(true)">
-                  {{ i18n.translate('Polaris.ResourceList.selectButtonText') }}
-                </Button>
-              </div>
             </div>
             <div v-if="isSelectable" :class="styles.SelectAllActionsWrapper">
               <SelectAllActions :label="selectAllActionsLabel" :accessibility-label="selectAllActionsAccessibilityLabel"
@@ -52,13 +46,13 @@
         </template>
       </Sticky>
     </div>
-    <div v-if="isSelectable && (bulkActions || promotedBulkActions)"
+    <div v-if="isSelectable"
       :class="classNames(styles.BulkActionsWrapper, isBulkActionsSticky && styles.BulkActionsWrapperSticky,)" :style="{
         top: isBulkActionsSticky ? undefined : `${bulkActionsAbsoluteOffset}px`, width: bulkActionsMaxWidth ? `${bulkActionsMaxWidth}px` : undefined, left:
           isBulkActionsSticky ? `${bulkActionsOffsetLeft}px` : undefined,
       }">
-      <BulkActions :select-mode="selectMode" @selectModeToggle="handleSelectMode" :promoted-actions="promotedBulkActions"
-        :actions="bulkActions" :disabled="loading" :is-sticky="isBulkActionsSticky" :width="bulkActionsMaxWidth" />
+      <BulkActions :select-mode="selectMode" :promoted-actions="promotedBulkActions" :actions="bulkActions"
+        :disabled="loading" :is-sticky="isBulkActionsSticky" :width="bulkActionsMaxWidth" />
     </div>
     <ul :class="classNames(
       styles.ResourceList,
@@ -98,25 +92,25 @@
 import { ref, computed, watch, provide, reactive, toRef } from 'vue'
 import type { ResourceListProps, TItemType } from './types'
 import { resourceListContextKey } from './context'
-import { SELECT_ALL_ITEMS } from './types'
+import { SELECT_ALL_ITEMS, type ResourceListSelectedItems } from './types'
 import styles from './ResourceList.module.scss'
 import { classNames } from "@ncpl-polaris/utils"
 import { themeDefault, toPx } from '@shopify/polaris-tokens';
 import { useI18n } from '../context';
-import { EnableSelectionMinor } from "@ncpl/ncpl-icons";
 import BulkActions, { useIsBulkActionsSticky } from "../BulkActions";
 import Sticky from "../Sticky";
 import CheckableButton from "../CheckableButton";
 import Select from "../Select";
-import Button from "../Button";
 import SelectAllActions from "../SelectAllActions";
 import EmptySearchResult from "../EmptySearchResult";
 import Spinner from "../Spinner";
+import { debounce } from "@ncpl-polaris/utils/debounce";
+import { useEventListener } from "@vueuse/core";
 
 defineOptions({
-  name: 'NpResourceItem',
+  name: 'NpResourceList',
 })
-const emit = defineEmits(['selectionChange', 'sortChange']);
+const emit = defineEmits(['selectionChange', 'sortChange', 'update:selected']);
 
 
 function getAllItemsOnPage(
@@ -144,10 +138,18 @@ const defaultIdForItem = (
 }
 
 
-const props = withDefaults(defineProps<ResourceListProps>(), { selectedItems: () => [], showHeader: true })
+const props = withDefaults(defineProps<ResourceListProps>(), {
+  selected: () => [],
+  isFiltered: undefined,
+  selectable: undefined,
+  hasMoreItems: undefined,
+  loading: undefined,
+  showHeader: undefined,
+})
 const i18n = useI18n();
 
-const selectMode = ref(Boolean(props.selectedItems && props.selectedItems.length > 0));
+const smallScreen = ref(isBreakpointsXS());
+const selectMode = computed(() => Boolean(props.selected && props.selected.length > 0) && !smallScreen.value);
 
 const {
   bulkActionsIntersectionRef,
@@ -159,8 +161,7 @@ const {
   computeTableDimensions,
 } = useIsBulkActionsSticky(selectMode);
 
-const smallScreen = ref(isBreakpointsXS());
-const checkableButtonRef = ref<HTMLElement>();
+const checkableButtonRef = ref();
 const isSelectable = computed(() =>
   Boolean(
     (props.promotedBulkActions && props.promotedBulkActions.length > 0) ||
@@ -214,8 +215,8 @@ const headerTitle = computed(() => {
 });
 
 const selectAllActionsAccessibilityLabel = computed(() => {
-  const { selectedItems, items, } = props;
-  const selectedItemsCount = selectedItems.length;
+  const { selected, items, } = props;
+  const selectedItemsCount = selected.length;
   const totalItemsCount = items.length;
   const allSelected = selectedItemsCount === totalItemsCount;
 
@@ -254,9 +255,9 @@ const selectAllActionsAccessibilityLabel = computed(() => {
 
 const selectAllActionsLabel = computed(() => {
   const selectedItemsCount =
-    props.selectedItems === SELECT_ALL_ITEMS
+    props.selected === SELECT_ALL_ITEMS
       ? `${props.items.length}+`
-      : props.selectedItems.length;
+      : props.selected.length;
 
   return i18n.value.translate('Polaris.ResourceList.selected', {
     selectedItemsCount,
@@ -264,16 +265,16 @@ const selectAllActionsLabel = computed(() => {
 });
 
 const selectAllSelectState = computed((): boolean | 'indeterminate' => {
-  const { selectedItems, items } = props;
+  const { selected, items } = props;
   let selectState: boolean | 'indeterminate' = 'indeterminate';
   if (
-    !selectedItems ||
-    (Array.isArray(selectedItems) && selectedItems.length === 0)
+    !selected ||
+    (Array.isArray(selected) && selected.length === 0)
   ) {
     selectState = false;
   } else if (
-    selectedItems === SELECT_ALL_ITEMS ||
-    (Array.isArray(selectedItems) && selectedItems.length === items.length)
+    selected === SELECT_ALL_ITEMS ||
+    (Array.isArray(selected) && selected.length === items.length)
   ) {
     selectState = true;
   }
@@ -281,13 +282,13 @@ const selectAllSelectState = computed((): boolean | 'indeterminate' => {
 });
 
 const paginatedSelectAllAction = computed(() => {
-  const { hasMoreItems, selectedItems, isFiltered, items } = props;
+  const { hasMoreItems, selected, isFiltered, items } = props;
   if (!isSelectable.value || !hasMoreItems) {
     return;
   }
 
   const actionText =
-    selectedItems === SELECT_ALL_ITEMS
+    selected === SELECT_ALL_ITEMS
       ? i18n.value.translate('Polaris.Common.undo')
       : i18n.value.translate(
         isFiltered
@@ -306,12 +307,12 @@ const paginatedSelectAllAction = computed(() => {
 });
 
 const paginatedSelectAllText = computed(() => {
-  const { hasMoreItems, selectedItems, isFiltered, items } = props;
+  const { hasMoreItems, selected, isFiltered, items } = props;
   if (!isSelectable.value || !hasMoreItems) {
     return;
   }
 
-  if (selectedItems === SELECT_ALL_ITEMS) {
+  if (selected === SELECT_ALL_ITEMS) {
     return i18n.value.translate(
       isFiltered
         ? 'Polaris.ResourceList.allFilteredItemsSelected'
@@ -341,32 +342,27 @@ const spinnerStyle = computed(() => {
 
 
 const handleSelectAllItemsInStore = () => {
-  const { selectedItems, items, idForItem = defaultIdForItem } = props;
+  const { selected, items, idForItem = defaultIdForItem } = props;
   const newlySelectedItems =
-    selectedItems === SELECT_ALL_ITEMS
+    selected === SELECT_ALL_ITEMS
       ? getAllItemsOnPage(items, idForItem)
       : SELECT_ALL_ITEMS;
 
-  emit('selectionChange', newlySelectedItems);
+  onSelectionChange(newlySelectedItems);
 
 };
 
-const handleSelectMode = (value: boolean) => {
-  selectMode.value = value;
-  if (!selectMode.value) {
-    emit('selectionChange', []);
-  }
-};
+
 
 
 const handleToggleAll = () => {
-  const { selectedItems, items, idForItem = defaultIdForItem } = props;
+  const { selected, items, idForItem = defaultIdForItem } = props;
 
   let newlySelectedItems: string[];
 
   if (
-    (Array.isArray(selectedItems) && selectedItems.length === items.length) ||
-    selectedItems === SELECT_ALL_ITEMS
+    (Array.isArray(selected) && selected.length === items.length) ||
+    selected === SELECT_ALL_ITEMS
   ) {
     newlySelectedItems = [];
   } else {
@@ -375,13 +371,7 @@ const handleToggleAll = () => {
     });
   }
 
-  if (newlySelectedItems.length === 0 && !isBreakpointsXS()) {
-    handleSelectMode(false);
-  } else if (newlySelectedItems.length > 0) {
-    handleSelectMode(true);
-  }
-
-  emit('selectionChange', newlySelectedItems);
+  onSelectionChange(newlySelectedItems);
 
   // setTimeout ensures execution after the Transition on BulkActions
   setTimeout(() => {
@@ -392,28 +382,28 @@ const handleToggleAll = () => {
 const handleMultiSelectionChange = (
   lastSelected: number,
   currentSelected: number,
-  resolveItemId: (item: TItemType) => string,
+  resolveItemId?: (item: TItemType) => string,
 ) => {
   const min = Math.min(lastSelected, currentSelected);
   const max = Math.max(lastSelected, currentSelected);
-  return props.items.slice(min, max + 1).map(resolveItemId);
+  return props.items.map(resolveItemId || defaultIdForItem).slice(min, max + 1);
 };
 
 const handleSelectionChange = (
-  selected: boolean,
+  selectedItems: boolean,
   id: string,
   sortOrder: number | undefined,
   shiftKey: boolean,
 ) => {
-  const { selectedItems, resolveItemId } = props;
-  if (selectedItems == null) {
+  const { selected, resolveItemId } = props;
+  if (selected == null) {
     return;
   }
 
   let newlySelectedItems =
-    selectedItems === SELECT_ALL_ITEMS
+    selected === SELECT_ALL_ITEMS
       ? getAllItemsOnPage(props.items, props.idForItem || defaultIdForItem)
-      : [...selectedItems];
+      : [...selected];
 
   if (sortOrder !== undefined) {
     lastSelected.value = sortOrder;
@@ -426,8 +416,7 @@ const handleSelectionChange = (
   if (
     shiftKey &&
     lastSelectedFromState != null &&
-    sortOrder !== undefined &&
-    resolveItemId
+    sortOrder !== undefined
   ) {
     selectedIds = handleMultiSelectionChange(
       lastSelectedFromState,
@@ -437,31 +426,40 @@ const handleSelectionChange = (
   }
   newlySelectedItems = [...new Set([...newlySelectedItems, ...selectedIds])];
 
-  if (!selected) {
+  if (!selectedItems) {
     for (const selectedId of selectedIds) {
       newlySelectedItems.splice(newlySelectedItems.indexOf(selectedId), 1);
     }
   }
 
-  if (newlySelectedItems.length === 0 && !isBreakpointsXS()) {
-    handleSelectMode(false);
-  } else if (newlySelectedItems.length > 0) {
-    handleSelectMode(true);
-  }
-
-  emit('selectionChange', newlySelectedItems);
+  onSelectionChange(newlySelectedItems);
 };
+
+const onSelectionChange = (value: ResourceListSelectedItems) => {
+  emit('selectionChange', value);
+  emit('update:selected', value);
+}
 
 
 watch(() => props.items, () => {
   computeTableDimensions();
 })
 
+const handleResize = debounce(
+  () => {
+    smallScreen.value = isBreakpointsXS();
+  },
+  50,
+  { leading: true, trailing: true, maxWait: 50 },
+);
+
+useEventListener(window, 'resize', handleResize);
+
 const hasBulkActions = computed(() => Boolean(props.bulkActions));
 
 provide(resourceListContextKey, reactive({
-  selectable: isSelectable.value,
-  selectedItems: toRef(props, 'selectedItems'),
+  selectable: isSelectable,
+  selectedItems: toRef(props, 'selected'),
   selectMode,
   hasBulkActions,
   resourceName,

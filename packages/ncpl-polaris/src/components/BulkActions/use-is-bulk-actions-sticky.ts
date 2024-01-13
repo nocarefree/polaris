@@ -60,19 +60,19 @@ export function useIsBulkActionsSticky(selectMode: MaybeRef<boolean>) {
   );
 
   onMounted(() => {
-    setTimeout(computeTableDimensions, 0)
+    // setTimeout(computeTableDimensions, 0)
 
-    const observer = observerRef.value;
-    if (!observer) {
-      return;
-    }
+    // const observer = observerRef.value;
+    // if (!observer) {
+    //   return;
+    // }
 
-    const node = bulkActionsIntersectionRef.value;
+    // const node = bulkActionsIntersectionRef.value;
 
-    if (node) {
-      observer.observe(node);
-    }
-    window.addEventListener('resize', debouncedComputeTableHeight);
+    // if (node) {
+    //   observer.observe(node);
+    // }
+    // window.addEventListener('resize', debouncedComputeTableHeight);
 
   });
 

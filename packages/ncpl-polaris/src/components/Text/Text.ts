@@ -1,36 +1,44 @@
 type Element =
-  | "dt"
-  | "dd"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "h5"
-  | "h6"
-  | "p"
-  | "span"
-  | "legend";
+  | 'dt'
+  | 'dd'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'p'
+  | 'span'
+  | 'strong'
+  | 'legend';
 
 type Variant =
-  | "headingXs"
-  | "headingSm"
-  | "headingMd"
-  | "headingLg"
-  | "headingXl"
-  | "heading2xl"
-  | "heading3xl"
-  | "heading4xl"
-  | "bodySm"
-  | "bodyMd"
-  | "bodyLg";
+  | 'headingSm'
+  | 'headingMd'
+  | 'headingLg'
+  | 'headingXl'
+  | 'heading2xl'
+  | 'heading3xl'
+  | 'bodyXs'
+  | 'bodySm'
+  | 'bodyMd'
+  | 'bodyLg';
 
-type Alignment = "start" | "center" | "end" | "justify";
+type Alignment = 'start' | 'center' | 'end' | 'justify';
 
-type FontWeight = "regular" | "medium" | "semibold" | "bold";
+type FontWeight = 'regular' | 'medium' | 'semibold' | 'bold';
 
-type Tone = 'success' | 'critical' | 'caution' | 'subdued' | 'text-inverse';
+type Tone =
+  | 'success'
+  | 'critical'
+  | 'caution'
+  | 'subdued'
+  | 'text-inverse'
+  | 'magic'
+  | 'magic-subdued';
 
 type TextDecorationLine = 'line-through';
+
 
 export type TextProps = {
   /** Adjust horizontal alignment of text */

@@ -6,7 +6,7 @@
     fullWidth && styles['Section-fullWidth'],
     hideOnPrint && styles['Section-hideOnPrint'],
   )">
-    <div :class="styles.SectionHeader">
+    <div v-if="$slots.title || title || actions" :class="styles.SectionHeader">
       <ConditionalWrapper :condition="Boolean(actions)">
         <template #wrapper="{ children }">
           <LegacyStack alignment="baseline">

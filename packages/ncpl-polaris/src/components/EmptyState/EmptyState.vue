@@ -6,13 +6,15 @@
         { source: largeImage, descriptor: '1136w' },
       ]" sizes="(max-width: 568px) 60vw" />
       <Image v-else :class="imageContainedClass" role="presentation" alt="" :source="image" />
-      <Box v-if="secondaryActionMarkup || primaryActionMarkup || $slots.footer || $slots.default || $slots.heading"
+      <Box
+        v-if="secondaryActionMarkup || primaryActionMarkup || $slots.footer || $slots.default || $slots.heading || heading"
         :max-width="fullWidth ? '100%' : '400px'">
         <BlockStack inline-align="center">
-          <Box v-if="$slots.heading || $slots.default" padding-block-end="400">
+          <Box v-if="$slots.heading || heading || $slots.default" padding-block-end="400">
             <Box padding-block-end="150">
-              <Text v-if="$slots.heading" variant="headingMd" as="p" alignment="center">
-                <slot name="heading"></slot>
+              <Text v-if="$slots.heading || heading" variant="headingMd" as="p" alignment="center">
+                <slot v-if="$slots.heading" name="heading"></slot>
+                <template v-else>{{ heading }}</template>
               </Text>
             </Box>
             <Text v-if="$slots.default" as="span" alignment="center" variant="bodySm">
@@ -53,7 +55,7 @@ const props = defineProps<EmptyStateProps>()
 
 
 const secondaryActionMarkup = computed(() => props.secondaryAction ? buttonFrom(props.secondaryAction, {}) : null)
-const primaryActionMarkup = computed(() => props.action ? buttonFrom(props.action, { primary: true, size: 'medium' }) : null)
+const primaryActionMarkup = computed(() => props.action ? buttonFrom(props.action, { variant: 'primary', size: 'medium' }) : null)
 const imageContainedClass = computed(() => classNames(props.imageContained && styles.imageContained,))
 
 

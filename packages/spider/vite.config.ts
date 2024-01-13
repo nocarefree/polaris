@@ -55,4 +55,15 @@ export default defineConfig({
       "@ncpl-polaris": resolve(__dirname, "../ncpl-polaris/src"),
     },
   },
+  server: {
+    //用来配置跨域
+    host: '127.0.0.1',
+    proxy: {
+      '/api': {
+        target: 'http://spider.com/frontendapi/',//目标服务器地址
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+    }
+  }
 });

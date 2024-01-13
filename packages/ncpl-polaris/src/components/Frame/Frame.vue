@@ -21,7 +21,7 @@
           <slot name="navigation"></slot>
           <button type="button" :class="styles.NavigationDismiss"
             :aria-hidden="mobileNavHidden || (!mediaQuery.isNavigationCollapsed && !showMobileNavigation)"
-            :aria-label="i18n.translate('Polaris.Frame.Navigation.closeMobileNavigationLabel')" :tabIndex="tabIndex"
+            :aria-label="i18n.translate('Polaris.Frame.Navigation.closeMobileNavigationLabel')" :tabindex="tabIndex"
             @click="e => $emit('update:showMobileNavigation', false)">
             <Icon :source="MobileCancelMajor"></Icon>
           </button>

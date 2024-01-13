@@ -9,7 +9,7 @@
     isHoveringRight && styles['DayCell-hoverRight'],
     rangeIsDifferent && styles['DayCell-hasRange'],
   )">
-    <button @focus="onFocus" type="button" ref="dayNode" :tabIndex="tabIndex" :class="classNames(
+    <button @focus="onFocus" type="button" ref="dayNode" :tabindex="tabindex" :class="classNames(
       styles.Day,
       selected && styles['Day-selected'],
       disabled && styles['Day-disabled'],
@@ -63,7 +63,7 @@ const today = computed(() => props.day ? isSameDay(new Date(), props.day) : fals
 
 
 const date = computed(() => props.day ? props.day.getDate() : null);
-const tabIndex = computed(() => (props.focused || props.selected || today.value || date.value === 1) && !props.disabled ? 0 : -1);
+const tabindex = computed(() => (props.focused || props.selected || today.value || date.value === 1) && !props.disabled ? 0 : -1);
 
 const ariaLabel = computed(() => {
   const { day } = props;

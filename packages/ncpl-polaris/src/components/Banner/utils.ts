@@ -9,7 +9,7 @@ import {
   RiskMinor,
   TickMinor,
 } from "@ncpl/ncpl-icons";
-import { ref, defineExpose } from 'vue';
+import { ref } from 'vue';
 
 import type { IconSource } from '../types';
 
@@ -87,14 +87,6 @@ export const bannerAttributes: { [key in BannerTone]: BannerAttributes } = {
 export function useBannerFocus() {
   const wrapperRef = ref<HTMLDivElement>();
   const shouldShowFocus = ref(false);
-
-
-  defineExpose({
-    focus: () => {
-      wrapperRef.value?.focus();
-      shouldShowFocus.value = false;
-    }
-  });
 
   const handleKeyUp = (event: KeyboardEvent) => {
     if (event.target === wrapperRef.value) {

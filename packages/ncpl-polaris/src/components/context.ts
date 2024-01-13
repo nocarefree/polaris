@@ -14,12 +14,12 @@ import { scrollable } from "./shared";
 export const routerContextKey: InjectionKey<boolean> = Symbol(
   "routerContextKey"
 );
-export const routerContext ={
+export const routerContext = {
   inject: () => {
     return inject(routerContextKey, false);
   },
   provide: (value: boolean = true) => {
-    provide(routerContextKey,value);
+    provide(routerContextKey, value);
   },
 }
 
@@ -204,13 +204,11 @@ export function useNavigation() {
 }
 
 //WithinContentContext
-export const withinContentContextKey: InjectionKey<MaybeRef<boolean>> = Symbol(
-  "withinContentContextKey"
-);
+export const withinContentContextKey: InjectionKey<MaybeRef<boolean>> = Symbol("withinContentContextKey");
 
 export const withinContentContext = {
   inject: () => {
-    return inject(withinContentContextKey);
+    return inject(withinContentContextKey, false);
   },
   provide: (value = true) => {
     provide(withinContentContextKey, computed(() => {
@@ -492,7 +490,7 @@ export const dropZoneContext = {
 
 
 //IndexTableContext
-import type { IndexTableProps } from "./IndexTable";
+import type { IndexTableProps, Range } from "./IndexTable/types";
 export interface IndexTableContext extends IndexTableProps {
   itemCount: number;
   resourceName: {
@@ -504,6 +502,8 @@ export interface IndexTableContext extends IndexTableProps {
   bulkActionsAccessibilityLabel: string;
   bulkSelectState: boolean;
   paginatedSelectAllText: string;
+  selectedItemsCount: number;
+  selectionChange: (type: any, checked: boolean, id?: string | Range, index?: number) => void;
   paginatedSelectAllAction: {
     content: string;
     onAction: () => {};
@@ -566,14 +566,15 @@ export function useIndexTableRow() {
 
 import { themeDefault } from '@shopify/polaris-tokens';
 import { useBreakpoints as baseUseBreakpoints } from "@vueuse/core"
-export const useBreakpoints = () => {
 
+
+
+const breakpoints = (() => {
   const options = Object.fromEntries(Object.entries(themeDefault.breakpoints).map(([key, value]: [string, string]) => {
     return [key.replace('breakpoints-', ''), value];
   }));
 
   const obj = baseUseBreakpoints(options)
-
 
   return {
     xsUp: obj.greaterOrEqual('xs'),
@@ -596,5 +597,8 @@ export const useBreakpoints = () => {
     xlDown: obj.smaller('xl'),
     xlOnly: obj.greaterOrEqual('xl'),
   }
+})();
 
+export const useBreakpoints = () => {
+  return breakpoints;
 }

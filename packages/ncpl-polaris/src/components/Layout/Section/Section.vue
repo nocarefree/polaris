@@ -1,11 +1,5 @@
 <template>
-  <div :class="classNames(
-    styles.Section,
-    secondary && styles['Section-secondary'],
-    fullWidth && styles['Section-fullWidth'],
-    oneHalf && styles['Section-oneHalf'],
-    oneThird && styles['Section-oneThird'],
-  )">
+  <div :class="classNames(styles.Section, styles[`Section-${variant}`])">
     <slot></slot>
   </div>
 </template>

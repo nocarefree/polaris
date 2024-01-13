@@ -2,6 +2,7 @@ export interface ApiItemType {
     name: string,
     required?: boolean,
     type?: string,
+    fun?: string,
     expands?: ApiType[],
     description?: string,
     defaultValue?: string,
@@ -15,5 +16,5 @@ export interface ApiType {
 
 export interface ComponentApiType {
     label: string,
-    types:ApiItemType[],
+    types: ApiItemType[],
 }

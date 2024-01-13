@@ -6,8 +6,9 @@ import { useId, useFrame } from "../context"
 
 export default defineComponent({
     name: 'NpToast',
-    setup(props: ToastProps) {
+    setup() {
 
+        const props = defineProps<ToastProps>();
         const id = useId();
         const { showToast, hideToast } = useFrame();
 
@@ -18,7 +19,8 @@ export default defineComponent({
         onUnmounted(() => {
             hideToast({ id: id.value });
         });
-
+    },
+    render() {
         return null;
     },
 });

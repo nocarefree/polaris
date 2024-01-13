@@ -21,7 +21,7 @@
         </BlockStack>
       </InlineStack>
     </SettingAction>
-    <Box v-if="$slots.termsOfService" :padding-block-start="breakpoints.mdUp ? '400' : '500'">
+    <Box v-if="$slots.termsOfService" :padding-block-start="mdUp ? '400' : '500'">
       <slot name="termsOfService"></slot>
     </Box>
   </Card>
@@ -43,7 +43,7 @@ defineOptions({
 })
 const props = defineProps<AccountConnectionProps>()
 
-const breakpoints = useBreakpoints();
+const { mdUp } = useBreakpoints();
 
 const initials = computed(() => props.accountName
   ? props.accountName

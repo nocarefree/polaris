@@ -4,6 +4,6 @@ import IndexTable from './IndexTable.vue'
 export const NpIndexTable = withInstall(IndexTable)
 export default NpIndexTable
 
-export * from './IndexTable';
+export * from './types';
 export * from './Cell';
 export * from './Row';

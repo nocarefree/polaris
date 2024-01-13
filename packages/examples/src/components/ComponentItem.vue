@@ -1,16 +1,17 @@
 <template>
   <NpPage v-if="name" :title="formatTitle(name.title)" full-width>
+    <NpBox :padding-inline-start="{ xs: '400', sm: '0' }" :padding-inline-end="{ xs: '400', sm: '0' }">
+      <NpText variant="bodyLg" as="p" style="margin-bottom:30px">{{ name.content }}</NpText>
 
-    <NpText variant="bodyLg" as="p" style="margin-bottom:30px">{{ name.content }}</NpText>
-
-    <NpBlockStack gap="300" style="margin-bottom:30px">
-      <component :is="name.title" />
-    </NpBlockStack>
+      <NpBlockStack gap="300" style="margin-bottom:30px">
+        <component :is="name.title" />
+      </NpBlockStack>
+    </NpBox>
   </NpPage>
 </template>
 <script lang="ts">
 import { computed } from "vue";
-import { NpPage, NpText, NpBlockStack } from "@ncpl/ncpl-polaris";
+import { NpPage, NpText, NpBlockStack, NpBox } from "@ncpl/ncpl-polaris";
 import { useRoute } from "vue-router";
 import { components } from "../routes/components";
 import { kebabCase, upperFirst, lowerCase } from "lodash";
@@ -94,7 +95,7 @@ import Scrollable from "../views/Scrollable.vue";
 
 export default {
   components: {
-    NpPage, NpText, NpBlockStack,
+    NpPage, NpText, NpBlockStack, NpBox,
     AccountConnection, Button, ButtonGroup, PageActions, Bleed, BlockStack, Box, CalloutCard, Card, EmptyState, Divider, FormLayout, Grid, InlineGrid, InlineStack, Layout, MediaCard, Page, Autocomplete, Checkbox, ChoiceList, ColorPicker, Combobox, ContextualSaveBar, DatePicker, DropZone, Filters, Form, IndexFilters, InlineError, RadioButton, RangeSlider, Select, Tag, TextField, Avatar, Icon, KeyboardKey, Thumbnail, VideoThumbnail, Badge, Banner, ExceptionList, Loading, ProgressBar, SkeletonBodyText, SkeletonDisplayText, SkeletonPage, SkeletonTabs, SkeletonThumbnail, Toast, Text, DataTable, IndexTable, ActionList, DescriptionList, List, Listbox, OptionList, ResourceItem, ResourceList, FooterHelp, FullscreenBar, Link, Navigation, Pagination, Tabs, TopBar, Modal, Popover, Tooltip, AppProvider, Collapsible, Frame, Scrollable
   },
   setup() {

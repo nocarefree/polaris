@@ -19,19 +19,20 @@
           <template #media>
             <NpAvatar customer size="md" name="name" />
           </template>
-          <Text as="h3" variant="bodyMd" fontWeight="bold">
+          <NpText as="h3" variant="bodyMd" fontWeight="bold">
             {{ name }}
-          </Text>
+          </NpText>
           <div>{{ location }}</div>
         </NpResourceItem>
       </template>
       <template #filterControl>
-        <NpFilters v-model:query-value="search.queryValue" :filters="filters">
+        <NpFilters v-model:query-value="search.queryValue" :filters="filters" :applied-filters="appliedFilters"
+          @clearAll="handleFiltersClearAll">
           <template #filter="{ filter }">
-            <NpTextField v-if="filter.key == 'taggedWith'" label="Tagged with" v-model="search.filters.taggedWith"
-              auto-complete="off" label-hidden />
+            <NpTextField v-if="filter.key == 'taggedWith'" label="Tagged with" :model-value="search.filters.taggedWith"
+              @update:model-value="onUpdateTagged" auto-complete="off" label-hidden />
             <NpChoiceList v-else title="Availability" title-hidden :choices="filterChoices[filter.key]"
-              v-model="search.filters[filter.key]" allow-multiple />
+              v-model:selected="search.filters[filter.key]" allow-multiple />
           </template>
           <div :style="{ paddingLeft: '8px' }">
             <NpButton variant="tertiary"> Save</NpButton>
@@ -42,10 +43,11 @@
   </NpCard>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { NpCard, NpResourceList, NpFilters, NpResourceItem, NpAvatar, NpButton, NpChoiceList, NpTextField } from "@ncpl/ncpl-polaris";
+import { ref, reactive, watch } from "vue";
+import { NpCard, NpResourceList, NpFilters, NpResourceItem, NpAvatar, NpButton, NpChoiceList, NpTextField, NpText } from "@ncpl/ncpl-polaris";
 
 
+const taggedWith = ref<string>('');
 
 const handleClearAll = () => {
 
@@ -73,7 +75,7 @@ const filterChoices = {
   ]
 }
 
-const filters = [
+const filters = ref([
   {
     key: 'availability',
     label: 'Availability',
@@ -86,7 +88,76 @@ const filters = [
     label: 'Tagged with',
     shortcut: true,
   },
-];
+]);
+
+const appliedFilters = ref([]);
+
+const onUpdateTagged = (v) => {
+  console.log(v);
+  //search.filters.taggedWith = v
+}
+
+watch(() => [search.filters.availability, search.filters.productType, search.filters.taggedWith], () => {
+  const { availability, productType, taggedWith } = search.filters;
+  const _appliedFilters = [];
+  if (!isEmpty(availability)) {
+    const key = 'availability';
+    _appliedFilters.push({
+      key,
+      label: disambiguateLabel(key, availability),
+      onRemove: () => {
+        search.filters.availability = [];
+      },
+    });
+  }
+  if (!isEmpty(productType)) {
+    const key = 'productType';
+    _appliedFilters.push({
+      key,
+      label: disambiguateLabel(key, productType),
+      onRemove: () => {
+        search.filters.productType = [];
+      },
+    });
+  }
+  if (!isEmpty(taggedWith)) {
+    const key = 'taggedWith';
+    _appliedFilters.push({
+      key,
+      label: `Tagged with ${taggedWith}`,
+      onRemove: () => {
+        search.filters.taggedWith = '';
+      },
+    });
+  }
+  appliedFilters.value = _appliedFilters;
+})
+
+const handleFiltersClearAll = () => {
+  search.filters.availability = [];
+  search.filters.productType = [];
+  search.filters.taggedWith = '';
+}
 
 
+function isEmpty(value: string | string[]): boolean {
+  if (Array.isArray(value)) {
+    return value.length === 0;
+  } else {
+    return value === '' || value == null;
+  }
+}
+
+function disambiguateLabel(key: string, value: string[]): string {
+  switch (key) {
+    case 'taggedWith':
+      return `Tagged with ${value}`;
+    case 'availability':
+      return value.map((val) => `Available on ${val}`).join(', ');
+    case 'productType':
+      return value.join(', ');
+    default:
+      return value.toString();
+  }
+}
 </script>

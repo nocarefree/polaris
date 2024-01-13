@@ -1,8 +1,8 @@
 <template>
-  <PositionedOverlay v-if="active" ref="overlayRef" :full-width="fullWidth" :active="active" :activator="activator"
-    :prefer-input-activator="preferInputActivator" :preferred-position="preferredPosition"
-    :preferred-alignment="preferredAlignment" :fixed="fixed" @scrollOut="handleScrollOut" :class="className"
-    :z-index-override="zIndexOverride">
+  <PositionedOverlay v-if="transitionStatus !== TransitionStatus.Exited || active" ref="overlayRef"
+    :full-width="fullWidth" :active="active" :activator="activator" :prefer-input-activator="preferInputActivator"
+    :preferred-position="preferredPosition" :preferred-alignment="preferredAlignment" :fixed="fixed"
+    @scrollOut="handleScrollOut" :class="className" :z-index-override="zIndexOverride">
     <template #default="{ measuring, desiredHeight, positioning }">
       <div :class="classNames(
         styles.Popover,
@@ -12,19 +12,23 @@
         hideOnPrint && styles['PopoverOverlay-hideOnPrint'],
       )
         " v-bind="overlay.props">
-        <div :class="styles.FocusTracker" tabIndex="0" @focus="handleFocusFirstItem"></div>
+        <EventListener event="click" :handler="handleClick" />
+        <EventListener event="touchstart" :handler="handleClick" />
+        <KeypressListener :key-code="Key.Escape" :handler="handleEscape" />
+        <div :class="styles.FocusTracker" tabindex="0" @focus="handleFocusFirstItem"></div>
         <div :class="styles.ContentContainer">
-          <div :id="id" :tab-index="autofocusTarget === 'none' ? undefined : -1" :class="classNames(
+          <div :id="id" :tabindex="autofocusTarget === 'none' ? undefined : -1" :class="classNames(
             styles.Content,
             fullHeight && styles['Content-fullHeight'],
             fluidContent && styles['Content-fluidContent'],
-          )" :style="measuring ? undefined : { height: `${desiredHeight}px` }" ref="contentNode">
+          )
+            " :style="measuring ? undefined : { height: `${desiredHeight}px` }" ref="contentNode">
             <RenderPopoverContent>
               <slot></slot>
             </RenderPopoverContent>
           </div>
         </div>
-        <div :class="styles.FocusTracker" tabIndex="0" @focus="handleFocusLastItem"></div>
+        <div :class="styles.FocusTracker" tabindex="0" @focus="handleFocusLastItem"></div>
       </div>
     </template>
   </PositionedOverlay>
@@ -36,8 +40,9 @@ import { classNames, elementChildren } from "@ncpl-polaris/utils"
 import { findFirstKeyboardFocusableNode } from "@ncpl-polaris/utils/focus"
 import { type PopoverOverlayProps, PopoverCloseSource } from './PopoverOverlay'
 import { overlay } from "../../shared";
+import EventListener from "../../EventListener";
+import KeypressListener from "../../KeypressListener"
 import { Key } from "../../types";
-import { useEventListener } from '@vueuse/core';
 import styles from '../Popover.module.scss'
 import Pane from "../Pane/Pane.vue";
 import PositionedOverlay from "@ncpl-polaris/components/PositionedOverlay/PositionedOverlay.vue"
@@ -96,6 +101,7 @@ const RenderPopoverContent = defineComponent({
 })
 
 const onClose = (v: PopoverCloseSource) => {
+  console.log(v);
   emit('update:active', false);
   emit('close', v)
 }
@@ -104,6 +110,7 @@ const handleScrollOut = () => {
   onClose(PopoverCloseSource.ScrollOut);
 }
 const handleClick = (event: Event) => {
+  console.log(event);
 
   const target = event.target as HTMLElement;
   const composedPath = event.composedPath();
@@ -148,12 +155,12 @@ const handleFocusLastItem = () => {
 const focusContent = () => {
   const { autofocusTarget = 'container' } = props;
 
-  if (autofocusTarget === 'none' || contentNode.value == null) {
+  if (autofocusTarget === 'none' || !contentNode) {
     return;
   }
 
   requestAnimationFrame(() => {
-    if (contentNode.value == null) {
+    if (!contentNode.value) {
       return;
     }
 
@@ -190,16 +197,10 @@ onMounted(() => {
 });
 
 let enteringTimer: any;
-let listernObjs: (() => void)[] = [];
 const clearTransitionTimeout = () => {
   if (enteringTimer) {
     window.clearTimeout(enteringTimer);
   }
-
-  for (let ob of listernObjs) {
-    ob();
-  }
-  listernObjs = [];
 }
 
 watch(() => props.active, (val: boolean, oldVal: boolean) => {
@@ -211,14 +212,6 @@ watch(() => props.active, (val: boolean, oldVal: boolean) => {
       enteringTimer = window.setTimeout(() => {
         transitionStatus.value = TransitionStatus.Entered;
       }, parseInt(theme.value.motion['motion-duration-100'], 10));
-
-      listernObjs.push(useEventListener(window, 'mousedown', handleClick));
-      listernObjs.push(useEventListener(window, 'touchstart', handleClick));
-      listernObjs.push(useEventListener(window, 'keydown', (e) => {
-        if (e.keyCode == Key.Escape) {
-          handleEscape(e)
-        }
-      }));
     });
   }
 
@@ -226,7 +219,7 @@ watch(() => props.active, (val: boolean, oldVal: boolean) => {
     clearTransitionTimeout();
     transitionStatus.value = TransitionStatus.Exited;
   }
-}, { flush: 'post' })
+})
 
 onUnmounted(() => {
   clearTransitionTimeout();

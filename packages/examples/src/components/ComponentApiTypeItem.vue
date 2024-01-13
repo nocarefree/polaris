@@ -9,6 +9,11 @@
                         <Highlighter @click="onShowType" :type="type"></Highlighter>
                     </span>
                 </template>
+                <template v-if="fun">
+                    <span>
+                        <Highlighter @click="onShowType" :type="fun"></Highlighter>
+                    </span>
+                </template>
             </NpInlineStack>
             <NpText v-if="description" variant="bodyLg" as="p" tone="subdued">{{ description }}</NpText>
             <NpCard v-if="showType" padding="0">

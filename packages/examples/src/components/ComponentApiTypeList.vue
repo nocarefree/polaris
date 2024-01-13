@@ -2,7 +2,7 @@
     <NpBlockStack gap="100">
         <template v-for="(type) in types">
             <NpDivider />
-            <ComponentApiTypeItem :name="type.name" :type="type.type" :required="type.required"
+            <ComponentApiTypeItem :name="type.name" :type="type.type" :fun="type.fun" :required="type.required"
                 :description="type.description" :expands="type.expands" />
         </template>
     </NpBlockStack>

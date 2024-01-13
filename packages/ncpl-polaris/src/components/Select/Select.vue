@@ -6,14 +6,15 @@
       error && styles.error,
       disabled && styles.disabled,
     )">
-      <select :id="_id" :name="name" :class="styles.Input" :disabled="disabled" @focus="e => $emit('focus', e)"
-        @blur="e => $emit('blur', e)" @change="handleChange" :aria-invalid="Boolean(error)"
+      <select :id="_id" :name="name" :class="styles.Input" :disabled="disabled"
+        @focus="(e: Event) => { focused = true, $emit('focus', e) }"
+        @blur="(e: Event) => { focused = false, $emit('blur', e) }" @change="handleChange" :aria-invalid="Boolean(error)"
         :aria-describedby="describedBy" :aria-required="requiredIndicator">
         <component :is="optionsMarkup"></component>
       </select>
       <div :class="styles.Content" aria-hidden :aria-disabled="disabled">
-        <Box v-if="labelInline" padding-inline-end="1">
-          <Text as="span" tone="subdued" truncate>
+        <Box v-if="labelInline" padding-inline-end="100">
+          <Text as="span" :tone="tone && tone === 'magic' && !focused ? 'magic-subdued' : 'subdued'" truncate>
             <component :is="() => $slots.label ? $slots.label() : [label]"></component>
           </Text>
         </Box>
@@ -30,7 +31,7 @@
   </Labelled>
 </template>
 <script setup lang="ts">
-import { computed, h, toRef } from 'vue'
+import { computed, h, toRef, ref } from 'vue'
 import type { SelectProps, SelectOption, SelectGroup, StrictOption } from './Select'
 import styles from './Select.module.scss'
 import Labelled, { helpTextID } from "../Labelled"
@@ -60,7 +61,7 @@ const emit = defineEmits(['blur', 'focus', 'change', 'update:modelValue']);
 const PLACEHOLDER_VALUE = '';
 const props = defineProps<SelectProps>()
 const _id = useId(toRef(props, 'id'));
-
+const focused = ref(false);
 const describedBy = computed(() => {
   const { helpText, error } = props
   let describedBy = [];

@@ -4,4 +4,6 @@ export type FiltersSearchFieldProps = {
     placeholder?: string;
     disabled?: boolean;
     borderlessQueryField?: boolean;
+    /** Show a loading spinner to the right of the input */
+    loading?: boolean;
 }

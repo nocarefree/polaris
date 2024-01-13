@@ -1,13 +1,13 @@
 <template>
   <li :class="classNames(styles.TabContainer, selected && styles.Underline)" ref="node" role="presentation">
-    <UnstyledLink v-if="url" :id="id" :url="url" role="tab" :tabIndex="tabIndex" @click="$emit('click', 'id')"
+    <UnstyledLink v-if="url" :id="id" :url="url" role="tab" :tabindex="tabIndex" @click="$emit('click', 'id')"
       :class="classNames(styles.Tab, selected && styles['Tab-selected'])" :aria-selected="selected"
       :aria-controls="panelId" :aria-label="accessibilityLabel" @mouseup="handleMouseUpByBlurring">
       <span :class="styles.Title">
         <slot></slot>
       </span>
     </UnstyledLink>
-    <button v-else :id="id" role="tab" type="button" :tabIndex="tabIndex"
+    <button v-else :id="id" role="tab" type="button" :tabindex="tabIndex"
       :class="classNames(styles.Tab, selected && styles['Tab-selected'])" @click="$emit('click', 'id')"
       :aria-selected="selected" :aria-controls="panelId" :aria-label="accessibilityLabel"
       @mouseup="handleMouseUpByBlurring">

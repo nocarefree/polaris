@@ -83,7 +83,7 @@ const toggleSecondaryActionsPopoverOpen = () => {
 withinContentContext.provide(true);
 
 
-watchEffect(() => {
+watchEffect((onCleanup) => {
   const legacyCardNode = legacyCard.value;
   let firstSection: Element | undefined;
   let lastSection: Element | undefined;
@@ -98,21 +98,23 @@ watchEffect(() => {
       const currentElements = legacyCardNode.querySelectorAll(
         `.${styles.Section}, .${styles.Header}, .${styles.Footer}`,
       );
+
       if (!currentElements?.length) return;
 
       const firstElement = currentElements[0];
+
       const lastElement = getMostSeniorLastElement(currentElements);
 
       // Update padding for first element if it is the first child or
       // a descendant of the first child
-      if (legacyCardNode.firstChild?.contains(firstElement)) {
+      if (legacyCardNode.firstElementChild?.contains(firstElement)) {
         firstSection = firstElement;
         updatePadding(firstSection, 'top', true);
       }
 
       // Update padding for last element if it is the last child or
       // a descendant of the last child
-      if (legacyCardNode.lastChild?.contains(lastElement)) {
+      if (legacyCardNode.lastElementChild?.contains(lastElement)) {
         lastSection = lastElement;
         updatePadding(lastSection, 'bottom', true);
       }
@@ -128,12 +130,12 @@ watchEffect(() => {
       subtree: true,
     });
 
-    return () => {
+    onCleanup(() => {
       // Clean up by removing added classes
       updatePadding(firstSection, 'top', false);
       updatePadding(lastSection, 'bottom', false);
       observer.disconnect();
-    };
+    });
   }
 }, { flush: 'post' });
 

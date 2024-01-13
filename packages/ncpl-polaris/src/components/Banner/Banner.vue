@@ -3,7 +3,7 @@
     styles.Banner,
     shouldShowFocus && styles.keyFocused,
     withinContentContainer ? styles.withinContentContainer : styles.withinPage,
-  )" :tabIndex="0" ref="wrapperRef" :role="tone === 'warning' || tone === 'critical' ? 'alert' : 'status'"
+  )" :tabindex="0" ref="wrapperRef" :role="tone === 'warning' || tone === 'critical' ? 'alert' : 'status'"
     :aria-live="stopAnnouncements ? 'off' : 'polite'" @mouseup="handleMouseUp" @keyup="handleKeyUp" @blur="handleBlur">
 
     <component :is="layoutComponent" :background-color="bannerColors.background" :text-color="bannerColors.text">
@@ -45,7 +45,8 @@
 import { provide, computed, unref } from 'vue';
 import Text from '../Text';
 import Icon from '../Icon';
-import Button from "../Button"
+import Button from "../Button";
+import ButtonGroup from "../ButtonGroup";
 import WithinContentContainerBanner from "./WithinContentContainerBanner.vue";
 import InlineIconBanner from "./InlineIconBanner.vue";
 import DefaultBanner from "./DefaultBanner.vue";
@@ -79,7 +80,7 @@ const layoutComponent = computed(() => {
   if (withinContentContainer.value) {
     return WithinContentContainerBanner;
   }
-  if (isInlineIconBanner) {
+  if (isInlineIconBanner.value) {
     return InlineIconBanner;
   }
 
@@ -87,5 +88,13 @@ const layoutComponent = computed(() => {
 })
 
 provide(bannerContextKey, true);
+
+
+defineExpose({
+  focus: () => {
+    wrapperRef.value?.focus();
+    shouldShowFocus.value = false;
+  }
+});
 
 </script>

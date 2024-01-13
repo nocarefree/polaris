@@ -5,16 +5,17 @@
     <div :class="styles.ItemWrapper">
       <div ref="node"
         :class="classNames(styles.ResourceItem, state.focused && styles.focused, context.selectable && styles.selectable, selected && styles.selected, context.selectMode && styles.selectMode, persistActions && styles.persistActions, state.focusedInner && styles.focusedInner,)"
-        @click="handleClick" @focus="handleFocus" @blur="handleBlur" @keyup="handleKeyUp" @mouseover="onMouseOver"
-        @mouseout="handleMouseOut" :data-href="url">
+        @click="handleClick" @keyup="handleKeyUp" @mouseover="onMouseOver" @mouseout="handleMouseOut" :data-href="url">
         <UseId v-if="url">
           <template #default="{ id }">
             <UnstyledLink :aria-describedby="id" :aria-label="ariaLabel" :class="styles.Link" :url="url"
-              :external="external" :tabIndex="context.loading ? -1 : 0" :id="id" ref="overlayRef" />
+              :external="external" :tabindex="context.loading ? -1 : 0" :id="id" ref="overlayRef" @focus="handleFocus"
+              @blur="handleBlur" />
           </template>
         </UseId>
-        <button v-else :class="styles.Button" :aria-label="ariaLabel" :aria-controls="ariaControls"
-          :aria-expanded="ariaExpanded" @click="handleClick" :tabIndex="context.loading ? -1 : 0" ref="buttonOverlay" />
+        <button v-else :class="styles.Button" :aria-label="ariaLabel" :aria-controls="ariaControls" @focus="handleFocus"
+          @blur="handleBlur" :aria-expanded="ariaExpanded" @click="handleClick" :tabindex="context.loading ? -1 : 0"
+          ref="buttonOverlay" />
         <Box :id="id" position="relative" padding-inline-start="300" padding-inline-end="300" padding-block-start="300"
           padding-block-end="300" z-index="var(--pc-resource-item-content-stacking-order)">
           <InlineGrid :columns="{ xs: '1fr auto' }">
@@ -42,14 +43,14 @@
             </InlineGrid>
             <template v-if="shortcutActions && !context.loading">
               <template v-if="persistActions">
-                <div v-if="breakpoints?.lgUp" :class="styles.Actions" @click="stopPropagation">
+                <div v-if="lgUp" :class="styles.Actions" @click="stopPropagation">
                   <ButtonGroup>
-                    <component :is="buttonsFrom(shortcutActions, {variant: 'tertiary',})"></component>
+                    <component :is="()=>buttonsFrom(shortcutActions!, {variant: 'tertiary'})"></component>
                   </ButtonGroup>
                 </div>
-                <div @click="stopPropagation">
+                <div v-if="!context.selectMode && lgDown" @click="stopPropagation">
                   <Popover @close="handleCloseRequest" :active="state.actionsMenuVisible">
-                    <template name="activator">
+                    <template #activator>
                       <NpButton :accessibility-label="name
                         ? i18n.translate('Polaris.ResourceList.Item.actionsDropdownLabel', {
                           accessibilityLabel: name,
@@ -61,10 +62,10 @@
                   </Popover>
                 </div>
               </template>
-              <div v-else-if="breakpoints?.lgUp" :class="styles.Actions" @click="stopPropagation">
+              <div v-else-if="lgUp" :class="styles.Actions" @click="stopPropagation">
                 <Box position="absolute" inset-block-start="400" inset-inline-end="500">
                   <ButtonGroup variant="segmented">
-                    <component :is="buttonsFrom(shortcutActions, {size: 'slim'})"></component>
+                    <component :is="()=>buttonsFrom(shortcutActions!, {size: 'slim'})"></component>
                   </ButtonGroup>
                 </Box>
               </div>
@@ -94,14 +95,15 @@ import Popover from "../Popover";
 import NpButton from "../Button";
 import ActionList from "../ActionList";
 import { buttonsFrom } from "../Button/utils";
-import { HorizontalDotsMinor } from "@ncpl/ncpl-icons"
+import { HorizontalDotsMinor } from "@ncpl/ncpl-icons";
 
 
 defineOptions({
   name: 'NpResourceItem',
 })
 
-const breakpoints = useBreakpoints();
+const { lgUp, lgDown } = useBreakpoints();
+
 const context = inject(resourceListContextKey, {});
 const i18n = useI18n();
 
@@ -155,8 +157,14 @@ const handleClick = (event: MouseEvent) => {
     anchor.click();
   }
 }
-const handleFocus = () => { }
-const handleBlur = () => { }
+const handleFocus = (event: Event) => {
+  state.focused = true;
+  state.focusedInner = false;
+}
+const handleBlur = () => {
+  state.focused = false;
+  state.focusedInner = false;
+}
 const handleKeyUp = (event: KeyboardEvent) => {
   const { key } = event;
 
@@ -177,8 +185,8 @@ const handleMouseOut = () => {
 const handleCloseRequest = () => {
   state.actionsMenuVisible = false;
 }
-const handleActionsClick = (actionsMenuVisible: boolean) => {
-  state.actionsMenuVisible = actionsMenuVisible;
+const handleActionsClick = () => {
+  state.actionsMenuVisible = !state.actionsMenuVisible;
 }
 
 const stopPropagation = (event: MouseEvent) => {
@@ -198,6 +206,7 @@ const handleSelection = (value: boolean, shiftKey: boolean) => {
   }
   state.focused = value;
   state.focusedInner = value;
+
   onSelectionChange(value, id, sortOrder, shiftKey);
 }
 

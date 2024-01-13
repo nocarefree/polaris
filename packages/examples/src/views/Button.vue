@@ -1,5 +1,5 @@
 <template>
-    <aNpPage title="Button" full-width>
+    <NpPage title="Button" full-width>
         <NpText variant="bodyLg" as="p">
             Buttons are used primarily for actions, such as “Add”, “Close”, “Cancel”, or “Save”. Plain buttons, which look
             similar to links, are used for less important or less commonly used actions, such as “view shipping settings”.
@@ -9,7 +9,7 @@
             <ExampleDefault></ExampleDefault>
         </ExampleWrapper>
 
-    </aNpPage>
+    </NpPage>
 </template>
 <script setup lang="ts">
 import ExampleWrapper from "../components/ExampleWrapper.vue";

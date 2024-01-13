@@ -47,4 +47,6 @@ export interface PopoverProps {
      * @default false
      */
     captureOverscroll?: boolean;
+    /** Used to illustrate the type of popover element */
+    ariaHaspopup?: boolean;
 }

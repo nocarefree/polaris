@@ -3,7 +3,6 @@
 </template>
 <script setup lang="ts">
 import ComponentApiList from "../components/ComponentApiList.vue";
-import { NpText, NpPage, NpBlockStack, NpCard } from "@ncpl/ncpl-polaris";
 
 const apis = [
   {

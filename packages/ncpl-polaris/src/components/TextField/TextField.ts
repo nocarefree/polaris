@@ -54,7 +54,7 @@ interface NonMutuallyExclusiveProps {
     prefix?: string | Component,
     suffix?: string | Component,
     helpText?: string | Component,
-    label: LabelledProps['label'];
+    label?: LabelledProps['label'];
     /** Adds an action to the label */
     labelAction?: LabelledProps['action'];
     /** Visually hide the label */
@@ -90,7 +90,7 @@ interface NonMutuallyExclusiveProps {
     /** Increment value for numeric and date-time inputs when using Page Up or Page Down */
     largeStep?: number;
     /** Enable automatic completion by the browser. Set to "off" when you do not want the browser to fill in info */
-    autoComplete: string;
+    autoComplete?: string;
     /** Mimics the behavior of the native HTML attribute, limiting the maximum value */
     max?: number | string;
     /** Maximum character length for an input */

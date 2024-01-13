@@ -11,13 +11,14 @@
   </component>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { PopoverProps } from './Popover'
 import Portal from "@ncpl-polaris/components/Portal/Portal.vue";
 import PopoverOverlay from "./PopoverOverlay/PopoverOverlay.vue";
 import { PopoverCloseSource } from "./PopoverOverlay/PopoverOverlay"
 import { useId } from "../context";
 import { portal } from "../shared";
+import { setActivatorAttributes } from "./set-activator-attributes";
 import { findFirstFocusableNodeIncludingDisabled, focusNextFocusableNode } from "@ncpl-polaris/utils/focus"
 
 
@@ -30,10 +31,9 @@ const emit = defineEmits(['close', 'update:active']);
 const id = useId();
 const overlayRef = ref();
 const activatorContainer = ref<HTMLElement>();
-
 const activatorNode = computed(() => {
   return activatorContainer.value?.firstElementChild as HTMLElement;
-})
+});
 
 const overlayProps = computed(() => {
   const {
@@ -54,7 +54,7 @@ const handleClose = (source: PopoverCloseSource) => {
     return;
   }
 
-  if (source === PopoverCloseSource.FocusOut && activatorNode) {
+  if (source === PopoverCloseSource.FocusOut && activatorNode.value) {
     const focusableActivator =
       findFirstFocusableNodeIncludingDisabled(activatorNode.value) ||
       findFirstFocusableNodeIncludingDisabled(activatorContainer.value) ||
@@ -64,7 +64,7 @@ const handleClose = (source: PopoverCloseSource) => {
     }
   } else if (
     source === PopoverCloseSource.EscapeKeypress &&
-    activatorNode
+    activatorNode.value
   ) {
     const focusableActivator =
       findFirstFocusableNodeIncludingDisabled(activatorNode.value) ||
@@ -89,4 +89,24 @@ function isInPortal(element: Element) {
 
   return true;
 }
+
+const setAccessibilityAttributes = () => {
+  if (activatorContainer.value == null) {
+    return;
+  }
+
+  const { active, ariaHaspopup } = props;
+
+  const firstFocusable = findFirstFocusableNodeIncludingDisabled(activatorContainer.value,);
+  const focusableActivator: HTMLElement & { disabled?: boolean; } = firstFocusable || activatorContainer.value;
+
+  const activatorDisabled = 'disabled' in focusableActivator && Boolean(focusableActivator.disabled);
+
+  setActivatorAttributes(focusableActivator, { id: id.value, active, ariaHaspopup, activatorDisabled });
+};
+
+
+watch(() => [props.active, activatorNode.value], () => {
+  setAccessibilityAttributes();
+});
 </script>

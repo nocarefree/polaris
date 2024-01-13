@@ -26,7 +26,7 @@ const borderRadius = computed(() => {
   const { roundedAbove } = props;
   let hasBorderRadius = !roundedAbove;
 
-  if (roundedAbove && breakpoints[`${roundedAbove}Up`]) {
+  if (roundedAbove && breakpoints[`${roundedAbove}Up`].value) {
     hasBorderRadius = true;
   }
   return hasBorderRadius ? '300' : '0'

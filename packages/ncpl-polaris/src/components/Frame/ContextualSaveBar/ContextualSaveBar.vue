@@ -7,12 +7,19 @@
       <Image v-if="logo" :style="{ width: logoWidth }" :source="logo.contextualSaveBarSource || ''" alt="" />
     </div>
     <div :class="contentsClassName">
-      <Text as="h2" variant="headingMd" tone="text-inverse" truncate>{{ message }}</Text>
+      <div :class="styles.MessageContainer">
+        <Icon :source="RiskMajor" />
+        <Text v-if="message" as="h2" variant="headingMd" tone="text-inverse" truncate>{{ message }}</Text>
+      </div>
+
       <div :class="styles.ActionContainer">
         <LegacyStack spacing="tight" :wrap="false">
           <component v-if="secondaryMenu" :is="secondaryMenu"></component>
-          <Button v-if="discardAction" v-bind="discardAction" @click="discardAction?.onAction">{{ discardAction.content
-            || "Discard" }}</Button>
+          <Button v-if="discardAction" variant="tertiary" size="large" :url="discardAction.url"
+            @click="() => discardAction!.discardConfirmationModal ? toggleDiscardConfirmationModal() : discardAction!.onAction?.()"
+            :loading="discardAction.loading" :disabled="discardAction.disabled"
+            :accessibility-label="discardAction.content">{{ discardAction.content
+              || "Discard" }}</Button>
           <Button v-if="saveAction" v-bind="saveAction" variant="primary" tone="success" size="large">{{
             saveAction && saveAction.content ? saveAction.content : i18n.translate('Polaris.ContextualSaveBar.save')
           }}</Button>
@@ -20,23 +27,32 @@
       </div>
     </div>
   </div>
+  <DiscardConfirmationModal v-if="discardAction && discardAction.onAction && discardAction.discardConfirmationModal"
+    :open="discardConfirmationModalVisible" @cancel="toggleDiscardConfirmationModal"
+    @discard="() => { discardAction!.onAction?.(), discardConfirmationModalVisible = false }" />
 </template>
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import type { ContextualSaveBarProps } from "./ContextualSaveBar";
 import styles from "./ContextualSaveBar.module.scss";
 import LegacyStack from "../../LegacyStack"
 import Text from "../../Text"
 import Image from "../../Image"
 import Button from "../../Button"
+import Icon from "../../Icon"
+import DiscardConfirmationModal from "./DiscardConfirmationModal/DiscardConfirmationModal.vue"
 import { classNames } from "@ncpl-polaris/utils";
 import { useFrame, useI18n } from "../../context"
+import { RiskMajor } from "@ncpl/ncpl-icons"
+
 
 
 const props = defineProps<ContextualSaveBarProps>();
 
 const { logo } = useFrame();
 const i18n = useI18n();
+
+const discardConfirmationModalVisible = ref(false);
 
 
 const logoWidth = computed(() => {
@@ -47,4 +63,10 @@ const contentsClassName = computed(() => classNames(
   styles.Contents,
   props.fullWidth && styles.fullWidth,
 ));
+
+const toggleDiscardConfirmationModal = () => {
+  discardConfirmationModalVisible.value = discardConfirmationModalVisible.value
+}
+
+
 </script>

@@ -31,9 +31,9 @@
         <div v-if="slots.verticalContent" :class="styles.VerticalContent" :id="`${inputId}-VerticalContent`"
           ref="verticalContentRef" @click="handleClickChild">
           <slot name="verticalContent"></slot>
-          <component :is="inputComponent"></component>
+          <component :is="multiline?'textarea':'input'" v-bind="attributes" />
         </div>
-        <component v-else :is="inputComponent"></component>
+        <component :is="multiline?'textarea':'input'" v-bind="attributes" />
 
 
         <div v-if="suffixComponent" :class="styles.Suffix" :id="`${inputId}-Suffix`" ref="suffixRef">
@@ -66,7 +66,7 @@
   </Labelled>
 </template>
 <script setup lang="ts">
-import { computed, nextTick, ref, watchEffect, toRef, useSlots, h, shallowRef, cloneVNode, watch, onBeforeUpdate, onUpdated } from 'vue'
+import { computed, nextTick, ref, watchEffect, toRef, useSlots, shallowRef, watch, onBeforeUpdate, onUpdated } from 'vue'
 import type { TextFieldProps } from './TextField'
 import Labelled, { helpTextID } from '../Labelled';
 import { labelID } from '../Label'
@@ -80,17 +80,58 @@ import { CircleCancelMinor } from "@ncpl/ncpl-icons"
 import { classNames, variationName, isKorean } from "@ncpl-polaris/utils"
 import { useI18n, useId } from '../context';
 import { useEventListener } from "@vueuse/core"
-import { isNil } from 'lodash'
+import { isNil } from 'lodash';
+import { Key } from "../types"
 
 defineOptions({
   name: 'NpTextField',
 })
 const props = withDefaults(defineProps<TextFieldProps>(), {
+  prefix: undefined,
+  suffix: undefined,
+  verticalContent: undefined,
+  placeholder: undefined,
   modelValue: '',
-  type: 'text',
+  helpText: undefined,
+  label: undefined,
+  labelAction: undefined,
+  labelHidden: undefined,
+  disabled: undefined,
+  clearButton: undefined,
+  readOnly: undefined,
+  autoFocus: undefined,
   focused: undefined,
-})
-const emit = defineEmits(['focus', 'blur', 'update:model-value', 'compositionstart', 'compositionupdate', 'compositionend', 'input', 'change']);
+  multiline: undefined,
+  error: undefined,
+  connectedRight: undefined,
+  connectedLeft: undefined,
+  type: 'text',
+  name: undefined,
+  step: undefined,
+  largeStep: undefined,
+  autoComplete: undefined,
+  max: undefined,
+  maxLength: undefined,
+  maxHeight: undefined,
+  min: undefined,
+  minLength: undefined,
+  pattern: undefined,
+  inputMode: undefined,
+  spellCheck: undefined,
+  ariaOwns: undefined,
+  ariaControls: undefined,
+  ariaExpanded: undefined,
+  ariaActiveDescendant: undefined,
+  ariaAutocomplete: undefined,
+  showCharacterCount: undefined,
+  align: undefined,
+  requiredIndicator: undefined,
+  monospaced: undefined,
+  selectTextOnFocus: undefined,
+  suggestion: undefined,
+  variant: 'inherit',
+});
+const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'compositionstart', 'compositionupdate', 'compositionend', 'input', 'change', 'clear']);
 const slots = useSlots();
 const i18n = useI18n();
 const inputRef = shallowRef<HTMLInputElement>();
@@ -98,7 +139,7 @@ const spinnerRef = ref();
 const suffixRef = ref();
 const prefixRef = ref();
 const verticalContentRef = ref();
-const focus = ref<boolean>(props.focused)
+const focus = ref<boolean>(Boolean(props.focused));
 const inputId = useId(toRef(props, 'id'));
 const isComposing = ref(false);
 const hasVerticalContent = ref<boolean>(Boolean(slots.verticalContent));
@@ -227,7 +268,11 @@ const handleClickChild = (event: MouseEvent | TouchEvent) => {
   focus.value = true;
   inputRef.value?.focus();
 }
-const handleClearButtonPress = () => { }
+const handleClearButtonPress = () => {
+  emit('update:modelValue', '');
+  emit('change');
+  emit('clear');
+}
 const handleNumberChange = (steps: number, stepAmount?: number) => {
 
   const { step, modelValue, max, min } = props;
@@ -253,7 +298,7 @@ const handleNumberChange = (steps: number, stepAmount?: number) => {
     Math.max(numericValue + steps * stepAmount, Number(normalizedMin)),
   );
 
-  emit('update:model-value', String(newValue.toFixed(decimalPlaces)));
+  emit('update:modelValue', String(newValue.toFixed(decimalPlaces)));
 
 }
 
@@ -282,14 +327,59 @@ const handleButtonRelease = () => {
   clearTimeout(buttonPressTimer);
 }
 const handleKeyPress = (event: KeyboardEvent) => {
-  // const { key, which } = event;
-  // const numbersSpec = /[\d.,eE+-]$/;
-  // const integerSpec = /[\deE+-]$/;
+  const { key, which } = event;
+  const numbersSpec = /[\d.,eE+-]$/;
+  const integerSpec = /[\deE+-]$/;
 
-
+  if (
+    !isNumericType.value ||
+    which === Key.Enter ||
+    (props.type === 'number' && numbersSpec.test(key)) ||
+    (props.type === 'integer' && integerSpec.test(key))
+  ) {
+    return;
+  }
   event.preventDefault();
 }
-const handleKeyDown = () => { }
+const handleKeyDown = (event: KeyboardEvent) => {
+  const { type, min, max, largeStep } = props;
+  if (!isNumericType) {
+    return;
+  }
+
+  const { key, which } = event;
+
+  if (type === 'integer' && (key === 'ArrowUp' || which === Key.UpArrow)) {
+    handleNumberChange(1);
+    event.preventDefault();
+  }
+  if (
+    type === 'integer' &&
+    (key === 'ArrowDown' || which === Key.DownArrow)
+  ) {
+    handleNumberChange(-1);
+    event.preventDefault();
+  }
+
+  if ((which === Key.Home || key === 'Home') && min !== undefined) {
+    emit('update:modelValue', String(min));
+  }
+
+  if ((which === Key.End || key === 'End') && max !== undefined) {
+    emit('update:modelValue', String(max));
+  }
+
+  if ((which === Key.PageUp || key === 'PageUp') && largeStep !== undefined) {
+    handleNumberChange(1, largeStep);
+  }
+
+  if (
+    (which === Key.PageDown || key === 'PageDown') &&
+    largeStep !== undefined
+  ) {
+    handleNumberChange(-1, largeStep);
+  }
+}
 
 
 const handleCompositionStart = (event: CompositionEvent) => {
@@ -317,13 +407,14 @@ const handleChange = (event: Event) => {
 }
 const handleInput = async (event: Event) => {
   //recordCursor()
-  emit('update:model-value', (event.target as HTMLInputElement).value)
+  emit('update:modelValue', (event.target as HTMLInputElement).value)
   emit('input', event)
 
   await nextTick()
 
   setNativeInputValue()
   //setCursor()
+
 
 }
 
@@ -345,11 +436,8 @@ const handleOnFocus = (event: FocusEvent) => {
   emit('focus', event)
 }
 
-const inputVNode = computed(() => {
-  return (attribues: any) => cloneVNode(h(props.multiline ? 'textarea' : 'input', attribues));
-})
 
-const inputComponent = computed(() => {
+const attributes = computed(() => {
   const {
     placeholder,
     disabled,
@@ -384,7 +472,7 @@ const inputComponent = computed(() => {
 
   const style = multiline && currentHeight.value ? { height: `${currentHeight.value}px`, maxHeight: maxHeight ? `${maxHeight}px` : undefined } : undefined;
 
-  const attributes = {
+  return {
     ref: inputRef,
     name,
     id: inputId.value,
@@ -433,8 +521,13 @@ const inputComponent = computed(() => {
     onCompositionstart: handleCompositionStart,
     onCompositionupdate: handleCompositionUpdate,
     onCompositionend: handleCompositionEnd,
+    // 1Password disable data attribute
+    'data-1p-ignore': autoComplete === 'off' || undefined,
+    // LastPass disable data attribute
+    'data-lpignore': autoComplete === 'off' || undefined,
+    // Dashlane disable data attribute
+    'data-form-type': autoComplete === 'off' ? 'other' : undefined,
   }
-  return inputVNode.value(attributes);
 })
 
 watchEffect(() => {

@@ -40,7 +40,7 @@
       </template>
 
       <component :is="urlIfNotDisabledOrSelected ? UnstyledLink: UnstyledButton" :id="id" :class="tabClassName"
-        :tab-index="tabIndex" :aria-selected="selected" :aria-controls="panelId" :aria-label="accessibilityLabel"
+        :tabindex="tabIndex" :aria-selected="selected" :aria-controls="panelId" :aria-label="accessibilityLabel"
         :role="tabIndexOverride == null ? 'tab' : undefined" :disabled="disabled" :url="urlIfNotDisabledOrSelected"
         @focus="emit('focus')" @mouseup="event => event.target.blur()" @click="handleClick" @keydown="handleKeyDown">
         <InlineStack gap="200" align="center" block-align="center" :wrap="false">

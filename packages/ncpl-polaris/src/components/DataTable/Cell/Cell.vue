@@ -2,7 +2,7 @@
   <th v-if="stickyHeadingCell" :ref="(e: any) => setRef(e)" v-bind="{ ...headerCell.props, ...colSpanProp }"
     :class="className" :aria-sort="sortDirection" :style="{ ...style, ...minWidthStyles }"
     data-index-table-sticky-heading>
-    <button v-if="sortable" :class="headerClassName" @click="onSort" @focus="handleFocus" :tabIndex="focusable ? 0 : -1">
+    <button v-if="sortable" :class="headerClassName" @click="onSort" @focus="handleFocus" :tabindex="focusable ? 0 : -1">
       <span :class="iconClassName">
         <Icon :source="source" :accessibility-label="sortAccessibilityLabel" />
       </span>
@@ -14,7 +14,7 @@
     <th v-if="header" v-bind="{ ...headerCell.props, ...colSpanProp }" :aria-sort="sortDirection"
       :ref="(e: any) => setRef(e)" :class="className" scope="col" :style="{ ...minWidthStyles }">
       <button v-if="sortable" :class="headerClassName" @click="onSort" @focus="handleFocus"
-        :tabIndex="focusable ? 0 : -1">
+        :tabindex="focusable ? 0 : -1">
         <span :class="iconClassName">
           <Icon :source="source" :accessibilityLabel="sortAccessibilityLabel" />
         </span>

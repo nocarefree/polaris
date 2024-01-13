@@ -1,5 +1,5 @@
 <template>
-  <Transition :css="false" :duration="duration" @before-enter="onBeforeEnter" @after-enter="onAfterEnter"
+  <Transition :css="false" :duration="duration" appear @before-enter="onBeforeEnter" @after-enter="onAfterEnter"
     @before-leave="onBeforeLeave" @after-leave="onAfterLeave">
     <slot :state="state"></slot>
   </Transition>

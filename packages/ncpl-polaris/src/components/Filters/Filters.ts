@@ -1,12 +1,12 @@
 import { Component } from "vue"
 
-interface AppliedFilterInterface {
+export interface AppliedFilterInterface {
     /** A unique key used to identify the applied filter */
     key: string;
     /** A label for the applied filter */
     label: string;
     /** Callback when the remove button is pressed */
-    onRemove(key: string): void;
+    onRemove: (key: string) => void;
 }
 
 export interface FilterInterface {
@@ -14,6 +14,10 @@ export interface FilterInterface {
     key: string;
     /** The label for the filter */
     label: string;
+    /** The label for the selected filter */
+    //selectedLabel?: string;
+    /** The label for the filter */
+    //onRemove?: (key: string) => void;
     /** The markup for the given filter */
     //filter: Component;
     /** Whether or not the filter should have a shortcut popover displayed */

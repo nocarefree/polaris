@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useIndexTable } from '../../context';
-import type { HeaderContentProps } from "./HeaderContent"
+import type { HeaderContentProps } from "../types"
 import UnstyledButton from "../../UnstyledButton"
 import Tooltip from "../../Tooltip"
 import styles from "../IndexTable.module.scss";
@@ -77,7 +77,6 @@ import { classNames } from "@ncpl-polaris/utils";
 import { SortAscendingMajor, SortDescendingMajor } from "@ncpl/ncpl-icons"
 
 
-type IndexTableSortDirection = 'ascending' | 'descending';
 
 const props = defineProps<HeaderContentProps>();
 
@@ -136,13 +135,13 @@ const defaultSortButtonProps = computed(() => {
 
   return {
     onClick: handleSortHeadingClick,
-    className: classNames(
+    class: classNames(
       styles.TableHeadingSortButton,
       !isCurrentlySorted.value && props.alignment === 'end' && styles['TableHeadingSortButton-heading-align-end'],
       isCurrentlySorted.value && props.alignment === 'end' && styles['TableHeadingSortButton-heading-align-end-currently-sorted'],
       isPreviouslySorted.value && !renderAfterSelectEvent.value && props.alignment === 'end' && styles['TableHeadingSortButton-heading-align-end-previously-sorted'],
     ),
-    tabIndex: indexTable.value.selectMode ? -1 : 0,
+    tabindex: indexTable.value.selectMode ? -1 : 0,
   }
 });
 

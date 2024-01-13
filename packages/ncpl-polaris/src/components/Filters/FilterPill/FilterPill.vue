@@ -84,10 +84,7 @@ onMounted(() => {
 })
 
 const togglePopoverActive = () => {
-  if (props.filter) {
-    popoverActive.value = !popoverActive.value
-  }
-
+  popoverActive.value = !popoverActive.value
   emit('click', props.filterKey);
 };
 
