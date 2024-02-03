@@ -48,9 +48,9 @@ import { NpTextField, NpBanner, NpCard, NpButton, NpBlockStack, NpIndexTable, Np
 import { DeleteMajor } from "@ncpl/ncpl-icons";
 import { useCurrentTaskWeb } from "../../stores";
 
-const formatUrls = (urls: any[]) => {
-  if (urls || urls.length == 0) {
-    urls.push({ url: '', name: '' });
+const formatUrls = (urls: { url: string; name: string }[]) => {
+  if (!urls || urls.length == 0) {
+    urls = [{ url: '', name: '' }];
   }
   return urls.map(((u: any, index: number) => ({ id: `c_url_${index}`, ...u })))
 }

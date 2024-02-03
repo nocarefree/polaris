@@ -103,6 +103,8 @@ type TaskType = {
   loading?: boolean;
   parsed: 1 | 0,
   ruled: 1 | 0,
+  products_count?: number;
+  maps_count?: number;
   map: {
     id: string,
     next_id: string,
@@ -153,7 +155,7 @@ const loadList = () => {
 let timeInterval = setInterval(loadList, 15000)
 loadList();
 
-const onToggleTask = (task) => {
+const onToggleTask = (task: TaskType) => {
   const status = task.status == 'running' ? 'stop' : 'run';
   task.loading = true;
   request.post(`/tasks/${task.id}/action`, { action: status }).then((data: any) => {
@@ -162,7 +164,7 @@ const onToggleTask = (task) => {
   })
 }
 
-const onExportTask = (task, type: string) => {
+const onExportTask = (task: TaskType, type: string) => {
   task.loading = true;
   clearInterval(timeInterval)
   request.post(`/tasks/${task.id}/action`, { action: 'export', type }).then(({ id }: any) => {
@@ -177,7 +179,7 @@ const onExportTask = (task, type: string) => {
   })
 }
 
-const onClearProduct = (task) => {
+const onClearProduct = (task: TaskType) => {
   task.loading = true;
   request.post(`/tasks/${task.id}/action`, { action: 'clearProduct' }).then(({ url }: any) => {
     task.loading = false;
@@ -186,12 +188,12 @@ const onClearProduct = (task) => {
   })
 }
 
-const onClearMap = (task) => {
+const onClearMap = (task: TaskType) => {
   task.loading = true;
   request.post(`/tasks/${task.id}/action`, { action: 'clearMap' }).then(({ url }: any) => {
     task.loading = false;
     task.ruled = 0;
-    task.map_count = 0;
+    task.maps_count = 0;
   })
 }
 

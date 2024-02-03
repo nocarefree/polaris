@@ -44,7 +44,7 @@ import { NpPage, NpLayout, NpLayoutSection, NpContextualSaveBar, NpForm, NpFormL
 
 
 const router = useRouter();
-const errors = ref([])
+const errors = ref<{ key: string, content: string }[]>([])
 
 const onSave = () => {
   let _errors = [];
@@ -91,7 +91,7 @@ const task = ref({
   process: '',
 })
 
-const processes = [];
+const processes: { value: string; label: string }[] = [];
 for (let i = 1; i < 10; i++) {
   processes.push({
     value: `${i}`,
