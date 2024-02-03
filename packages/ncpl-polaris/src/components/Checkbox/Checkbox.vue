@@ -31,7 +31,8 @@ import styles from './Checkbox.module.scss';
 import { classNames } from "@ncpl-polaris/utils";
 import { MinusMinor, TickSmallMinor } from "@ncpl/ncpl-icons";
 import { errorTextID } from '../InlineError';
-import { useId, withinListboxContext } from "../context"
+import { useId } from "../context";
+import { withinListboxContext } from "../Listbox";
 
 defineOptions({
   name: 'NpCheckbox',

@@ -1,8 +1,8 @@
 import { Component } from 'vue';
 import type { PageHeaderTitleProps } from './Title';
 import type { MenuActionDescriptor, TooltipAction, DestructableAction, DisableableAction, LoadableAction, IconableAction, MenuGroupDescriptor } from "../../types"
-import type { BreadcrumbsProps } from "@ncpl-polaris/components/Breadcrumbs"
-import type { PaginationProps } from "@ncpl-polaris/components/Pagination"
+import type { BreadcrumbsProps } from "../../Breadcrumbs"
+import type { PaginationProps } from "../../Pagination"
 
 
 export interface PageHeaderPrimaryAction

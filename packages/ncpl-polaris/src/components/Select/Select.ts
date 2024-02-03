@@ -1,5 +1,5 @@
 import { Component } from "vue";
-import type { LabelledProps } from "@ncpl-polaris/components/Labelled"
+import type { LabelledProps } from "../Labelled"
 
 export interface StrictOption {
     /** Machine value of the option; this is the value passed to `onChange` */

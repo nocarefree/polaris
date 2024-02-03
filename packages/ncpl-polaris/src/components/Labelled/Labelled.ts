@@ -1,5 +1,5 @@
 import type { Component } from "vue"
-import type { LabelProps } from "@ncpl-polaris/components/Label"
+import type { LabelProps } from "../Label"
 
 import type { Action, Error } from '../types';
 

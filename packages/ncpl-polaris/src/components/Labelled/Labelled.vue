@@ -5,7 +5,7 @@
     readOnly && styles.readOnly,
   )">
     <div v-if="label || $slots.label" :class="styles.LabelWrapper">
-      <Label :id="id" :required-indicator="requiredIndicator" v-bind="$attrs" :hidden="false">
+      <Label :id="id" :required-indicator="requiredIndicator" :hidden="false">
         <template v-if="typeof label == 'string'">{{ label }}</template>
         <component v-else="label" :is="label"></component>
         <slot v-else name="label"></slot>

@@ -1,4 +1,3 @@
-import type { Component } from "vue";
 import type { DisableableAction } from "../types"
 
 export type Alignment = 'leading' | 'trailing' | 'center' | 'fill' | 'baseline';

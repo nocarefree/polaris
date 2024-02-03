@@ -5,7 +5,7 @@
         <SelectAllActions :label="i18n.translate('Polaris.IndexTable.selected', {
           selectedItemsCount: selectedItemsCountLabel as number,
         })" :accessibility-label="indexTable.bulkActionsAccessibilityLabel" :selected="indexTable.bulkSelectState"
-          :select-mode="indexTable.selectMode" @toggleAll="$emit('toggleAll')"
+          :select-mode="indexTable.selectMode" @toggleAll="handleTogglePage"
           :paginated-select-all-text="indexTable.paginatedSelectAllText"
           :paginated-select-all-action="indexTable.paginatedSelectAllAction" />
         <slot name="loading"></slot>
@@ -22,18 +22,18 @@
         <div :class="styles.StickyTableColumnHeader">
           <div :class="classNames(styles.TableHeading, indexTable.selectable &&
             styles['TableHeading-first'], firstHeading.flush &&
-          styles['TableHeading-flush'])" :style="stickyColumnHeaderStyle" data-index-table-sticky-heading>
+          styles['TableHeading-flush'])" :style="stickyColumnHeaderStyle" data-index-table-sticky-heading="true">
             <LegacyStack spacing="none" :wrap="false" alignment="center">
               <template v-if="indexTable.selectable">
-                <div :class="styles['StickyTableHeading-second-scrolling']">
-                  <HeaderContent v-bind="firstHeading" :index="0"></HeaderContent>
-                </div>
                 <div :class="styles.FirstStickyHeaderElement" ref="firstStickyHeaderElement">
                   <div :class="styles.ColumnHeaderCheckboxWrapper">
                     <Checkbox
                       :label="i18n.translate('Polaris.IndexTable.selectAllLabel', { resourceNamePlural: indexTable.resourceName?.plural, })"
-                      label-hidden @change="$emit('handleSelectPage')" :checked="indexTable.bulkSelectState" />
+                      label-hidden @change="handleTogglePage" :checked="indexTable.bulkSelectState" />
                   </div>
+                </div>
+                <div :class="styles['StickyTableHeading-second-scrolling']">
+                  <HeaderContent v-bind="firstHeading" :index="0"></HeaderContent>
                 </div>
               </template>
               <div v-else :class="classNames(styles.FirstStickyHeaderElement)" ref="firstStickyHeaderElement">
@@ -44,7 +44,7 @@
         </div>
         <div :class="styles.StickyTableHeadings" ref="stickyHeaderElement">
           <div v-for="(heading, index) in indexTable.headings" v-bind="headerAttributes(heading, index)"
-            data-index-table-sticky-heading>
+            data-index-table-sticky-heading="true">
             <HeaderContent v-bind="heading" :index="index"></HeaderContent>
           </div>
         </div>
@@ -62,23 +62,25 @@ import Sticky from "../../Sticky";
 import LegacyStack from "../../LegacyStack";
 import Checkbox from "../../Checkbox";
 import { useI18n, useIndexTable } from "../../context";
-import type { IndexTableHeading } from "../types"
-import { SELECT_ALL_ITEMS } from "../types"
-
+import type { IndexTableHeading, TableHeadingRect } from "../types"
+import { SELECT_ALL_ITEMS, SelectionType } from "../types"
+import { getTableHeadingsBySelector } from '../utils';
+import { debounce } from "@ncpl-polaris/utils/debounce";
+import { themeDefault, toPx } from '@shopify/polaris-tokens';
+import { useEventListener } from "@vueuse/core";
 
 const i18n = useI18n();
 const indexTable = useIndexTable();
-const tableHeadingRects = ref<HTMLElement[]>([]);
+const tableHeadingRects = ref<TableHeadingRect[]>([]);
 const firstStickyHeaderElement = ref<HTMLElement>();
+const stickyHeaderElement = ref<HTMLElement>();
+const stickyHeaderWrapperElement = ref<HTMLElement>();
 
 
 const props = defineProps<{
   stickyWrapper: HTMLElement;
+  scrollLeft?: number;
 }>()
-
-watch(() => props.stickyWrapper, () => {
-  console.log(props.stickyWrapper)
-})
 
 const firstHeading = computed(() => {
   return indexTable.value.headings[0]
@@ -87,7 +89,6 @@ const firstHeading = computed(() => {
 const selectedItemsCountLabel = computed(() => indexTable.value.selected === SELECT_ALL_ITEMS ? `${indexTable.value.itemCount}+` : indexTable.value.selectedItemsCount)
 
 const selectAllActionsClassName = (isSticky: boolean) => {
-  console.log(isSticky);
   return classNames(
     styles.SelectAllActionsWrapper,
     indexTable.value.condensed && styles['StickyTableHeader-condensed'],
@@ -126,7 +127,7 @@ const headerAttributes = (heading: IndexTableHeading, index: number) => {
 const stickyColumnHeaderStyle = computed(() =>
   tableHeadingRects.value && tableHeadingRects.value.length > 0
     ? {
-      minWidth: calculateFirstHeaderOffset(),
+      minWidth: `${calculateFirstHeaderOffset()}px`,
     }
     : undefined
 );
@@ -141,4 +142,71 @@ const calculateFirstHeaderOffset = () => {
     : tableHeadingRects.value[0].offsetWidth +
     tableHeadingRects.value[1].offsetWidth;
 }
+
+const handleTogglePage = () => {
+  indexTable.value.selectionChange(SelectionType.Page, Boolean(!indexTable.value.bulkSelectState || indexTable.value.bulkSelectState === 'indeterminate'));
+}
+
+watch(() => props.scrollLeft, () => {
+  if (stickyHeaderElement.value && props.scrollLeft) {
+    stickyHeaderElement.value.scrollLeft = props.scrollLeft
+  }
+})
+
+
+const tableHeadings = ref<HTMLElement[]>([]);
+const stickyTableHeadings = ref<HTMLElement[]>([]);
+
+const resizeTableHeadings = debounce(() => {
+  if (indexTable.value.condensed) {
+    return;
+  }
+
+  const { selectable } = indexTable.value;
+
+
+  tableHeadingRects.value = tableHeadings.value.map((heading) => ({
+    offsetWidth: heading.offsetWidth || 0,
+    offsetLeft: heading.offsetLeft || 0,
+  }));
+
+  if (tableHeadings.value.length === 0) {
+    return;
+  }
+
+  // update left offset for first column
+  if (selectable && tableHeadings.value.length > 1)
+    tableHeadings.value[1].style.left = `${tableHeadingRects.value[0].offsetWidth}px`;
+
+  // update sticky header min-widths
+  stickyTableHeadings.value.forEach((heading, index) => {
+    let minWidth = 0;
+    if (index === 0 && (!isBreakpointsXS() || !selectable)) {
+      minWidth = calculateFirstHeaderOffset();
+    } else if (selectable && tableHeadingRects.value.length > index) {
+      minWidth = tableHeadingRects.value[index]?.offsetWidth || 0;
+    } else if (!selectable && tableHeadingRects.value.length >= index) {
+      minWidth = tableHeadingRects.value[index - 1]?.offsetWidth || 0;
+    }
+
+    heading.style.minWidth = `${minWidth}px`;
+  });
+})
+
+watch(() => [indexTable.value.headings, firstStickyHeaderElement.value], () => {
+  tableHeadings.value = getTableHeadingsBySelector(props.stickyWrapper, '[data-index-table-heading]',);
+  stickyTableHeadings.value = getTableHeadingsBySelector(stickyHeaderWrapperElement.value, '[data-index-table-sticky-heading]',);
+
+  //console.log(tableHeadings.value, stickyTableHeadings.value)
+  resizeTableHeadings();
+}, { flush: 'post', immediate: true })
+
+const isBreakpointsXS = () => {
+  return typeof window === 'undefined'
+    ? false
+    : window.innerWidth <
+    parseFloat(toPx(themeDefault.breakpoints['breakpoints-sm']) ?? '');
+};
+
+useEventListener(window, 'resize', resizeTableHeadings)
 </script>

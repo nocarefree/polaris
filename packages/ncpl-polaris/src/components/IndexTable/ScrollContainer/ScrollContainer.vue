@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import styles from './ScrollContainer.module.scss'
-import { debounce } from "@ncpl-polaris/utils/debounce"
+import { debounce } from "@ncpl-polaris/utils/debounce";
 import { scrollContext } from "../../context"
 
 defineOptions({
@@ -22,27 +22,25 @@ const containerScroll = ref({
   canScrollRight: false,
 });
 
-const handleScroll = () => {
-  return debounce(() => {
-    if (!scrollableContainerRef.value) {
-      return;
-    }
+const handleScroll = debounce(() => {
+  if (!scrollableContainerRef.value) {
+    return;
+  }
 
-    const availableScrollAmount =
-      scrollableContainerRef.value.scrollWidth -
-      scrollableContainerRef.value.offsetWidth;
+  const availableScrollAmount =
+    scrollableContainerRef.value.scrollWidth -
+    scrollableContainerRef.value.offsetWidth;
 
-    const canScrollLeft = scrollableContainerRef.value.scrollLeft > 0;
-    const canScrollRight =
-      scrollableContainerRef.value.scrollLeft < availableScrollAmount;
-    emit('scroll', canScrollLeft, canScrollRight);
-    containerScroll.value = {
-      scrollableContainer: scrollableContainerRef.value,
-      canScrollLeft,
-      canScrollRight,
-    };
-  }, 40, { trailing: true, leading: true, maxWait: 40 },)
-}
+  const canScrollLeft = scrollableContainerRef.value.scrollLeft > 0;
+  const canScrollRight =
+    scrollableContainerRef.value.scrollLeft < availableScrollAmount;
+  emit('scroll', canScrollLeft, canScrollRight);
+  containerScroll.value = {
+    scrollableContainer: scrollableContainerRef.value,
+    canScrollLeft,
+    canScrollRight,
+  };
+}, 40, { trailing: true, leading: true, maxWait: 40 },)
 
 scrollContext.provide(containerScroll);
 

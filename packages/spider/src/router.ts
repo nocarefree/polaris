@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
     { path: '/tasks', component: () => import('./views/TaskList.vue') },
-    { path: '/tasks/new', component: () => import('./views/TaskNew.vue') },
-    { path: '/tasks/:id', component: () => import('./views/Task.vue') },
+    { path: '/tasks/new', component: () => import('./views/TaskItem.vue') },
+    { path: '/tasks/:id', component: () => import('./views/TaskItem.vue') },
+    { path: '/webs/:id', component: () => import('./views/TaskWeb.vue') },
+    { path: '/export_logs', component: () => import('./views/TaskExportLogs.vue') },
 ]
 
 

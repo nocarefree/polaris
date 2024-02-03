@@ -5,7 +5,8 @@
         :resource-name-plural="resourceNamePlural.toLocaleLowerCase()"></Loading>
       <template v-if="itemCount > 0">
         <div :class="classNames(styles.StickyTable, condensed && styles['StickyTable-condensed'])" role="presentation">
-          <StickyHeader v-if="stickyWrapper" :sticky-wrapper="stickyWrapper">
+          <StickyHeader v-if="stickyWrapper" :sticky-wrapper="stickyWrapper" :scroll-left="scrollLeft"
+            :set-sticky-header-wrapper-element="stickyHeaderWrapperElement">
             <template #loading>
               <Loading :resource-name-plural="resourceNamePlural.toLocaleLowerCase()"></Loading>
             </template>
@@ -14,9 +15,8 @@
             </template>
           </StickyHeader>
           <div v-if="shouldShowBulkActions && !condensed" :class="bulkActionClassNames"
-            :style="{ insetBlockStart: isBulkActionsSticky ? undefined : bulkActionsAbsoluteOffset, width: `${bulkActionsMaxWidth}px`, insetInlineStart: isBulkActionsSticky ? bulkActionsOffsetLeft : undefined }">
+            :style="{ insetBlockStart: isBulkActionsSticky ? undefined : `${bulkActionsAbsoluteOffset}px`, width: `${bulkActionsMaxWidth}px`, insetInlineStart: isBulkActionsSticky ? `${bulkActionsOffsetLeft}px` : undefined }">
             <BulkActions :select-mode="selectMode" :promoted-actions="promotedActions" :actions="actions"
-              @selectModeToggle="condensed ? $emit('selectionChange', SelectionType.All, false) : undefined"
               :is-sticky="isBulkActionsSticky" :width="bulkActionsMaxWidth" />
           </div>
         </div>
@@ -29,13 +29,13 @@
           <table ref="tableElement" :class="tableClassNames">
             <thead>
               <tr :class="styles.HeadingRow">
-                <th
+                <th v-if="selectable"
                   :class="classNames(styles.TableHeading, sortable?.some((value) => value === true) && styles['TableHeading-sortable'], styles['TableHeading-first'])"
                   data-index-table-heading>
                   <div :class="styles.ColumnHeaderCheckboxWrapper">
                     <Checkbox
                       :label="i18n.translate('Polaris.IndexTable.selectAllLabel', { resourceNamePlural: resourceNamePlural })"
-                      label-hidden @change="handleSelectPage" :checked="bulkSelectState" />
+                      label-hidden @change="e => selectionChange(SelectionType.Page, e)" :checked="bulkSelectState" />
                   </div>
                 </th>
                 <th v-for="(heading, index) in headings" v-bind="headerThAttributes(heading, index)"
@@ -44,7 +44,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody :ref="e => setTableBodyRef">
+            <tbody :ref="e => setTableBodyRef(e)">
               <template v-for="(row, index) in rows">
                 <slot :index="index" :row="row"></slot>
               </template>
@@ -62,7 +62,7 @@
     </div>
     <div ref="bulkActionsIntersectionRef" />
   </div>
-  <div v-if="itemCount > 0 && isMounted" :class="scrollBarWrapperClassNames" ref="scrollContainerElement">
+  <div v-if="itemCount > 0" :class="scrollBarWrapperClassNames" ref="scrollContainerElement">
     <div @scroll="handleScrollBarScroll" :class="styles.ScrollBar" ref="scrollBarElement">
       <div :class="classNames(tableElement && tableInitialized && styles.ScrollBarContent)" />
     </div>
@@ -83,8 +83,8 @@ import Checkbox from "../Checkbox";
 import { classNames } from "@ncpl-polaris/utils";
 import BulkActions from "../BulkActions";
 import { useIsBulkActionsSticky } from '../BulkActions/use-is-bulk-actions-sticky';
-import { debounce } from "@ncpl-polaris/utils/debounce"
-import { useEventListener } from "@vueuse/core"
+import { debounce } from "@ncpl-polaris/utils/debounce";
+import { useEventListener } from "@vueuse/core";
 
 interface TableHeadingRect {
   offsetWidth: number;
@@ -98,7 +98,7 @@ defineOptions({
 const SCROLL_BAR_PADDING = 4;
 const SCROLL_BAR_DEBOUNCE_PERIOD = 300;
 
-const emit = defineEmits(['selectionChange', 'update:selected'])
+const emit = defineEmits(['update:selected'])
 const props = withDefaults(defineProps<IndexTableProps>(), {
   selectable: true,
   promotedBulkActions: () => [],
@@ -126,13 +126,14 @@ const tableHeadings = ref<HTMLElement[]>([]);
 const scrollableContainerElement = ref<HTMLElement>();
 const scrollContainerElement = ref<HTMLElement>();
 const scrollBarElement = ref<HTMLElement>();
-const tablePosition = ref({ top: 0, left: 0 });
+const stickyHeaderWrapperElement = ref<HTMLElement>();
 const scrollingContainer = ref(false);
 const tableInitialized = ref(false);
 const hasMoreLeftColumns = ref(false);
 const scrollingWithBar = ref(false);
 const canFitStickyColumn = ref(true);
 const canScrollRight = ref(true);
+const scrollLeft = ref<number | undefined>();
 const isSortable = computed(() => props.sortable?.some((value) => value))
 const selectMode = computed(() => selectedItemsCount.value > 0);
 const shouldShowActions = computed(() => !props.condensed || selectMode.value);
@@ -225,7 +226,7 @@ const bulkActionsAccessibilityLabel = computed(() => {
   }
 })
 
-const bulkSelectState = computed(() => {
+const bulkSelectState = computed<boolean | 'indeterminate'>(() => {
   let bulkSelectState: boolean | 'indeterminate' = 'indeterminate';
   if (!selectedItemsCount.value || selectedItemsCount.value === 0) {
     bulkSelectState = false;
@@ -250,7 +251,7 @@ const {
 
 
 const headerThAttributes = (heading: IndexTableHeading, index: number) => {
-  const { headings, sortable, selectable = true } = props;
+  const { headings, sortable, selectable } = props;
 
   const isSecond = index === 0;
   const isLast = index === headings.length - 1;
@@ -281,17 +282,11 @@ const headerThAttributes = (heading: IndexTableHeading, index: number) => {
   }
 }
 
-const handleSelectPage = () => {
-  const selected = props.rows.map(i => i.id);
-  emit('update:selected', bulkSelectState.value === true ? [] : selected);
-}
 
-// const handleTogglePage = () => {
-//   emit('selectionChange', SelectionType.Page, Boolean(!bulkSelectState.value || bulkSelectState.value === 'indeterminate'))
-// }
-
-const setTableBodyRef = () => {
-  tableInitialized.value = true;
+const setTableBodyRef = (e: any) => {
+  if (e && !tableInitialized.value) {
+    tableInitialized.value = true;
+  }
 }
 
 
@@ -307,16 +302,15 @@ const handleScrollContainerScroll = (canScrollLeft: boolean, _canScrollRight: bo
   }
   scrollingWithBar.value = false;
 
-  if (stickyHeaderElement.value) {
-    stickyHeaderElement.value.scrollLeft =
-      scrollableContainerElement.value.scrollLeft;
-  }
+
+  scrollLeft.value = scrollableContainerElement.value.scrollLeft;
+
 
   if (
-    (canScrollLeft && !hasMoreLeftColumns) ||
-    (!canScrollLeft && hasMoreLeftColumns)
+    (canScrollLeft && !hasMoreLeftColumns.value) ||
+    (!canScrollLeft && hasMoreLeftColumns.value)
   ) {
-    toggleHasMoreLeftColumns();
+    hasMoreLeftColumns.value = !hasMoreLeftColumns.value;
   }
 
   canScrollRight.value = _canScrollRight;
@@ -348,7 +342,7 @@ const resizeTableScrollBar = () => {
 
 
 const handleSelectAllItemsInStore = () => {
-  emit('selectionChange', props.selected === SELECT_ALL_ITEMS ? SelectionType.Page : SelectionType.All, true);
+  selectionChange(props.selected === SELECT_ALL_ITEMS ? SelectionType.Page : SelectionType.All, true);
 }
 
 function getPaginatedSelectAllAction() {
@@ -375,47 +369,6 @@ function getPaginatedSelectAllAction() {
   };
 }
 
-const resizeTableHeadings = debounce(() => {
-  if (!tableElement.value || !scrollableContainerElement.value) {
-    return;
-  }
-
-  const { selectable } = props;
-
-  const boundingRect =
-    scrollableContainerElement.value.getBoundingClientRect();
-  tablePosition.value = {
-    top: boundingRect.top,
-    left: boundingRect.left,
-  };
-
-  tableHeadingRects.value = tableHeadings.value.map((heading) => ({
-    offsetWidth: heading.offsetWidth || 0,
-    offsetLeft: heading.offsetLeft || 0,
-  }));
-
-  if (tableHeadings.value.length === 0) {
-    return;
-  }
-
-  // update left offset for first column
-  if (selectable && tableHeadings.value.length > 1)
-    tableHeadings.value[1].style.left = `${tableHeadingRects.value[0].offsetWidth}px`;
-
-  // update sticky header min-widths
-  stickyTableHeadings.value.forEach((heading, index) => {
-    let minWidth = 0;
-    if (index === 0 && (!isBreakpointsXS() || !selectable)) {
-      minWidth = calculateFirstHeaderOffset();
-    } else if (selectable && tableHeadingRects.value.length > index) {
-      minWidth = tableHeadingRects.value[index]?.offsetWidth || 0;
-    } else if (!selectable && tableHeadingRects.value.length >= index) {
-      minWidth = tableHeadingRects.value[index - 1]?.offsetWidth || 0;
-    }
-
-    heading.style.minWidth = `${minWidth}px`;
-  });
-})
 
 const debounceResizeTableScrollbar = debounce(resizeTableScrollBar, SCROLL_BAR_DEBOUNCE_PERIOD, { trailing: true, })
 
@@ -439,6 +392,7 @@ const handleCanFitStickyColumn = () => {
   if (!scrollableContainerElement.value || !tableHeadings.value.length) {
     return;
   }
+  const { selectable } = props;
   const scrollableRect =
     scrollableContainerElement.value.getBoundingClientRect();
   const checkboxColumnWidth = selectable
@@ -458,7 +412,7 @@ const handleCanFitStickyColumn = () => {
       : 0;
   // Secure some space for the remaining columns to be visible
   const restOfContentMinWidth = 100;
-  setCanFitStickyColumn(
+  canFitStickyColumn.value = Boolean(
     scrollableRect.width >
     firstStickyColumnWidth +
     checkboxColumnWidth +
@@ -474,7 +428,6 @@ const handleResize = () => {
     `0px`,
   );
 
-  resizeTableHeadings();
   debounceResizeTableScrollbar();
   handleCanScrollRight();
   handleCanFitStickyColumn();
@@ -482,7 +435,8 @@ const handleResize = () => {
 
 let prevChecked: number | undefined;
 const selectionChange = (type: SelectionType, checked: boolean, id?: string | Range, index?: number) => {
-  let selected: string[] = [];
+
+  let selected: string[] | 'All' = [];
 
   if (type === SelectionType.Single || (type === SelectionType.Multi && (typeof prevChecked !== 'number' || typeof index !== 'number'))) {
     type = SelectionType.Single;
@@ -493,6 +447,8 @@ const selectionChange = (type: SelectionType, checked: boolean, id?: string | Ra
       selected = checked ? [...selectedItems.value, id as string] : selectedItems.value.filter(row => row !== id);
       break;
     case SelectionType.All:
+      selected = checked ? SELECT_ALL_ITEMS : [];
+      break;
     case SelectionType.Page:
       selected = checked ? props.rows.map(row => row.id) : [];
       break;
@@ -557,6 +513,14 @@ const selectionChange = (type: SelectionType, checked: boolean, id?: string | Ra
 }
 
 const indexTableProvide = computed(() => {
+  const { selectable, hasMoreItems, selected, rows } = props;
+  const itemCount = rows.length;
+
+  const paginatedSelectAllText = selectable && hasMoreItems && selected === SELECT_ALL_ITEMS ? i18n.value.translate('Polaris.IndexProvider.allItemsSelected', {
+    itemsLength: itemCount,
+    resourceNamePlural: computedResourceName.value.plural.toLocaleLowerCase(),
+  }) : undefined;
+
   return {
     ...props,
     resourceName: computedResourceName.value,
@@ -564,8 +528,8 @@ const indexTableProvide = computed(() => {
     shouldShowBulkActions: shouldShowBulkActions.value,
     bulkActionsAccessibilityLabel: bulkActionsAccessibilityLabel.value,
     bulkSelectState: bulkSelectState.value,
-    paginatedSelectAllText: `All ${itemCount.value}+ ${computedResourceName.value.plural} are selected`,
-    itemCount: props.rows.length,
+    paginatedSelectAllText,
+    itemCount,
     selectedItemsCount: selectedItemsCount.value,
     paginatedSelectAllAction: getPaginatedSelectAllAction(),
     selectionChange: selectionChange
@@ -579,11 +543,13 @@ watch(() => props.rows, computeTableDimensions, { flush: 'post' });
 
 
 onMounted(() => {
-  isMounted.value = true;
-  resizeTableScrollBar();
-
-  stickyWrapper.value = props.condensed ? condensedListElement.value : tableElement.value;
-  console.log(stickyWrapper.value)
+  handleCanScrollRight();
 })
+
+watch(() => [props.condensed, tableInitialized.value, isMounted.value], () => {
+  resizeTableScrollBar();
+  stickyWrapper.value = props.condensed ? condensedListElement.value : tableElement.value;
+}, { flush: 'post', immediate: true });
+
 
 </script>

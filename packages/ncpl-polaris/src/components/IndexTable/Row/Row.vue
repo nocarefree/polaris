@@ -25,6 +25,8 @@ const isNavigating = ref(false)
 const tableRowRef = ref();
 const primaryLinkElement = ref();
 
+
+
 const indexTableContext = useIndexTable();
 const selected = computed(() =>
   indexTableContext.value.selected && (

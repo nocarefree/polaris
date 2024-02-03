@@ -217,20 +217,6 @@ export const withinContentContext = {
   },
 };
 
-//withinListboxContext
-export const withinListboxContextKey: InjectionKey<MaybeRef<boolean>> = Symbol(
-  "withinListboxContextKey"
-);
-
-export const withinListboxContext = {
-  inject: () => {
-    return inject(withinListboxContextKey, false);
-  },
-  provide: (value = true) => {
-    provide(withinListboxContextKey, value);
-  },
-};
-
 //ScrollableContext
 export const scrollableContextKey: InjectionKey<() => void> = Symbol(
   "scrollableContextKey"
@@ -500,7 +486,7 @@ export interface IndexTableContext extends IndexTableProps {
   selectMode: boolean;
   shouldShowBulkActions: boolean;
   bulkActionsAccessibilityLabel: string;
-  bulkSelectState: boolean;
+  bulkSelectState: boolean | 'indeterminate';
   paginatedSelectAllText: string;
   selectedItemsCount: number;
   selectionChange: (type: any, checked: boolean, id?: string | Range, index?: number) => void;

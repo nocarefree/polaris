@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 
 import { NpActionList, NpTopBarSearchField, NpFrame, NpNavigation, NpNavigationSection, NpAppProvider, NpTopBar, NpTopBarUserMenu } from "@ncpl/ncpl-polaris"
 import { TemplateMinor, OrdersFilledMinor } from "@ncpl/ncpl-icons"
-import en from "@ncpl/ncpl-polaris/locales/en.json"
+import en from "@ncpl/ncpl-polaris/locales/zh-CN.json"
 
 const route = useRoute();
 
@@ -24,10 +24,7 @@ const navItems = [
     label: '任务',
     icon: OrdersFilledMinor,
     subNavigationItems: [
-      { url: '/components/actions/account-connection', label: 'AccountConnection' },
-      { url: '/components/actions/button', label: 'Button' },
-      { url: '/components/actions/button-group', label: 'ButtonGroup' },
-      { url: '/components/actions/page-actions', label: 'PageActions' },
+      { url: '/export_logs', label: '导出日志' },
     ]
   },
   {

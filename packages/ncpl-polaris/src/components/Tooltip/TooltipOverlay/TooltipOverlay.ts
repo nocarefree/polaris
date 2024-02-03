@@ -1,4 +1,4 @@
-import type { PositionedOverlayProps } from '@ncpl-polaris/components/PositionedOverlay';
+import type { PositionedOverlayProps } from '../../PositionedOverlay';
 
 import type { Width, Padding, BorderRadius } from '../Tooltip';
 

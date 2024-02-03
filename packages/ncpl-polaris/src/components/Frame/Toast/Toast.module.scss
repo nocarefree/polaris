@@ -1,5 +1,6 @@
 @import '../../../styles/common';
 
+
 $Backdrop-opacity: 0.88;
 
 .Toast {
@@ -42,10 +43,6 @@ $Backdrop-opacity: 0.88;
 
 .LeadingIcon {
   margin-right: var(--p-space-150);
-
-  svg {
-    fill: currentColor;
-  }
 }
 
 .CloseButton {
@@ -60,10 +57,6 @@ $Backdrop-opacity: 0.88;
   color: var(--p-color-icon-inverse);
   cursor: pointer;
   margin-left: var(--p-space-200);
-
-  svg {
-    fill: currentColor;
-  }
 
   &:focus {
     outline: none;

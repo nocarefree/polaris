@@ -4,7 +4,7 @@
     discardConfirmationModal: true,
     onAction: onBack,
   }" />
-  <NpPage title="添加任务" :back-action="{ content: 'Products', url: '/tasks' }">
+  <NpPage :title="task.id ? '修改任务' : '添加任务'" :back-action="{ content: 'Products', url: '/tasks' }">
     <NpForm action="post">
       <NpLayout>
         <NpLayoutSection v-if="errors.length > 0">
@@ -21,13 +21,13 @@
               <NpTextField label="任务名" v-model="task.name" placeholder="请填写名称" :error="getError('name')" />
             </NpFormLayout>
           </NpLegacyCard>
+
         </NpLayoutSection>
         <NpLayoutSection variant="oneThird">
           <NpLegacyCard title="线程" sectioned>
             <NpSelect v-model="task.process" label-hidden placeholder="请选择线程" label="process" :options="processes"
               :error="getError('process')" />
           </NpLegacyCard>
-
         </NpLayoutSection>
         <NpLayoutSection>
           <NpPageActions :primary-action="saveAction" />
@@ -39,7 +39,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import request from "../request"
-import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { NpPage, NpLayout, NpLayoutSection, NpContextualSaveBar, NpForm, NpFormLayout, NpTextField, NpLegacyCard, NpSelect, NpPageActions, NpBanner, NpList, NpListItem } from "@ncpl/ncpl-polaris";
 
@@ -49,14 +48,14 @@ const errors = ref([])
 
 const onSave = () => {
   let _errors = [];
-  if (!task.name) {
+  if (!task.value.name) {
     _errors.push({
       key: 'name',
       content: '标题不能为空'
     })
   }
 
-  if (!task.process) {
+  if (!task.value.process) {
     _errors.push({
       key: 'process',
       content: '线程不能为空'
@@ -68,9 +67,12 @@ const onSave = () => {
   if (_errors.length == 0) {
     saveAction.value.loading = true;
 
-
-    request.post('tasks', { ...task }).then(({ id }) => {
-      router.push(`/tasks/${id}`);
+    (!task.value.id ? request.post('tasks', { ...task.value }) : request.put(`tasks/${task.value.id}`, { ...task.value })).then(({ id }: any) => {
+      if (id) {
+        return router.push('/tasks');
+      }
+    }).finally(() => {
+      saveAction.value.loading = false;
     })
   }
 
@@ -83,7 +85,8 @@ const saveAction = ref({
   disabled: false,
 });
 
-const task = reactive({
+const task = ref({
+  id: '',
   name: '',
   process: '',
 })

@@ -28,9 +28,8 @@
           </Button>
         </ButtonGroup>
       </template>
-      <template v-if="dismissable">
-        <Button variant="tertiary" @click="$emit('dismiss')"
-          :accessibility-label="i18n.translate('Polaris.Banner.dismissButton')">
+      <template v-if="dismissable" #dismissButton>
+        <Button variant="tertiary" @click="$emit('dismiss')"  :accessibility-label="i18n.translate('Polaris.Banner.dismissButton')">
           <template #icon>
             <span :class="styles[isInlineIconBanner ? 'icon-secondary' : bannerColors.icon]">
               <Icon :source="CancelMinor" />

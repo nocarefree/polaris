@@ -14,12 +14,8 @@
             <template v-if="options">
               <Option v-for="(option, optionIndex) in options "
                 :key="option.id || `${uniqId}-${sectionIndex}-${optionIndex}`"
-                :id="option.id || `${uniqId}-${sectionIndex}-${optionIndex}`" 
-                v-bind="option" 
-                :section="sectionIndex"
-                :index="optionIndex" 
-                @click="handleClick" 
-                :select="selected.includes(option.value)"
+                :id="option.id || `${uniqId}-${sectionIndex}-${optionIndex}`" v-bind="option" :section="sectionIndex"
+                :index="optionIndex" @click="handleClick" :select="selected.includes(option.value)"
                 :allow-multiple="allowMultiple" :vertical-align="verticalAlign" @pointerEnter="handlePointerEnter"
                 @focus="handleFocus" />
             </template>
@@ -45,7 +41,7 @@ import { useId } from '../context';
 defineOptions({
   name: 'NpOptionList',
 })
-const emit = defineEmits(['change', 'pointerEnterOption', 'focusOption']);
+const emit = defineEmits(['change', 'update:selected', 'pointerEnterOption', 'focusOption']);
 const props = defineProps<OptionListProps>()
 const normalizedOptions = computed(() => createNormalizedOptions(props.options || [], props.sections || [], props.title));
 const uniqId = useId(toRef(props, 'id'));
@@ -65,10 +61,12 @@ const handleClick = (sectionIndex: number, optionIndex: number) => {
           ...selected.slice(foundIndex + 1, selected.length),
         ];
     emit('change', newSelection);
+    emit('update:selected', newSelection);
     return;
   }
   emit('change', [selectedValue]);
-};
+  emit('update:selected', [selectedValue]);
+}
 
 const handlePointerEnter = (sectionIndex: number, optionIndex: number) => {
   const selectedValue = normalizedOptions.value[sectionIndex].options[optionIndex].value;

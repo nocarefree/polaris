@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import postCssPxToRem from "postcss-pxtorem";
-import _ from "lodash";
+import { camelCase, upperFirst } from "lodash";
 
 export default defineConfig({
   plugins: [vue()],
@@ -31,7 +31,7 @@ export default defineConfig({
             if (cur == "components") {
               prev.push("-");
             } else {
-              cur = _.upperFirst(_.camelCase(cur));
+              cur = upperFirst(camelCase(cur));
               if (prev.length === 0 || prev[prev.length - 1] !== cur) {
                 prev.push(cur);
               }

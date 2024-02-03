@@ -1,5 +1,6 @@
 <template>
-  <div :class="classNames(styles.Toast, error && styles.error)">
+  <div :class="classNames(styles.Toast, error && styles.error)" aria-live="assertive">
+    <KeypressListener :key-code="Key.Escape" :handler="(e) => $emit('dismiss', e)" />
     <div v-if="error" :class="styles.LeadingIcon">
       <Icon :source="AlertMinor" tone="base" />
     </div>
@@ -7,24 +8,26 @@
       <Text as="span" font-weight="medium">{{ content }}</Text>
     </InlineStack>
     <div v-if="action">
-      <Button plain monochrome size="slim" @click="action?.onAction">
+      <Button variant="monochromePlain" remove-underline size="slim" @click="action?.onAction">
         {{ action.content }}</Button>
     </div>
-    <button type="button" :class="styles.toastProps" @click="(e) => $emit('dismiss', e)">
+    <button type="button" :class="styles.CloseButton" @click="(e) => $emit('dismiss', e)">
       <Icon :source="CancelSmallMinor" />
     </button>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import InlineStack from "../../InlineStack"
 import Icon from "../../Icon"
 import Button from "../../Button"
 import Text from "../../Text"
 import { type ToastProps, DEFAULT_TOAST_DURATION, DEFAULT_TOAST_DURATION_WITH_ACTION } from "./Toast";
 import { AlertMinor, CancelSmallMinor } from "@ncpl/ncpl-icons";
-import { classNames } from "@ncpl-polaris/utils"
-import styles from "./Toast.module.scss"
+import { classNames } from "@ncpl-polaris/utils";
+import styles from "./Toast.module.scss";
+import KeypressListener from "../../KeypressListener";
+import { Key } from '../../types';
 
 const props = defineProps<ToastProps>();
 
@@ -55,4 +58,8 @@ onMounted(() => {
     emit('dismiss')
   }, timeoutDuration);
 });
+
+onUnmounted(() => {
+  clearTimeout(timer);
+})
 </script>

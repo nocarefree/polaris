@@ -21,9 +21,9 @@
               <ConditionalWrapper :condition="Boolean(secondaryAction)">
                 <template #wrapper="{ children }">
                   <component :is="children"></component>
-                  <component :is="buttonFrom(secondaryAction,{  variant: 'tertiary' })"></component>
+                  <component :is="()=>buttonFrom(secondaryAction,{  variant: 'tertiary' })"></component>
                 </template>
-                <component :is="buttonFrom(primaryAction)"></component>
+                <component :is="()=>buttonFrom(primaryAction)"></component>
               </ConditionalWrapper>
             </div>
           </div>

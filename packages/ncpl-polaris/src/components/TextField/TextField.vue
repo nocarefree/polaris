@@ -33,7 +33,7 @@
           <slot name="verticalContent"></slot>
           <component :is="multiline?'textarea':'input'" v-bind="attributes" />
         </div>
-        <component :is="multiline?'textarea':'input'" v-bind="attributes" />
+        <component v-else :is="multiline?'textarea':'input'" v-bind="attributes" />
 
 
         <div v-if="suffixComponent" :class="styles.Suffix" :id="`${inputId}-Suffix`" ref="suffixRef">

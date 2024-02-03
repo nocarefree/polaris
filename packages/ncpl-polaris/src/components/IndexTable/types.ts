@@ -47,6 +47,12 @@ export enum SelectionType {
     Range = 'range',
 }
 
+export interface TableHeadingRect {
+    offsetWidth: number;
+    offsetLeft: number;
+}
+
+
 export type Range = [number, number];
 
 export interface IndexProviderProps {

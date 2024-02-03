@@ -12,12 +12,15 @@
   </td>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import styles from './Checkbox.module.scss'
 import sharedStyles from '../IndexTable.module.scss';
 import Checkbox from "../../Checkbox"
 import { classNames } from '../../../utils'
-import { useI18n, useIndexTable, useIndexTableRow } from "../../context"
+import { useI18n, useIndexTable, useIndexTableRow } from "../../context";
+import { debounce } from "@ncpl-polaris/utils/debounce";
+import { setRootProperty } from '@ncpl-polaris/utils/set-root-property';
+import { useEventListener } from "@vueuse/core";
 
 
 const props = defineProps<{
@@ -37,4 +40,21 @@ const label = computed(() => props.accessibilityLabel
 )
 
 const wrapperClassName = classNames(styles.Wrapper);
+
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
+const handleResize =
+  debounce(() => {
+    if (indexRowValue.value.position !== 0 || !checkboxNode.value) return;
+
+    const { width } = checkboxNode.value.getBoundingClientRect();
+    setRootProperty('--pc-checkbox-offset', `${width}px`);
+  })
+
+useEventListener(window, 'resize', handleResize);
+
+onMounted(() => {
+  handleResize();
+});
+
 </script>

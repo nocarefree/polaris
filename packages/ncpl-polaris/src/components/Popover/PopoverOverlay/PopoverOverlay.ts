@@ -1,4 +1,4 @@
-import { PositionedOverlayProps } from "@ncpl-polaris/components/PositionedOverlay"
+import type { PositionedOverlayProps } from "../../PositionedOverlay"
 
 export type PopoverAutofocusTarget = 'none' | 'first-node' | 'container';
 

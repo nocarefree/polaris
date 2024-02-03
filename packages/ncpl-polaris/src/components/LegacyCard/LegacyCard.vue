@@ -7,16 +7,18 @@
       <slot></slot>
     </Section>
     <slot v-else></slot>
-    <div v-if="primaryFooterActionMarkup || secondaryFooterActionsMarkup"
+    <div v-if="primaryFooterAction || secondaryFooterActionsMarkup"
       :class="classNames(styles.Footer, footerActionAlignment === 'left' && styles.LeftJustified,)">
 
       <ButtonGroup v-if="footerActionAlignment === 'right'">
         <component v-if="secondaryFooterActionsMarkup" :is="secondaryFooterActionsMarkup"></component>
-        <component v-if="primaryFooterActionMarkup" :is="primaryFooterAction"></component>
+        <component v-if="primaryFooterAction" :is="() => buttonFrom(props.primaryFooterAction, { variant: 'primary' })">
+        </component>
       </ButtonGroup>
 
       <ButtonGroup v-else>
-        <component v-if="primaryFooterAction" :is="primaryFooterAction"></component>
+        <component v-if="primaryFooterAction" :is="() => buttonFrom(props.primaryFooterAction, { variant: 'primary' })">
+        </component>
         <component v-if="secondaryFooterActionsMarkup" :is="secondaryFooterActionsMarkup"></component>
       </ButtonGroup>
 
@@ -51,11 +53,6 @@ const className = computed(() => classNames(
   props.hideOnPrint && styles.hideOnPrint,
 ));
 
-const primaryFooterActionMarkup = computed(() => {
-  return props.primaryFooterAction
-    ? buttonFrom(props.primaryFooterAction, { variant: 'primary' })
-    : null;
-})
 
 const secondaryFooterActionsMarkup = computed(() => {
   const { secondaryFooterActions, secondaryFooterActionsDisclosureText } = props;

@@ -1,6 +1,6 @@
 <template>
   <Tooltip preferred-position="above" :hover-delay="400">
-    <div :style="style">
+    <div v-bind="$attrs">
       <Button size="slim" @click="e => $emit('click')" :disabled="disabled" :accessibility-label="label">
         <template #icon>
           <InlineStack gap="0">
@@ -28,6 +28,7 @@ import { SearchMinor, FilterMinor } from "@ncpl/ncpl-icons";
 
 defineOptions({
   name: 'NpIndexFiltersSearchFilterButton',
+  inheritAttrs: false
 })
 defineProps<IndexFiltersSearchFilterButtonProps>()
 defineEmits(['click'])

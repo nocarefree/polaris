@@ -1,5 +1,20 @@
 <template>
-  <UnstyledButton :class="className" v-bind="shareProps">
+  <UnstyledButton :class="classNames(
+    styles.Button,
+    styles.pressable,
+    styles[variationName('variant', variant)],
+    styles[variationName('size', size)],
+    styles[variationName('textAlign', textAlign)],
+    fullWidth && styles.fullWidth,
+    disclosure && styles.disclosure,
+    (icon || $slots.icon) && $slots.default && styles.iconWithText,
+    (icon || $slots.icon) && !$slots.default && styles.iconOnly,
+    isDisabled && styles.disabled,
+    loading && styles.loading,
+    pressed && !disabled && !url && styles.pressed,
+    removeUnderline && styles.removeUnderline,
+    tone && styles[variationName('tone', tone)],
+  )" v-bind="shareProps">
     <span :class="styles.Content">
       <span v-if="loading" :class="styles.Spinner">
         <Spinner size="small" :accessibility-label="i18n.translate('Polaris.Button.spinnerAccessibilityLabel')" />
@@ -32,7 +47,7 @@ import UnstyledButton from "@ncpl-polaris/components/UnstyledButton"
 import { SelectMinor, CaretDownMinor, CaretUpMinor } from "@ncpl/ncpl-icons";
 
 import styles from "./Button.module.scss";
-import { computed, useSlots } from "vue";
+import { computed } from "vue";
 import {
   classNames,
   variationName,
@@ -40,14 +55,14 @@ import {
 
 import { useI18n } from "../context";
 
-const DEFAULT_SIZE = "medium";
 
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-  size: DEFAULT_SIZE,
+  size: 'medium',
+  textAlign: 'center',
+  variant: 'secondary',
 })
 
-const slots = useSlots();
 const i18n = useI18n();
 
 const isDisabled = computed(() => {
@@ -62,40 +77,6 @@ const shareProps = computed(() => {
   }
 })
 
-const className = computed(() => {
-  const {
-    loading,
-    icon,
-    removeUnderline,
-    disabled,
-    pressed,
-    size,
-    textAlign,
-    url,
-    fullWidth,
-    variant,
-    tone
-  } = props;
-
-  return classNames(
-    styles.Button,
-    variant === 'primary' && styles.primary,
-    variant === 'plain' && styles.plain,
-    variant === 'tertiary' && styles.tertiary,
-    variant === 'monochromePlain' && styles.monochrome,
-    variant === 'monochromePlain' && styles.plain,
-    tone === 'critical' && styles.critical,
-    tone === 'success' && styles.success,
-    isDisabled.value && styles.disabled,
-    loading && styles.loading,
-    pressed && !disabled && !url && styles.pressed,
-    size && size !== DEFAULT_SIZE && styles[variationName('size', size)],
-    textAlign && styles[variationName('textAlign', textAlign)],
-    fullWidth && styles.fullWidth,
-    (icon || slots.icon) && slots.default == null && styles.iconOnly,
-    removeUnderline && styles.removeUnderline,
-  )
-});
 const disclosureIconSource = computed(() => {
   if (props.loading) {
     return "placeholder";
