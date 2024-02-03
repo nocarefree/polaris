@@ -51,11 +51,10 @@
               </NpIndexTableCell>
               <NpIndexTableCell>
                 <NpButtonGroup>
-                  <NpButton :disabled="task.status == 'running' || task.loading == 'loading'"
+                  <NpButton :disabled="task.status == 'running' || task.loading"
                     @click="router.push(`/webs/${task.map.id}/`)">设置规则
                   </NpButton>
-                  <NpButton :pressed="task.status == 'running'" :disabled="task.loading == 'loading'"
-                    @click="onToggleTask(task)">
+                  <NpButton :pressed="task.status == 'running'" :loading="task.loading" @click="onToggleTask(task)">
                     {{ task.status == 'running' ? '暂停运行' : `开始运行` }}
                   </NpButton>
                   <ExportButton v-if="task.parsed" @click="e => onExportTask(task, e)" :loading="task.loading" />
