@@ -2,9 +2,8 @@
   "name": "ncpl",
   "version": "1.0.0",
   "description": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "private": true,
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -14,7 +13,7 @@
     "vite": "^4.4.8"
   },
   "dependencies": {
-    "@shopify/polaris-tokens": "^7.5.2",
+    "@shopify/polaris-tokens": "^8.4.0",
     "@types/lodash": "^4.14.196",
     "@vueuse/core": "^10.3.0",
     "@vueuse/integrations": "^10.3.0",

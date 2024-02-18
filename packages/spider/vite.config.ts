@@ -6,6 +6,16 @@ import { camelCase, upperFirst } from "lodash";
 
 export default defineConfig({
   plugins: [vue()],
+  build: {
+    rollupOptions: { //解决isCE
+      external: ["vue"],
+      output: {
+        globals: {
+          vue: 'vue'
+        }
+      }
+    },
+  },
   css: {
     postcss: {
       plugins: [
@@ -59,8 +69,8 @@ export default defineConfig({
     //用来配置跨域
     host: '127.0.0.1',
     proxy: {
-      '/api': {
-        target: 'http://spider.com/frontendapi/',//目标服务器地址
+      '/frontendapi': {
+        target: 'http://spider.com/',//目标服务器地址
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },

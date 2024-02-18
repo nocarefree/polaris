@@ -42,9 +42,6 @@
   "unpkg": "dist/index.iife.min.js",
   "jsdelivr": "dist/index.iife.min.js",
   "sideEffects": false,
-  "peerDependencies": {
-    "vue": "^3.2.0"
-  },
   "devDependencies": {
     "@pnpm/find-workspace-dir": "^6.0.2",
     "@pnpm/find-workspace-packages": "^6.0.9",
