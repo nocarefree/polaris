@@ -6,8 +6,8 @@
     <template v-if="selectedTab.id == 'attributes'">
       <NpInlineStack gap="200" block-align="start" align="center">
         <NpBlockStack v-if="selecteRules.length" gap="200" style="flex:3">
-          <HtmlContentRule v-for="rule in selecteRules" :title="rule.title" :index="rule.index">
-          </HtmlContentRule>
+          <ProductRuleItem v-for="rule in selecteRules" :title="rule.title" :index="rule.index">
+          </ProductRuleItem>
         </NpBlockStack>
         <NpLegacyCard style="flex:1" title="新增属性" sectioned
           :primary-footer-action="{ content: '添加', onAction: onAddNewAttribute, disabled: !Boolean(newAttribute) }">
@@ -17,8 +17,8 @@
     </template>
 
     <template v-else>
-      <HtmlContentRule v-for="rule in selecteRules" :title="rule.title" :index="rule.index">
-      </HtmlContentRule>
+      <ProductRuleItem v-for="rule in selecteRules" :title="rule.title" :index="rule.index">
+      </ProductRuleItem>
     </template>
 
     <NpLegacyCard>
@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { computed, watch } from "vue";
 import { ref } from "vue";
-import HtmlContentRule from "./HtmlContentRule.vue";
+import ProductRuleItem from "./ProductRuleItem.vue";
 import { NpTabs, NpBlockStack, NpLegacyCard, NpIndexTable, NpIndexTableRow, NpIndexTableCell, NpTextField, NpInlineStack } from "@ncpl/ncpl-polaris";
 import { useCurrentTaskWeb } from "../../stores";
 

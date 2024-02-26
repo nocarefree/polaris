@@ -15,26 +15,20 @@
     removeUnderline && styles.removeUnderline,
     tone && styles[variationName('tone', tone)],
   )" v-bind="shareProps">
-    <span :class="styles.Content">
-      <span v-if="loading" :class="styles.Spinner">
-        <Spinner size="small" :accessibility-label="i18n.translate('Polaris.Button.spinnerAccessibilityLabel')" />
-      </span>
-      <span v-if="icon || $slots.icon" :class="classNames(styles.Icon, loading && styles.hidden)">
-        <Icon v-if="icon" :source="loading ? 'placeholder' : icon"></Icon>
-        <slot v-else name="icon"></slot>
-      </span>
+    <span v-if="loading" :class="styles.Spinner">
+      <Spinner size="small" :accessibility-label="i18n.translate('Polaris.Button.spinnerAccessibilityLabel')" />
+    </span>
+    <span v-if="icon || $slots.icon" :class="classNames(styles.Icon, loading && styles.hidden)">
+      <Icon v-if="icon" :source="loading ? 'placeholder' : icon"></Icon>
+      <slot v-else name="icon"></slot>
+    </span>
 
-      <span v-if="$slots.default" :class="classNames(styles.Text, removeUnderline && styles.removeUnderline)"
-        :key="disabled ? 'text-disabled' : 'text'">
-        <slot></slot>
-      </span>
-      <template v-if="disclosure">
-        <span :class="styles.Icon">
-          <div :class="classNames(styles.DisclosureIcon, loading && styles.hidden)">
-            <Icon :source="disclosureIconSource"></Icon>
-          </div>
-        </span>
-      </template>
+    <span v-if="$slots.default" :class="classNames(styles.Text, removeUnderline && styles.removeUnderline)"
+      :key="disabled ? 'text-disabled' : 'text'">
+      <slot></slot>
+    </span>
+    <span v-if="disclosure" :class="loading ? styles.hidden : styles.Icon">
+      <Icon :source="disclosureIconSource"></Icon>
     </span>
   </UnstyledButton>
 </template>

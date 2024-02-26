@@ -1,6 +1,6 @@
 <template>
     <span :class="className">
-        <Text as="span" visually-hidden>{{ accessibilityLabel }}</Text>
+        <Text v-if="accessibilityLabel" as="span" visually-hidden>{{ accessibilityLabel }}</Text>
         <div v-if="source === 'placeholder'" :class="styles.Placeholder"></div>
         <img v-if="typeof source === 'string'" :class="styles.Img" :src="`data:image/svg+xml;utf8,${source}`" alt=""
             aria-hidden="true" />

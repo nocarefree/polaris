@@ -29,7 +29,7 @@ interface WebMapType {
   next: WebClientType,
   source_id: string;
   next_id: string;
-  additions: { [key: string]: string },
+  additions?: { [key: string]: string },
 }
 
 interface UrlRuleType {
@@ -42,12 +42,13 @@ interface UrlRuleType {
     no_params?: boolean;
     no_text?: string[];
     replace_text?: { search: string[], replace: string[] };
-    urls?: { url: string; name?: string }[]
+    urls?: { url: string; args: string }[]
     range: {
       start: string;
       end?: string;
       args?: string[];
       arg?: string;
+      node?: string;
     }
   },
   parent_id: string;
@@ -84,11 +85,13 @@ export const useCurrentTaskWeb = defineStore('currentTaskWeb', {
       loading: false,
       productLoading: false,
       responseLoading: false,
+      additionsLoading: false,
       map: {
         id: '',
         source_id: '',
         rule_id: '',
         next_id: '',
+        additions: {},
       },
       data: initWebData(),
       prevRule: null as (UrlRuleType | null),
@@ -97,6 +100,9 @@ export const useCurrentTaskWeb = defineStore('currentTaskWeb', {
     }
   },
   getters: {
+    additions(state): { [key: string]: string } {
+      return state.map.additions || {}
+    },
     responseHeaders(state) {
       let data = [], index = 0;
       if (state.data.response && state.data.response.headers) {
@@ -257,6 +263,16 @@ export const useCurrentTaskWeb = defineStore('currentTaskWeb', {
         }
       }).finally(() => {
         this.productLoading = false;
+      })
+    },
+    touchAdditions() {
+      this.additionsLoading = true;
+      api.post(`/webs/${this.map.id}/additions`).then((data: any) => {
+        if (data) {
+          this.map.additions = data;
+        }
+      }).finally(() => {
+        this.additionsLoading = false;
       })
     },
     deleteRule(index: number) {

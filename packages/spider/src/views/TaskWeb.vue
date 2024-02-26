@@ -25,10 +25,24 @@
                 <NpButtonGroup>
                   <NpButton v-for="button in addRulesButtons" @click="onAddRule(button.type)">添加{{ button.content }}规则
                   </NpButton>
+
+                  <NpPopover :active="additionPopoverActive" @close="additionPopoverActive = false" sectioned>
+                    <template #activator>
+                      <NpButton text-align="left" @click="additionPopoverActive = !additionPopoverActive"
+                        :disclosure="additionPopoverActive ? 'down' : 'up'">
+                        添加参数</NpButton>
+                    </template>
+                    <NpTextField label="参数名" v-model="additionValue" auto-complete="off">
+                      <template #connectedRight>
+                        <NpButton size="slim" :disabled="!(additionValue.length > 0)" @click="onAddAddition">添加</NpButton>
+                      </template>
+                    </NpTextField>
+                  </NpPopover>
                 </NpButtonGroup>
               </NpLayoutSection>
               <NpLayoutSection v-for="(rule, index) in store.rules">
-                <HtmlUrl v-if="rule.type == 'custom_list_url'" :index="index"></HtmlUrl>
+                <CustomUrlRule v-if="rule.type == 'custom_list_url'" :index="index"></CustomUrlRule>
+                <HtmlContentRule v-else-if="rule.type.indexOf('additions_') === 0" :index="index"></HtmlContentRule>
                 <HtmlUrlRule v-else :index="index" />
               </NpLayoutSection>
             </template>
@@ -43,14 +57,15 @@
   </template>
 </template>
 <script setup lang="ts">
-import {  computed, watch } from "vue";
+import { computed, watch, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import WebClient from "../components/Task/WebClient.vue";
 import HtmlUrlRule from "../components/Task/HtmlUrlRule.vue";
-import HtmlUrl from "../components/Task/HtmlUrl.vue";
+import CustomUrlRule from "../components/Task/CustomUrlRule.vue";
+import HtmlContentRule from "../components/Task/HtmlContentRule.vue";
 import ProductRules from "../components/Task/ProductRules.vue";
 import { useCurrentTaskWeb } from "../stores"
-import { NpSkeletonPage, NpSkeletonBodyText, NpPage, NpLayout, NpLayoutSection, NpBadge, NpForm, NpButton, NpButtonGroup } from "@ncpl/ncpl-polaris";
+import { NpSkeletonPage, NpSkeletonBodyText, NpPage, NpLayout, NpLayoutSection, NpBadge, NpForm, NpButton, NpButtonGroup, NpPopover, NpTextField } from "@ncpl/ncpl-polaris";
 
 
 const router = useRouter();
@@ -141,7 +156,7 @@ const actions = computed(() => {
   return undefined;
 })
 
-const onSetRuleType = (type:string) => {
+const onSetRuleType = (type: string) => {
   store.updateRuleType(type);
 }
 
@@ -154,8 +169,16 @@ for (let i = 1; i < 10; i++) {
   })
 }
 
-const onAddRule = (type:string) => {
+const onAddRule = (type: string) => {
   store.addRule(type)
+}
+
+const additionPopoverActive = ref(false)
+const additionValue = ref('');
+const onAddAddition = () => {
+  store.addRule('additions_' + additionValue.value)
+  additionValue.value = '';
+  additionPopoverActive.value = false;
 }
 
 

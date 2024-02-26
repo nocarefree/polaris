@@ -41,15 +41,25 @@
         </NpCheckbox>
         <NpCheckbox :checked="rule.content.html_entity_decode"
           @change="(e: boolean) => rule.content.html_entity_decode = e" label="链接解码转译"></NpCheckbox>
-        <NpCheckbox :checked="hasNoText" @change="onRemoveNoText" label="过滤内容"></NpCheckbox>
+        <NpCheckbox :checked="hasFilterText" @change="onRemoveFilterText" label="过滤内容"></NpCheckbox>
         <NpCheckbox :checked="hasReplaceText" @change="onRemoveReplaceText" label="替换内容"></NpCheckbox>
         <NpCheckbox :checked="hasCustomUrl" @change="onRemoveCustomUrl" label="自定义链接"></NpCheckbox>
         <NpCheckbox :checked="hasNextPost" @change="onRemovePost" label="POST"></NpCheckbox>
       </NpInlineStack>
-      <NpTextField v-if="hasNoText" label="过滤包含字符的内容" v-model="noText" @keyup.enter="onAddRuleNoText">
+      <NpTextField v-if="hasFilterText" label="过滤包含字符的内容" v-model="noText" @keyup.enter="onAddRuleNoText">
         <template v-if="rule.content.no_text" #verticalContent>
           <NpInlineStack gap="200" alignment="start">
             <NpTag v-for="(text, index) in rule.content.no_text" removable
+              @remove="rule.content.no_text.splice(index, 1)">{{
+                text }}
+            </NpTag>
+          </NpInlineStack>
+        </template>
+      </NpTextField>
+      <NpTextField v-if="hasFilterText" label="只保留包含字符的内容" v-model="needText" @keyup.enter="onAddRuleNeedText">
+        <template v-if="rule.content.need_text" #verticalContent>
+          <NpInlineStack gap="200" alignment="start">
+            <NpTag v-for="(text, index) in rule.content.need_text" removable
               @remove="rule.content.no_text.splice(index, 1)">{{
                 text }}
             </NpTag>
@@ -102,12 +112,17 @@
         <NpDivider />
 
         <NpIndexTable :resource-name="{ singular: 'url_maps', plural: 'url_maps' }"
-          :headings="[{ title: '链接' }, { title: '' }]" :rows="rule.maps" last-column-sticky :selectable="false">
+          :headings="[{ title: '链接' }, { title: '传递参数' }, { title: '' }]" :rows="rule.maps" last-column-sticky
+          :selectable="false">
           <template #default="{ index, row }">
             <NpIndexTableRow :id="row.id" :position="index">
               <NpIndexTableCell>{{ row.next?.request?.url }}</NpIndexTableCell>
               <NpIndexTableCell>
-                <NpButton @click="router.push(`/webs/${row.id}`)">测试</NpButton>
+                <NpTextField label="参数" label-hidden v-model="row.additions" :disabled="row.loading"
+                  @change="onUpdateMap(row)" />
+              </NpIndexTableCell>
+              <NpIndexTableCell>
+                <NpButton @click="router.push(`/webs/${row.id}`)" :loading="row.loading">测试</NpButton>
               </NpIndexTableCell>
             </NpIndexTableRow>
           </template>
@@ -117,9 +132,9 @@
   </NpBanner>
 </template>
 <script setup lang="ts">
-import { computed } from "vue";
-import { ref } from "vue";
-import { useRouter } from "vue-router"
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+import request from "../../request"
 import { NpDivider, NpInlineStack, NpTextField, NpIndexTable, NpIndexTableRow, NpIndexTableCell, NpTag, NpButton, NpBanner, NpTabs, NpBlockStack, NpCard, NpCheckbox } from "@ncpl/ncpl-polaris";
 import { useCurrentTaskWeb } from "../../stores";
 
@@ -211,6 +226,21 @@ const ruleTypes: {
   },
   description: '通过jquery表达式，循环找到内容作为链接。'
 },
+{
+  content: '页数循环',
+  id: 'pages',
+  fields: {
+    start: {
+      text: '链接',
+      required: true
+    },
+    end: {
+      text: '页数',
+      required: true
+    },
+  },
+  description: '通过参数拼接URL循环作为链接。'
+},
   ];
 
 const selectedTypeIndex = computed({
@@ -279,7 +309,7 @@ const title = computed(() => {
     case 'product_list_more':
       return '更多页获取规则';
     default:
-      return '规则丢失';
+      return `无效规则`;
   }
 });
 
@@ -296,7 +326,8 @@ const onAddRangeArgsText = () => {
 }
 
 const noText = ref('');
-const hasNoText = ref(Array.isArray(rule.value.content.no_text) && rule.value.content.no_text.length > 0);
+const needText = ref('');
+const hasFilterText = ref((Array.isArray(rule.value.content.no_text) && rule.value.content.no_text.length > 0) || (Array.isArray(rule.value.content.need_text) && rule.value.content.need_text.length > 0));
 const onAddRuleNoText = () => {
   if (noText.value) {
     if (!Array.isArray(rule.value.content.no_text)) {
@@ -306,13 +337,22 @@ const onAddRuleNoText = () => {
     noText.value = '';
   }
 }
-const onRemoveNoText = (s: boolean) => {
-  hasNoText.value = s;
-  if (!s) {
-    rule.value.content.no_text = [];
+const onAddRuleNeedText = () => {
+  if (needText.value) {
+    if (!Array.isArray(rule.value.content.need_text)) {
+      rule.value.content.need_text = [];
+    }
+    rule.value.content.need_text.push(needText.value)
+    needText.value = '';
   }
 }
-
+const onRemoveFilterText = (s: boolean) => {
+  hasFilterText.value = s;
+  if (!s) {
+    rule.value.content.no_text = [];
+    rule.value.content.need_text = [];
+  }
+}
 
 const replaceText = ref({
   search: '', replace: ''
@@ -334,6 +374,12 @@ const onRemoveReplaceText = (s: boolean) => {
   }
 }
 
+const onUpdateMap = (map: any) => {
+  map.loading = true;
+  request.put(`/webs/${map.id}`, { additions: map.additions }).then(() => {
+    map.loading = false;
+  })
+}
 
 
 const hasCustomUrl = ref(Boolean(rule.value.content?.custom_url));

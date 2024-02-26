@@ -149,16 +149,35 @@ const loadList = () => {
     firstLoading.value = false;
     tasks.data = data.data as TaskType[];
     tasks.total = data.total;
+
+    for (let row of tasks.data) {
+      if (row.status == 'running') {
+        autoRefresh();
+        break;
+      }
+    }
   })
 }
 
-let timeInterval = setInterval(loadList, 15000)
+let timeInterval: any;
+const autoRefresh = () => {
+  if (timeInterval) {
+    stopRefresh()
+  }
+  timeInterval = setInterval(loadList, 15000)
+}
+const stopRefresh = () => {
+  timeInterval && clearInterval(timeInterval)
+}
 loadList();
+
 
 const onToggleTask = (task: TaskType) => {
   const status = task.status == 'running' ? 'stop' : 'run';
   task.loading = true;
+  stopRefresh()
   request.post(`/tasks/${task.id}/action`, { action: status }).then((data: any) => {
+    autoRefresh();
     task.status = data.status;
     task.loading = false;
   })
@@ -166,9 +185,9 @@ const onToggleTask = (task: TaskType) => {
 
 const onExportTask = (task: TaskType, type: string) => {
   task.loading = true;
-  clearInterval(timeInterval)
+  stopRefresh()
   request.post(`/tasks/${task.id}/action`, { action: 'export', type }).then(({ id }: any) => {
-    timeInterval = setInterval(loadList, 15000)
+    autoRefresh();
     task.loading = false;
     if (id) {
       frameContext.showToast({
@@ -181,7 +200,9 @@ const onExportTask = (task: TaskType, type: string) => {
 
 const onClearProduct = (task: TaskType) => {
   task.loading = true;
+  stopRefresh();
   request.post(`/tasks/${task.id}/action`, { action: 'clearProduct' }).then(({ url }: any) => {
+    autoRefresh();
     task.loading = false;
     task.parsed = 0;
     task.products_count = 0;
@@ -190,7 +211,9 @@ const onClearProduct = (task: TaskType) => {
 
 const onClearMap = (task: TaskType) => {
   task.loading = true;
+  stopRefresh();
   request.post(`/tasks/${task.id}/action`, { action: 'clearMap' }).then(({ url }: any) => {
+    autoRefresh();
     task.loading = false;
     task.ruled = 0;
     task.maps_count = 0;

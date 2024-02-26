@@ -6,16 +6,6 @@ import { camelCase, upperFirst } from "lodash";
 
 export default defineConfig({
   plugins: [vue()],
-  build: {
-    rollupOptions: { //解决isCE
-      external: ["vue"],
-      output: {
-        globals: {
-          vue: 'vue'
-        }
-      }
-    },
-  },
   css: {
     postcss: {
       plugins: [
