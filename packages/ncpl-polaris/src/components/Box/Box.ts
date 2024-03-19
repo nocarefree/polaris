@@ -13,7 +13,7 @@ import type {
 type Element = 'div' | 'span' | 'section' | 'legend' | 'ul' | 'li';
 
 type LineStyles = 'solid' | 'dashed';
-type Overflow = 'hidden' | 'scroll';
+type Overflow = 'hidden' | 'scroll' | 'clip';
 type Position = 'relative' | 'absolute' | 'fixed' | 'sticky';
 
 type Spacing = ResponsiveProp<SpaceScale>;
@@ -69,6 +69,12 @@ export interface BoxProps {
      * padding={{xs: '200', sm: '300', md: '400', lg: '500', xl: '600'}}
      */
     padding?: Spacing;
+    /** Vertical start and end spacing around children. Accepts a spacing token or an object of spacing tokens for different screen sizes.
+     * @example
+     * paddingBlock='400'
+     * paddingBlock={{xs: '200', sm: '300', md: '400', lg: '500', xl: '600'}}
+     */
+    paddingBlock?: Spacing;
     /** Vertical start spacing around children. Accepts a spacing token or an object of spacing tokens for different screen sizes.
      * @example
      * paddingBlockStart='400'
@@ -81,6 +87,12 @@ export interface BoxProps {
      * paddingBlockEnd={{xs: '200', sm: '300', md: '400', lg: '500', xl: '600'}}
      */
     paddingBlockEnd?: Spacing;
+    /** Horizontal start and end spacing around children. Accepts a spacing token or an object of spacing tokens for different screen sizes.
+   * @example
+   * paddingInline='400'
+   * paddingInline={{xs: '200', sm: '300', md: '400', lg: '500', xl: '600'}}
+   */
+    paddingInline?: Spacing;
     /** Horizontal start spacing around children. Accepts a spacing token or an object of spacing tokens for different screen sizes.
      * @example
      * paddingInlineStart='400'

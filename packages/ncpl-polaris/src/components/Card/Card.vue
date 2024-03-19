@@ -1,6 +1,7 @@
 <template>
-  <ShadowBevel box-shadow="100" :border-radius="borderRadius" z-index="32">
-    <Box :background="background" :padding="padding" overflow-x="hidden" overflow-y="hidden" min-height="100%">
+  <ShadowBevel box-shadow="100" :bevel="isSmUp" :border-radius="hasBorderRadius ? defaultBorderRadius : '0'"
+    z-index="32">
+    <Box :background="background" :padding="padding" overflow-x="clip" overflow-y="clip" min-height="100%">
       <slot></slot>
     </Box>
   </ShadowBevel>
@@ -18,19 +19,15 @@ defineOptions({
 const props = withDefaults(defineProps<CardProps>(), {
   background: 'bg-surface',
   padding: () => ({ xs: '400' }),
+  roundedAbove: 'sm',
 });
 
 const breakpoints = useBreakpoints();
 
-const borderRadius = computed(() => {
-  const { roundedAbove } = props;
-  let hasBorderRadius = !roundedAbove;
+const defaultBorderRadius = '300';
+const isSmUp = computed(() => Boolean(breakpoints.smUp));
+const hasBorderRadius = computed(() => Boolean(breakpoints[`${props.roundedAbove}Up`]));
 
-  if (roundedAbove && breakpoints[`${roundedAbove}Up`].value) {
-    hasBorderRadius = true;
-  }
-  return hasBorderRadius ? '300' : '0'
-});
 
 withinContentContext.provide(true)
 </script>

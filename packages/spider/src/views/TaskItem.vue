@@ -21,7 +21,6 @@
               <NpTextField label="任务名" v-model="task.name" placeholder="请填写名称" :error="getError('name')" />
             </NpFormLayout>
           </NpLegacyCard>
-
         </NpLayoutSection>
         <NpLayoutSection variant="oneThird">
           <NpLegacyCard title="线程" sectioned>

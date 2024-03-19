@@ -1,281 +1,205 @@
 <template>
-  <div ref="containerNode">
-    <MyTransition :timeout="100">
-      <template #default="{ state: status }">
-        <div v-if="selectMode"
-          :class="classNames(styles.Group, !isSticky && styles['Group-not-sticky'], !state.measuring && isSticky && styles[`Group-${status}`], state.measuring && styles['Group-measuring'])"
-          ref="groupNode" :style="{ width: `${width}px` }">
-          <div :class="styles.ButtonGroupWrapper" ref="buttonsNode">
-            <div :class="styles.ButtonGroupInner">
-              <InlineStack v-if="promotedActions && numberOfPromotedActionsToRender > 0 || hasPopover" gap="300">
-                <template v-for="action in promotedActions">
+  <div :class="styles.BulkActions" :style="width ? { width } : undefined">
+    <InlineStack gap="400" block-align="center">
+      <div :class="styles.BulkActionsSelectAllWrapper">
+        <CheckableButton :accessibility-label="accessibilityLabel"
+          :label="paginatedSelectAllText && paginatedSelectAllAction ? paginatedSelectAllText : label"
+          :selected="selected" @toggleAll="e => $emit('toggleAll', e)" :disabled="disabled"
+          :aria-live="paginatedSelectAllText && paginatedSelectAllAction ? 'polite' : undefined" />
+        <div v-if="paginatedSelectAllAction" :class="styles.PaginatedSelectAll">
+          <UnstyledButton :class="styles.AllAction" @click="paginatedSelectAllAction.onAction" size="slim"
+            :disabled="disabled">
+            {{ paginatedSelectAllAction.content }}
+          </UnstyledButton>
+        </div>
+      </div>
+      <div v-if="selectMode" :class="styles.BulkActionsPromotedActionsWrapper">
+        <InlineStack gap="100" block-align="center">
+          <div :class="styles.BulkActionsOuterLayout">
+            <BulkActionsMeasurer :promoted-actions="promotedActions" :disabled="disabled" :button-size="buttonSize"
+              @measurement="handleMeasurement" />
+            <div :class="classNames(styles.BulkActionsLayout, !hasMeasured && styles['BulkActionsLayout--measuring'])">
+              <template v-if="promotedActions">
+                <template v-for="action in visiblePromotedActions">
                   <BulkActionMenu v-if="instanceOfMenuGroupDescriptor(action)" v-bind="action"
-                    :is-new-badge-in-badge-actions="isNewBadgeInBadgeActions()" />
-                  <BulkActionButton v-else :disabled="disabled" v-bind="action" @measurement="handleMeasurement" />
+                    :is-new-badge-in-badge-actions="isNewBadgeInBadgeActions(actionSections)" :size="buttonSize" />
+                  <BulkActionButton v-else :disabled="disabled" v-bind="action" :size="buttonSize" />
                 </template>
-                <div v-if="actionSections || rolledInPromotedActions.length > 0 || state.measuring"
-                  :class="styles.Popover" ref="moreActionsNode">
-                  <Popover :active="state.popoverVisible" preferred-alignment="right" @close="togglePopover">
-                    <template #activator>
-                      <BulkActionButton disclosure
-                        :show-content-in-button="!(promotedActions && numberOfPromotedActionsToRender > 0)"
-                        @action="togglePopover" :content="activatorLabel" :disabled="disabled"
-                        :indicator="isNewBadgeInBadgeActions()">
-                      </BulkActionButton>
-                    </template>
-                    <ActionList :sections="combinedActions" @actionAnyItem="togglePopover" />
-                  </Popover>
-                </div>
-              </InlineStack>
+              </template>
             </div>
           </div>
-        </div>
-      </template>
-    </MyTransition>
+          <Popover v-if="allHiddenActions.length > 0" :active="popoverActive" preferred-alignment="right"
+            @close="togglePopover">
+            <ActionList
+              :sections="hiddenPromotedSection.items.length > 0 ? [hiddenPromotedSection, ...allHiddenActions] : allHiddenActions"
+              @actionAnyItem="togglePopover" />
+            <template #activator>
+              <BulkActionButton disclosure :show-content-in-button="!visiblePromotedActions?.length"
+                @action="togglePopover" :content="activatorLabel" :disabled="disabled"
+                :indicator="isNewBadgeInBadgeActions(actionSections)" :size="buttonSize" />
+            </template>
+          </Popover>
+        </InlineStack>
+      </div>
+    </InlineStack>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, reactive, watch, onMounted } from 'vue'
-import type { BulkActionsProps, BulkAction } from './BulkActions'
-import styles from './BulkActions.module.scss'
-import InlineStack from "../InlineStack"
-import Popover from "../Popover"
-import ActionList from "../ActionList"
-import MyTransition from "../Transition"
-import BulkActionMenu from "./BulkActionMenu"
-import BulkActionButton from "./BulkActionButton"
-import { classNames } from '@ncpl-polaris/utils'
-import { clamp } from "lodash"
+import { ref, computed, watch } from 'vue';
+import type { BulkActionsProps, BulkAction } from './BulkActions';
+import styles from './BulkActions.module.scss';
+import InlineStack from "../InlineStack";
+import UnstyledButton from "../UnstyledButton";
+import CheckableButton from "../CheckableButton";
+import Popover from "../Popover";
+import ActionList from "../ActionList";
+import BulkActionMenu from "./BulkActionMenu";
+import BulkActionButton from "./BulkActionButton";
+import BulkActionsMeasurer from "./BulkActionsMeasurer";
+import type { BulkActionsMeasurements } from './BulkActionsMeasurer';
+import { classNames } from '@ncpl-polaris/utils';
 import { useI18n } from '../context'
+import { getVisibleAndHiddenActions, instanceOfMenuGroupDescriptor, instanceOfBulkActionListSection, getActionSections, isNewBadgeInBadgeActions } from "./utils";
 import type {
   MenuGroupDescriptor,
-} from '../types';
-
-import type {
   ActionListSection
-} from "../ActionList/Section"
+} from '../types';
 
 defineOptions({
   name: 'NpBulkActions',
 })
 
+
+
 type BulkActionListSection = ActionListSection;
 
-
-const MAX_PROMOTED_ACTIONS = 2;
-
-const BUTTONS_NODE_ADDITIONAL_WIDTH = 64;
 
 const props = defineProps<BulkActionsProps>()
 const i18n = useI18n();
 
-const state = reactive({
-  popoverVisible: false,
-  measuring: true,
-  containerWidth: 0,
-})
-const moreActionsNode = ref();
-const buttonsNode = ref();
-const containerNode = ref();
 
-const actionSections = computed<BulkActionListSection[] | undefined>(() => {
+const popoverActive = ref(false);
+const hasMeasured = ref<boolean>(false)
+const actionsWidths = ref<number[]>([]);
+const containerWidth = ref<number>(Infinity);
+const disclosureWidth = ref<number>(0);
+
+const visiblePromotedActions = ref<BulkActionsProps['promotedActions']>([]);
+const hiddenPromotedActions = ref<BulkActionsProps['promotedActions']>([]);
+const hiddenPromotedSection = computed(() => {
+  const mergedHiddenPromotedActions = hiddenPromotedActions.value?.reduce(
+    (memo, action) => {
+      if (!action) return memo;
+      if (instanceOfMenuGroupDescriptor(action)) {
+        return memo.concat(action.actions);
+      }
+      return memo.concat(action);
+    },
+    [] as (BulkAction | MenuGroupDescriptor)[],
+  );
+
+  return {
+    items: mergedHiddenPromotedActions || [],
+  } as BulkActionListSection
+})
+
+const actionSections = computed(() => getActionSections(props.actions));
+const allHiddenActions = computed(() => {
   const { actions } = props;
 
-  if (!actions || actions.length === 0) {
+  if (actionSections.value) {
+    return actionSections.value;
+  }
+  if (!actions) {
+    return [];
+  }
+  let isAFlatArray = true;
+  return actions
+    .filter((action) => action)
+    .reduce(
+      (
+        memo: BulkActionListSection[],
+        action: BulkAction | BulkActionListSection,
+      ): BulkActionListSection[] => {
+        if (instanceOfBulkActionListSection(action)) {
+          isAFlatArray = false;
+          return memo.concat(action);
+        }
+        if (isAFlatArray) {
+          if (memo.length === 0) {
+            return [{ items: [action] }];
+          }
+          const lastItem = memo[memo.length - 1];
+          memo.splice(memo.length - 1, 1, {
+            items: [...lastItem.items, action],
+          });
+          return memo;
+        }
+
+        isAFlatArray = true;
+
+        return memo.concat({ items: [action] });
+      },
+      [],
+    );
+});
+
+const activatorLabel = computed(() =>
+  !props.promotedActions || (props.promotedActions && visiblePromotedActions.value?.length === 0)
+    ? i18n.value.translate('Polaris.ResourceList.BulkActions.actionsActivatorLabel')
+    : i18n.value.translate(
+      'Polaris.ResourceList.BulkActions.moreActionsActivatorLabel',
+    ));
+
+
+const handleMeasurement = (measurements: BulkActionsMeasurements) => {
+
+  if (!props.promotedActions || props.promotedActions.length === 0) {
     return;
   }
 
-  if (instanceOfBulkActionListSectionArray(actions)) {
-    return actions;
-  }
-
-  if (instanceOfBulkActionArray(actions)) {
-    return [
-      {
-        items: actions,
-      },
-    ];
-  }
-})
-
-const hasPopover = computed(() => {
-  return actionSections.value || rolledInPromotedActions.value.length > 0 || state.measuring
-})
-
-const rolledInPromotedActions = computed(() => {
-  const { promotedActions } = props;
-
-  if (
-    !promotedActions ||
-    promotedActions.length === 0 ||
-    numberOfPromotedActionsToRender.value >= promotedActions.length
-  ) {
-    return [];
-  }
-
-  const rolledInPromotedActions = promotedActions.map((action) => {
-    if (instanceOfMenuGroupDescriptor(action)) {
-      return { items: [...action.actions] };
-    }
-    return { items: [action] };
-  });
-
-  return rolledInPromotedActions.slice(numberOfPromotedActionsToRender.value);
-})
-
-const activatorLabel = computed(() => {
-  return !props.promotedActions ||
-    (props.promotedActions && numberOfPromotedActionsToRender.value === 0 && !state.measuring)
-    ? i18n.value.translate(
-      'Polaris.ResourceList.BulkActions.actionsActivatorLabel',
-    )
-    : i18n.value.translate(
-      'Polaris.ResourceList.BulkActions.moreActionsActivatorLabel',
-    );
-})
-
-const combinedActions = computed(() => {
-  let combinedActions: any[] = [];
-
-  if (actionSections.value && rolledInPromotedActions.value.length > 0) {
-    combinedActions = [...rolledInPromotedActions.value, ...actionSections.value];
-  } else if (actionSections.value) {
-    combinedActions = actionSections.value;
-  } else if (rolledInPromotedActions.value.length > 0) {
-    combinedActions = [...rolledInPromotedActions.value];
-  }
-  return combinedActions as ActionListSection[];
-})
-
-
-const togglePopover = () => {
-  state.popoverVisible = !state.popoverVisible
-}
-
-const bulkActionsWidth = ref(0);
-const promotedActionsWidths = ref<number[]>([]);
-const addedMoreActionsWidthForMeasuring = ref(0);
-const numberOfPromotedActionsToRender = computed(() => {
-  const { promotedActions } = props;
-
-  if (!promotedActions) {
-    return 0;
-  }
-
-  const containerWidthMinusAdditionalWidth = Math.max(
-    0,
-    state.containerWidth - BUTTONS_NODE_ADDITIONAL_WIDTH,
+  const _ = getVisibleAndHiddenActions(
+    props.promotedActions,
+    measurements.disclosureWidth,
+    measurements.hiddenActionsWidths,
+    measurements.containerWidth,
   );
 
-  if (
-    containerWidthMinusAdditionalWidth >= bulkActionsWidth.value ||
-    state.measuring
-  ) {
-    return promotedActions.length;
-  }
+  visiblePromotedActions.value = _.visiblePromotedActions;
+  hiddenPromotedActions.value = _.hiddenPromotedActions;
+  hasMeasured.value = true;
+  actionsWidths.value = measurements.hiddenActionsWidths;
+  containerWidth.value = measurements.containerWidth;
+  disclosureWidth.value = measurements.disclosureWidth;
+};
 
-  let sufficientSpace = false;
-  let counter = promotedActions.length - 1;
-  let totalWidth = 0;
+const togglePopover = () => {
+  popoverActive.value = !popoverActive.value
+};
 
-  while (!sufficientSpace && counter >= 0) {
-    totalWidth += promotedActionsWidths.value[counter];
-    const widthWithRemovedAction =
-      bulkActionsWidth.value -
-      totalWidth +
-      addedMoreActionsWidthForMeasuring.value;
-    if (containerWidthMinusAdditionalWidth >= widthWithRemovedAction) {
-      sufficientSpace = true;
-    } else {
-      counter--;
-    }
-  }
 
-  return clamp(counter, 0, promotedActions.length);
-})
-
-const instanceOfMenuGroupDescriptor = (
-  action: MenuGroupDescriptor | BulkAction,
-): action is MenuGroupDescriptor => {
-  return 'title' in action;
-}
-
-const isNewBadgeInBadgeActions = () => {
-  const actions = actionSections.value;
-  if (!actions) return false;
-
-  for (const action of actions) {
-    for (const item of action.items) {
-      if (item.badge?.status === 'new') return true;
-    }
-  }
-
-  return false;
-}
-
-const handleMeasurement = (width: number) => {
-  if (state.measuring) {
-    promotedActionsWidths.value.push(width);
-  }
-}
-
-function instanceOfBulkActionListSectionArray(
-  actions: (BulkAction | BulkActionListSection)[],
-): actions is BulkActionListSection[] {
-  const validList = actions.filter((action: any) => {
-    return action.items;
-  });
-
-  return actions.length === validList.length;
-}
-
-function instanceOfBulkActionArray(
-  actions: (BulkAction | BulkActionListSection)[],
-): actions is BulkAction[] {
-  const validList = actions.filter((action: any) => {
-    return !action.items;
-  });
-
-  return actions.length === validList.length;
-}
-
-watch(() => props.promotedActions, () => {
-  promotedActionsWidths.value = [];
-})
-
-onMounted(() => {
-  const { actions, promotedActions } = props;
-
-  if (promotedActions && !actions && moreActionsNode.value) {
-    addedMoreActionsWidthForMeasuring.value = moreActionsNode.value.getBoundingClientRect().width;
-  }
-
-  bulkActionsWidth.value = buttonsNode.value
-    ? buttonsNode.value.getBoundingClientRect().width - addedMoreActionsWidthForMeasuring.value : 0;
-
-  if (containerNode.value) {
-    state.containerWidth = containerNode.value.getBoundingClientRect().width;
-    state.measuring = false;
-  }
-});
-
-if (process.env.NODE_ENV === 'development') {
-  watch(() => props.promotedActions, () => {
-    const { promotedActions } = props;
+watch(
+  () => [containerWidth.value, disclosureWidth.value, props.promotedActions, actionsWidths.value],
+  () => {
     if (
-      promotedActions &&
-      promotedActions.length > MAX_PROMOTED_ACTIONS
+      containerWidth.value === 0 ||
+      !props.promotedActions ||
+      props.promotedActions.length === 0
     ) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        i18n.value.translate('Polaris.ResourceList.BulkActions.warningMessage', {
-          maxPromotedActions: MAX_PROMOTED_ACTIONS,
-        }),
-      );
+      return;
     }
-  })
+    const _ =
+      getVisibleAndHiddenActions(
+        props.promotedActions,
+        disclosureWidth.value,
+        actionsWidths.value,
+        containerWidth.value,
+      );
 
-}
+    visiblePromotedActions.value = _.visiblePromotedActions;
+    hiddenPromotedActions.value = _.hiddenPromotedActions;
+    hasMeasured.value = containerWidth.value !== Infinity;
 
+  }, { immediate: true, flush: 'post' });
 
 </script>

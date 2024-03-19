@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
+    { path: '/', component: () => import('./views/Home.vue') },
     { path: '/tasks', component: () => import('./views/TaskList.vue') },
     { path: '/tasks/new', component: () => import('./views/TaskItem.vue') },
     { path: '/tasks/:id', component: () => import('./views/TaskItem.vue') },

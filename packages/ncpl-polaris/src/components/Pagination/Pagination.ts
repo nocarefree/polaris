@@ -28,7 +28,7 @@ export interface PaginationProps {
     /** Accessible labels for the buttons and UnstyledLinks */
     accessibilityLabels?: AccessibilityLabels;
     /** Text to provide more context in between the arrow buttons */
-    label?: string | Component;
+    label?: string;
     /** Layout structure of the component */
     type?: 'page' | 'table';
 }

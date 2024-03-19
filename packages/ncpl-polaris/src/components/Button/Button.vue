@@ -23,10 +23,10 @@
       <slot v-else name="icon"></slot>
     </span>
 
-    <span v-if="$slots.default" :class="classNames(styles.Text, removeUnderline && styles.removeUnderline)"
-      :key="disabled ? 'text-disabled' : 'text'">
+    <Text v-if="$slots.default" as="span" :variant="size === 'large' || hasPlainText ? 'bodyMd' : 'bodySm'"
+      :font-weight="textFontWeight" :key="disabled ? 'text-disabled' : 'text'">
       <slot></slot>
-    </span>
+    </Text>
     <span v-if="disclosure" :class="loading ? styles.hidden : styles.Icon">
       <Icon :source="disclosureIconSource"></Icon>
     </span>
@@ -34,11 +34,17 @@
 </template>
 
 <script setup lang="ts">
+import { useSlots } from "vue";
 import type { ButtonProps } from "./Button";
-import Spinner from "@ncpl-polaris/components/Spinner"
-import Icon from "@ncpl-polaris/components/Icon"
-import UnstyledButton from "@ncpl-polaris/components/UnstyledButton"
+import type { TextProps } from '../Text';
+
+import Text from '../Text';
+import Spinner from "../Spinner"
+import Icon from "../Icon"
+import UnstyledButton from "../UnstyledButton"
 import { SelectMinor, CaretDownMinor, CaretUpMinor } from "@ncpl/ncpl-icons";
+import { useBreakpoints } from "../context";
+
 
 import styles from "./Button.module.scss";
 import { computed } from "vue";
@@ -50,12 +56,16 @@ import {
 import { useI18n } from "../context";
 
 
+const slots = useSlots();
+
 
 const props = withDefaults(defineProps<ButtonProps>(), {
   size: 'medium',
   textAlign: 'center',
   variant: 'secondary',
 })
+const { mdUp } = useBreakpoints();
+
 
 const i18n = useI18n();
 
@@ -80,5 +90,16 @@ const disclosureIconSource = computed(() => {
   }
 
   return props.disclosure === "up" ? CaretUpMinor : CaretDownMinor;
+})
+
+const hasPlainText = computed(() => ['plain', 'monochromePlain'].includes(props.variant));
+const textFontWeight = computed(() => {
+  let data: TextProps['fontWeight'] = 'medium';
+  if (data) {
+    data = 'regular';
+  } else if (props.variant === 'primary') {
+    data = mdUp.value ? 'medium' : 'semibold';
+  }
+  return data;
 })
 </script>

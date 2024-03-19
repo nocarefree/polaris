@@ -2,22 +2,13 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import postCssPxToRem from "postcss-pxtorem";
-import postcssCustomMedia from "postcss-custom-media";
-import postcssGlobalData from "@csstools/postcss-global-data";
 import { camelCase, upperFirst } from "lodash";
-
-
-const mediaQueriesCssPath = resolve(__dirname, '../../node_modules/@shopify/polaris-tokens/dist/css/media-queries.css');
 
 export default defineConfig({
   plugins: [vue()],
   css: {
     postcss: {
       plugins: [
-        postcssGlobalData({
-          files: [mediaQueriesCssPath],
-        }),
-        postcssCustomMedia(),
         postCssPxToRem({
           rootValue: 16,
           propList: ["*"],
@@ -38,7 +29,7 @@ export default defineConfig({
           .split("/")
           .reduce(function (prev: string[], cur: string) {
             if (cur == "components") {
-              //prev.push("-");
+              prev.push("-");
             } else {
               cur = "-" + upperFirst(camelCase(cur));
               if (prev.length === 0 || prev[prev.length - 1] !== cur) {
@@ -48,7 +39,7 @@ export default defineConfig({
             return prev;
           }, []);
 
-        if (names[names.length - 1] != ("-" + name)) {
+        if (names[names.length - 1] != name) {
           name = name.replace("-", "--");
           names.push(
             name.charAt(0) === name.charAt(0).toUpperCase() ? "__" : "--"
@@ -64,21 +55,5 @@ export default defineConfig({
     alias: {
       "@ncpl-polaris": resolve(__dirname, "../ncpl-polaris/src"),
     },
-  },
-  server: {
-    //用来配置跨域
-    host: '127.0.0.1',
-    proxy: {
-      '/frontendapi': {
-        target: 'http://spider.com/',//目标服务器地址
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      },
-      '/graphql': {
-        target: 'http://spider.com/',//目标服务器地址
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      },
-    }
   }
 });

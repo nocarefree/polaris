@@ -24,13 +24,16 @@
   }
 
   &.table {
+    border-top: 1px solid var(--p-color-border);
+
     button {
-      --button-min-height: var(--p-space-600);
-      background-color: var(--p-color-bg-surface-secondary);
+      --button-min-height: var(--p-height-700);
+      background-color: var(--p-color-bg-surface-secondary-selected);
       min-height: var(--button-min-height);
       min-width: var(--button-min-height);
       height: var(--button-min-height);
       width: var(--button-min-height);
+      display: flex;
       padding: unset;
 
       /* stylelint-disable -- override pagination buttons in tables  */
@@ -59,4 +62,11 @@
       /* stylelint-enable */
     }
   }
+}
+
+.TablePaginationActions {
+  display: flex;
+  gap: var(--p-space-025);
+  align-items: center;
+  justify-content: center;
 }

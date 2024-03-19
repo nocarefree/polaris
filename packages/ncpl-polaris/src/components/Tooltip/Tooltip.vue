@@ -4,19 +4,10 @@
     :class="wrapperClassNames">
     <slot></slot>
     <Portal id-prefix="tooltip">
-      <TooltipOverlay
-        :id="id"
-        :preferred-position="preferredPosition"
-        :activator="activatorNode"
-        :active="_active"
-        :accessibility-label="accessibilityLabel"
-        :prevent-interaction="dismissOnMouseOut"
-        :width="width"
-        :padding="padding"
-        :border-radius="borderRadius"
-        :z-index-override="zIndexOverride"
-        :instant="!shouldAnimate"
-      >
+      <TooltipOverlay ref="overlay" @mouseleave="handleMouseLeave" @mouseenter="handleMouseEnterFix" :id="id"
+        :preferred-position="preferredPosition" :activator="activatorNode" :active="_active"
+        :accessibility-label="accessibilityLabel" :prevent-interaction="dismissOnMouseOut" :width="width"
+        :padding="padding" :border-radius="borderRadius" :z-index-override="zIndexOverride" :instant="!shouldAnimate">
         <slot v-if="$slots.content" name="content"></slot>
         <component v-else :is="()=>[content]"></component>
       </TooltipOverlay>
@@ -51,6 +42,7 @@ const emit = defineEmits(['open', 'close']);
 
 const id = useId();
 const activatorContainer = ref();
+const overlay = ref();
 const shouldAnimate = ref<boolean>(Boolean(!props.active))
 const _active = ref<boolean>(Boolean(props.active));
 const mouseEntered = ref<boolean>(false)
@@ -112,7 +104,30 @@ const handleClose = () => {
     //removePresence('tooltip');
   }, HOVER_OUT_TIMEOUT);
 }
-const handleMouseLeave = () => {
+const handleMouseLeave = (event: MouseEvent) => {
+
+  let rect;
+  const overlayEl = overlay.value?.$el;
+  rect = overlayEl?.getBoundingClientRect?.();
+  if (rect && event.target != overlayEl) {
+    if (event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom) {
+      return true;
+    }
+  }
+
+  if (activatorContainer.value && event.target != activatorContainer.value) {
+    rect = activatorContainer.value.getBoundingClientRect();
+    if (event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom) {
+      return true;
+    }
+  }
+
   if (hoverDelayTimeout.value) {
     clearTimeout(hoverDelayTimeout.value);
     hoverDelayTimeout.value = null;

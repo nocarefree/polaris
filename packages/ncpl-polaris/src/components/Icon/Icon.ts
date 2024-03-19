@@ -2,6 +2,7 @@ import { IconSource } from "../types"
 
 type Tone =
   | 'base'
+  | 'inherit'
   | 'subdued'
   | 'caution'
   | 'warning'

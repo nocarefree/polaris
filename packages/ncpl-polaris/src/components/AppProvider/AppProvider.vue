@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, onMounted, computed } from "vue";
+import { reactive, onMounted, computed, nextTick } from "vue";
 import type { AppProviderProps } from "./AppProvider"
 import { routerContext, i18nContext, mediaQueryContext, stickyManagerContext, scrollLockManagerContext, featuresContext, themeContext } from "../context";
 import FocusManager from "@ncpl-polaris/components/FocusManager";
@@ -67,9 +67,6 @@ const setBodyStyles = () => {
   document.body.style.color = 'var(--p-color-text)';
 };
 
-const classNamePolarisSummerEditions2023 =
-  'Polaris-Summer-Editions-2023';
-
 const setRootAttributes = () => {
   const activeThemeName = theme.value;
 
@@ -80,7 +77,7 @@ const setRootAttributes = () => {
     );
   });
 
-  document.documentElement.classList.add(classNamePolarisSummerEditions2023);
+  //document.documentElement.classList.add(classNamePolarisSummerEditions2023);
 };
 
 
@@ -99,7 +96,7 @@ function measureScrollbars() {
   const child = document.createElement('div');
   child.setAttribute(
     'style',
-    `width:100%; height: ${SCROLLBAR_TEST_ELEMENT_CHILD_SIZE}; overflow:scroll`,
+    `width:100%; height: ${SCROLLBAR_TEST_ELEMENT_CHILD_SIZE}; overflow:scroll; scrollbar-width: thin;`,
   );
   parentEl.appendChild(child);
   document.body.appendChild(parentEl);
@@ -121,12 +118,28 @@ function measureScrollbars() {
   document.body.removeChild(parentEl);
 }
 
-onMounted(() => {
-  stickyManager.setContainer(document);
-  setBodyStyles();
-  setRootAttributes();
 
-  measureScrollbars();
+onMounted(() => {
+  if (document) {
+    stickyManager.setContainer(document);
+    setBodyStyles();
+    setRootAttributes();
+
+    const isSafari16 =
+      navigator.userAgent.includes('Safari') &&
+      !navigator.userAgent.includes('Chrome') &&
+      (navigator.userAgent.includes('Version/16.1') ||
+        navigator.userAgent.includes('Version/16.2') ||
+        navigator.userAgent.includes('Version/16.3'));
+
+    if (isSafari16) {
+      document.documentElement.classList.add(
+        'Polaris-Safari-16-Font-Optical-Sizing-Patch',
+      );
+    }
+  }
+
+  nextTick(measureScrollbars)
 });
 </script>
 <template>

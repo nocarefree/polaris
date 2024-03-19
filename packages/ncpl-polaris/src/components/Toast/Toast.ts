@@ -1,14 +1,19 @@
-import { defineComponent, onMounted, onUnmounted } from "vue"
+import { defineComponent, onMounted, onBeforeUnmount, type PropType } from "vue"
 
-import type { ToastProps } from "../Frame/Toast/Toast";
+import type { Action } from "@ncpl-polaris/components/types";
 import { useId, useFrame } from "../context"
 
 
 export default defineComponent({
     name: 'NpToast',
-    setup() {
-
-        const props = defineProps<ToastProps>();
+    props: {
+        content: { type: String, required: true },
+        duration: { type: Number, default: 5000 },
+        error: { type: Boolean },
+        onDismiss: { type: Function as PropType<() => void>, required: true },
+        action: { type: Function as PropType<Action> },
+    },
+    setup(props) {
         const id = useId();
         const { showToast, hideToast } = useFrame();
 
@@ -16,7 +21,7 @@ export default defineComponent({
             showToast({ id: id.value, ...props });
         });
 
-        onUnmounted(() => {
+        onBeforeUnmount(() => {
             hideToast({ id: id.value });
         });
     },

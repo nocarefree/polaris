@@ -9,12 +9,19 @@ type Align =
   | 'space-between'
   | 'space-evenly';
 type BlockAlign = 'start' | 'center' | 'end' | 'baseline' | 'stretch';
-
 type Gap = ResponsiveProp<SpaceScale>;
+type Direction = ResponsiveProp<'row' | 'row-reverse'>;
+type Element = 'div' | 'span' | 'li' | 'ol' | 'ul';
 
 export type InlineStackProps = {
+  /** HTML Element type
+   * @default 'div'
+   */
+  as?: Element;
   /** Horizontal alignment of children */
   align?: Align;
+  /** Horizontal direction in which children are laid out */
+  direction?: Direction;
   /** Vertical alignment of children */
   blockAlign?: BlockAlign;
   /** The spacing between elements. Accepts a spacing token or an object of spacing tokens for different screen sizes.

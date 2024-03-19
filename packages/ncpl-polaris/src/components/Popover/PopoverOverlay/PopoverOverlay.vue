@@ -5,24 +5,24 @@
     @scrollOut="handleScrollOut" :class="className" :z-index-override="zIndexOverride">
     <template #default="{ measuring, desiredHeight, positioning }">
       <div :class="classNames(
-        styles.Popover,
-        positioning === 'above' && styles.positionedAbove,
-        fullWidth && styles.fullWidth,
-        measuring && styles.measuring,
-        hideOnPrint && styles['PopoverOverlay-hideOnPrint'],
-      )
-        " v-bind="overlay.props">
+    styles.Popover,
+    positioning === 'above' && styles.positionedAbove,
+    fullWidth && styles.fullWidth,
+    measuring && styles.measuring,
+    hideOnPrint && styles['PopoverOverlay-hideOnPrint'],
+  )
+    " v-bind="overlay.props">
         <EventListener event="click" :handler="handleClick" />
         <EventListener event="touchstart" :handler="handleClick" />
         <KeypressListener :key-code="Key.Escape" :handler="handleEscape" />
         <div :class="styles.FocusTracker" tabindex="0" @focus="handleFocusFirstItem"></div>
         <div :class="styles.ContentContainer">
           <div :id="id" :tabindex="autofocusTarget === 'none' ? undefined : -1" :class="classNames(
-            styles.Content,
-            fullHeight && styles['Content-fullHeight'],
-            fluidContent && styles['Content-fluidContent'],
-          )
-            " :style="measuring ? undefined : { height: `${desiredHeight}px` }" ref="contentNode">
+    styles.Content,
+    fullHeight && styles['Content-fullHeight'],
+    fluidContent && styles['Content-fluidContent'],
+  )
+    " :style="measuring ? undefined : { height: `${desiredHeight}px` }" ref="contentNode">
             <RenderPopoverContent>
               <slot></slot>
             </RenderPopoverContent>
@@ -101,7 +101,6 @@ const RenderPopoverContent = defineComponent({
 })
 
 const onClose = (v: PopoverCloseSource) => {
-  console.log(v);
   emit('update:active', false);
   emit('close', v)
 }
@@ -110,7 +109,6 @@ const handleScrollOut = () => {
   onClose(PopoverCloseSource.ScrollOut);
 }
 const handleClick = (event: Event) => {
-  console.log(event);
 
   const target = event.target as HTMLElement;
   const composedPath = event.composedPath();

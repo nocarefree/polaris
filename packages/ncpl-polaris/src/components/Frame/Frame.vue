@@ -6,8 +6,8 @@
     $slots.sidebar && styles.hasSidebar,
   )">
     <div :class="skipClassName">
-      <a :href="`#${skipUrl}`" @click="handleClick" @blur="skipFocused = false" @focus="skipFocused = true">{{
-        i18n.translate('Polaris.Frame.skipToContent') }}</a>
+      <a :href="`#${skipUrl}`" @click="handleClick" @blur="handleBlur" @focus="handleFocus">{{
+    i18n.translate('Polaris.Frame.skipToContent') }}</a>
     </div>
     <div v-if="$slots.topBar" id="AppFrameTopBar" :class="styles.TopBar"
       :="{ ...dataPolarisTopBar.props, ...layer.props }">
@@ -31,13 +31,13 @@
     <CSSAnimation :in="showContextualSaveBar" :class="styles.ContextualSaveBar" type="fade">
       <ContextualSaveBar v-bind="contextualSaveBarProps"></ContextualSaveBar>
     </CSSAnimation>
-    <div v-if="loadingStack > 0" :class="styles['LoadingBar']" id="AppFrameLoadingBar">
+    <div v-if="state.loadingStack > 0" :class="styles['LoadingBar']" id="AppFrameLoadingBar">
       <LoadingBar></LoadingBar>
     </div>
     <Backdrop v-if="showMobileNavigation && mediaQuery.isNavigationCollapsed" below-navigation
       @click="e => $emit('update:showMobileNavigation', false)"></Backdrop>
-    <main :class="styles['Main']" id="AppFrameMain" :data-has-global-ribbon="globalRibbon">
-      <div :class="styles['Content']">
+    <main :class="styles.Main" id="AppFrameMain" :data-has-global-ribbon="Boolean($slots.globalRibbon)">
+      <div :class="styles.Content">
         <slot></slot>
       </div>
     </main>
@@ -54,13 +54,14 @@ import {
   toRef,
   computed,
   onMounted,
-  onUpdated
+  onUpdated,
+  reactive
 } from "vue";
 import { useI18n, useMediaQuery, frameContext, useTheme } from "../context";
 import { classNames, setRootProperty } from "@ncpl-polaris/utils";
 import type { AttrsType } from "@ncpl-polaris/components/types";
 import { dataPolarisTopBar, layer } from "@ncpl-polaris/components/shared";
-import { frameProps } from "./Frame";
+import type { FrameProps, ToastPropsWithID, ToastID } from "./Frame";
 import CSSAnimation from "./CSSAnimation/CSSAnimation.vue";
 import { MobileCancelMajor } from "@ncpl/ncpl-icons";
 import Icon from "@ncpl-polaris/components/Icon";
@@ -71,23 +72,34 @@ import ContextualSaveBar from "./ContextualSaveBar/ContextualSaveBar.vue";
 import LoadingBar from "./Loading/Loading.vue";
 import ToastManager from "./ToastManager/ToastManager.vue";
 import styles from "./Frame.module.scss";
-import type { ToastMessage, ToastID } from "./ToastManager/ToastManager";
 import { useEventListener } from '@vueuse/core';
 
 defineOptions({
   name: "NpFrame",
 });
 
-const props = defineProps(frameProps);
+const props = defineProps<FrameProps>();
 const slots = defineSlots();
 defineEmits(["update:showMobileNavigation"]);
 
 const theme = useTheme();
 const showContextualSaveBar = ref(false);
 const contextualSaveBarProps = ref<AttrsType>({})
-const skipFocused = ref(false);
 const i18n = useI18n();
 const mediaQuery = useMediaQuery();
+const state = reactive<{
+  skipFocused?: boolean;
+  globalRibbonHeight: number;
+  loadingStack: number;
+  toastMessages: ToastPropsWithID[];
+  showContextualSaveBar: boolean;
+}>({
+  skipFocused: false,
+  globalRibbonHeight: 0,
+  loadingStack: 0,
+  toastMessages: [],
+  showContextualSaveBar: false,
+})
 
 const navTransitionClasses = {
   enter: classNames(styles['Navigation-enter']),
@@ -105,7 +117,7 @@ const navClassName = computed(() => classNames(
 
 const skipClassName = computed(() => classNames(
   styles.Skip,
-  skipFocused.value && styles.focused,
+  state.skipFocused && styles.focused,
 ));
 
 const mobileNavAttributes = computed(() => {
@@ -131,9 +143,7 @@ const tabIndex = computed(() => {
 });
 
 const globalRibbonContainer = ref<HTMLElement>();
-
-const loadingStack = ref(0);
-const toastMessages = ref<ToastMessage[]>([]);
+const toastMessages = ref<ToastPropsWithID[]>([]);
 const navigationNode = ref<HTMLElement>();
 
 const skipUrl = computed(() => {
@@ -148,18 +158,24 @@ const handleClick = (e: Event) => {
   t && (t.focus(), null == e || e.preventDefault());
 };
 
+const setGlobalRibbonHeight = () => {
+  if (globalRibbonContainer.value) {
+    state.globalRibbonHeight = globalRibbonContainer.value.offsetHeight;
+    setGlobalRibbonRootProperty();
+  }
+}
+
 const setOffset = () => {
   const { offset = '0px' } = props;
   setRootProperty('--pc-frame-offset', offset);
 };
 
 const setGlobalRibbonRootProperty = () => {
-  if (globalRibbonContainer.value) {
-    setRootProperty(
-      '--pc-frame-global-ribbon-height',
-      `${globalRibbonContainer.value.offsetHeight}px`,
-    );
-  }
+  const globalRibbonHeight = state.globalRibbonHeight;
+  setRootProperty(
+    '--pc-frame-global-ribbon-height',
+    `${globalRibbonHeight}px`,
+  );
 };
 
 const handleResize = () => {
@@ -167,6 +183,15 @@ const handleResize = () => {
     setGlobalRibbonRootProperty();
   }
 };
+
+const handleFocus = () => {
+  state.skipFocused = true;
+};
+
+const handleBlur = () => {
+  state.skipFocused = false;
+};
+
 
 frameContext.provide({
   logo: toRef(props, 'logo'),
@@ -177,7 +202,7 @@ frameContext.provide({
   removeContextualSaveBar: () => {
     showContextualSaveBar.value = false;
   },
-  showToast: (e: ToastMessage) => {
+  showToast: (e: ToastPropsWithID) => {
     toastMessages.value = toastMessages.value.find((i) => {
       return i.id == e.id || i.id == e.id;
     })
@@ -190,10 +215,10 @@ frameContext.provide({
     });
   },
   startLoading: () => {
-    loadingStack.value += 1;
+    state.loadingStack += 1;
   },
   stopLoading: () => {
-    loadingStack.value = Math.max(0, loadingStack.value - 1);
+    state.loadingStack = Math.max(0, state.loadingStack - 1);
   },
 });
 
@@ -209,7 +234,7 @@ onMounted(() => {
 })
 
 onUpdated(() => {
-  setGlobalRibbonRootProperty();
+  setGlobalRibbonHeight();
   setOffset();
 })
-</script>
+</script>./ToastManager/types

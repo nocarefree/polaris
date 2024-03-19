@@ -1,20 +1,24 @@
 <template>
-  <SkeletonList v-if="firstLoading" />
+  <NpLoading v-if="tasksLoading"></NpLoading>
+  <SkeletonList v-if="tasksLoading" />
   <NpPage v-else title="任务" full-width>
     <template #primaryAction>
       <NpButton variant="primary" @click="router.push('/tasks/new')">添加任务</NpButton>
     </template>
-
-
     <NpCard padding="0">
-      <template v-if="tasks?.data?.length > 0">
+      <template v-if="result?.tasks?.data?.length > 0">
         <NpIndexFilters :mode="IndexFiltersMode.Default" v-model:selected="viewSelected" :tabs="views"
           v-model:sort-selected="sortSelected" :sort-options="sortOptions" v-model:query-value="queryValue"
           :filters="filters" can-create-new-view>
         </NpIndexFilters>
-        <NpIndexTable :resource-name="resourceName"
+        <NpIndexTable 
+          :resource-name="resourceName" :has-more-items="true"
           :headings="[{ title: 'ID' }, { title: '任务名' }, { title: '抓取数量' }, { title: '产品数量' }, { title: '状态' }, { title: '状态' }]"
-          :rows="tasks.data">
+          :rows="result.tasks.data" 
+          :pagination="{ hasNext: true, onNext: () => { } }"
+          :promoted-bulk-actions="promotedBulkActions"
+          :bulk-actions="bulkActions"
+          v-model:selected="selectedResources">
           <template #default="{ index, row: task }">
             <NpIndexTableRow :id="task.id" :selected="selectedResources == 'All' || selectedResources.includes(task.id)"
               :position="index">
@@ -37,7 +41,8 @@
               </NpIndexTableCell>
               <NpIndexTableCell>
                 <NpInlineStack gap="200" block-align="center">
-                  <NpButton :icon="DeleteMinor" variant="tertiary" :loading="task.loading" @click="onClearProduct(task)">
+                  <NpButton :icon="DeleteMinor" variant="tertiary" :loading="task.loading"
+                    @click="onClearProduct(task)">
                   </NpButton>
                   <NpText>{{ task.products_count }}</NpText>
                 </NpInlineStack>
@@ -46,16 +51,16 @@
                 <NpInlineStack gap="200" block-align="center">
                   <NpBadge v-if="task.ruled" tone="success">网址已抓取</NpBadge>
                   <NpBadge v-if="task.parsed" tone="success">数据已解析</NpBadge>
-                  <NpBadge v-if="task.status == 'running'" tone="attention">运行中</NpBadge>
+                  <NpBadge v-if="task.status == 'RUNNING'" tone="attention">运行中</NpBadge>
                 </NpInlineStack>
               </NpIndexTableCell>
               <NpIndexTableCell>
                 <NpButtonGroup>
-                  <NpButton :disabled="task.status == 'running' || task.loading"
+                  <NpButton :disabled="task.status == 'RUNNING' || task.loading"
                     @click="router.push(`/webs/${task.map.id}/`)">设置规则
                   </NpButton>
-                  <NpButton :pressed="task.status == 'running'" :loading="task.loading" @click="onToggleTask(task)">
-                    {{ task.status == 'running' ? '暂停运行' : `开始运行` }}
+                  <NpButton :pressed="task.status == 'RUNNING'" :loading="task.loading" @click="onToggleTask(task)">
+                    {{ task.status == 'RUNNING' ? '暂停运行' : `开始运行` }}
                   </NpButton>
                   <ExportButton v-if="task.parsed" @click="e => onExportTask(task, e)" :loading="task.loading" />
 
@@ -73,21 +78,19 @@
         </NpEmptyState>
       </template>
     </NpCard>
-
   </NpPage>
-</template> 
+</template>
 <script setup lang="ts">
-import { ref, reactive, onUnmounted } from "vue";
+import { ref, onUnmounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import request from "../request";
+import { useQuery } from '@vue/apollo-composable';
 import ExportButton from "../components/Task/ExportButton.vue";
 import SkeletonList from "../components/SkeletonList.vue";
-import { useFrame, NpPage, NpButton, NpCard, NpIndexFilters, NpIndexTable, IndexFiltersMode, NpEmptyState, NpIndexTableRow, NpIndexTableCell, NpInlineStack, NpText, NpButtonGroup, NpBadge } from "@ncpl/ncpl-polaris";
+import { NpLoading, useFrame, NpPage, NpButton, NpCard, NpIndexFilters, NpIndexTable, IndexFiltersMode, NpEmptyState, NpIndexTableRow, NpIndexTableCell, NpInlineStack, NpText, NpButtonGroup, NpBadge } from "@ncpl/ncpl-polaris";
 import { DeleteMinor } from "@ncpl/ncpl-icons";
-
+import { gql } from "graphql-tag";
 
 const router = useRouter();
-const firstLoading = ref(true);
 const filters = ref([])
 
 const resourceName = {
@@ -96,33 +99,32 @@ const resourceName = {
 };
 
 
-type TaskType = {
-  id: string;
-  name: string;
-  status?: string;
-  loading?: boolean;
-  parsed: 1 | 0,
-  ruled: 1 | 0,
-  products_count?: number;
-  maps_count?: number;
-  map: {
-    id: string,
-    next_id: string,
-  };
-}
+// type TaskType = {
+//   id: string;
+//   name: string;
+//   status?: string;
+//   loading?: boolean;
+//   parsed: boolean,
+//   ruled: boolean,
+//   products_count?: number;
+//   maps_count?: number;
+//   map: {
+//     id: string,
+//     next_id: string,
+//   };
+// }
 
-const tasks = reactive<{
-  total: number;
-  data: TaskType[];
-}>({
-  total: 0,
-  data: [],
-})
+// const tasks = ref<{
+//   total: number;
+//   data: TaskType[];
+// }>({
+//   total: 0,
+//   data: [],
+// })
+
 
 const selectedResources = ref<string[] | 'All'>([]);
-
 const frameContext = useFrame();
-
 const viewSelected = ref(0);
 const views = [
   { id: "1", content: '全部' },
@@ -130,10 +132,10 @@ const views = [
   { id: "3", content: '已完成' },
 ];
 
-const sortSelected = ref([]);
+const sortSelected = ref<string[]>(['id desc']);
 const sortOptions = [
-  { label: '任务号', value: 'task asc', directionLabel: 'Ascending' },
-  { label: '任务号', value: 'task desc', directionLabel: 'Descending' },
+  { label: '任务号', value: 'id asc', directionLabel: 'Ascending' },
+  { label: '任务号', value: 'id desc', directionLabel: 'Descending' },
   { label: '线程', value: 'process asc', directionLabel: 'Ascending' },
   { label: '线程', value: 'process desc', directionLabel: 'Ascending' },
   { label: '名称', value: 'name asc', directionLabel: 'A-Z' },
@@ -142,86 +144,156 @@ const sortOptions = [
   { label: '状态', value: 'status desc', directionLabel: 'A-Z' }
 ];
 
-const queryValue = ref("")
+const tasksVariables = ref({
+  page: 1,
+  orderBy: [{ column: 'ID', order: 'DESC' }],
+})
 
-const loadList = () => {
-  request.get('/tasks').then((data: any) => {
-    firstLoading.value = false;
-    tasks.data = data.data as TaskType[];
-    tasks.total = data.total;
-
-    for (let row of tasks.data) {
-      if (row.status == 'running') {
-        autoRefresh();
-        break;
-      }
+watch(() => tasksVariables, () => {
+  tasksVariables.value.orderBy = sortSelected.value.map((i: string) => {
+    const [column, order] = i.split(' ');
+    return {
+      column: column.toUpperCase(),
+      order: order.toUpperCase(),
     }
   })
-}
+})
+
+const { restart, loading: tasksLoading, result } = useQuery(gql`query GetTasks( $page:Int, $orderBy: [QueryTasksOrderByOrderByClause!]){
+    tasks( page: $page, orderBy: $orderBy ){
+      data{
+        id
+        name
+        status
+        maps_count
+        products_count
+        parsed
+        ruled
+        map{
+          id
+          next_id
+        }
+      }
+      paginatorInfo{
+        total
+        currentPage
+      }
+    }
+  }`, tasksVariables)
+
+
+
+const queryValue = ref("")
+
 
 let timeInterval: any;
 const autoRefresh = () => {
   if (timeInterval) {
     stopRefresh()
   }
-  timeInterval = setInterval(loadList, 15000)
+  timeInterval = setInterval(restart, 15000)
 }
 const stopRefresh = () => {
   timeInterval && clearInterval(timeInterval)
 }
-loadList();
+
 
 
 const onToggleTask = (task: TaskType) => {
-  const status = task.status == 'running' ? 'stop' : 'run';
+  const status = task.status == 'RUNNING' ? 'stop' : 'run';
   task.loading = true;
   stopRefresh()
-  request.post(`/tasks/${task.id}/action`, { action: status }).then((data: any) => {
-    autoRefresh();
-    task.status = data.status;
-    task.loading = false;
-  })
+  // request.post(`/tasks/${task.id}/action`, { action: status }).then((data: any) => {
+  //   autoRefresh();
+  //   task.status = data.status;
+  //   task.loading = false;
+  // })
 }
 
 const onExportTask = (task: TaskType, type: string) => {
   task.loading = true;
   stopRefresh()
-  request.post(`/tasks/${task.id}/action`, { action: 'export', type }).then(({ id }: any) => {
-    autoRefresh();
-    task.loading = false;
-    if (id) {
-      frameContext.showToast({
-        id: `${task.id}_${id}`,
-        content: '导出请求已接收'
-      })
-    }
-  })
+  // request.post(`/tasks/${task.id}/action`, { action: 'export', type }).then(({ id }: any) => {
+  //   autoRefresh();
+  //   task.loading = false;
+  //   if (id) {
+  //     frameContext.showToast({
+  //       id: `${task.id}_${id}`,
+  //       content: '导出请求已接收'
+  //     })
+  //   }
+  // })
 }
 
 const onClearProduct = (task: TaskType) => {
   task.loading = true;
   stopRefresh();
-  request.post(`/tasks/${task.id}/action`, { action: 'clearProduct' }).then(({ url }: any) => {
-    autoRefresh();
-    task.loading = false;
-    task.parsed = 0;
-    task.products_count = 0;
-  })
+  // request.post(`/tasks/${task.id}/action`, { action: 'clearProduct' }).then(({ url }: any) => {
+  //   autoRefresh();
+  //   task.loading = false;
+  //   task.parsed = 0;
+  //   task.products_count = 0;
+  // })
 }
 
 const onClearMap = (task: TaskType) => {
   task.loading = true;
   stopRefresh();
-  request.post(`/tasks/${task.id}/action`, { action: 'clearMap' }).then(({ url }: any) => {
-    autoRefresh();
-    task.loading = false;
-    task.ruled = 0;
-    task.maps_count = 0;
-  })
+  // request.post(`/tasks/${task.id}/action`, { action: 'clearMap' }).then(({ url }: any) => {
+  //   autoRefresh();
+  //   task.loading = false;
+  //   task.ruled = 0;
+  //   task.maps_count = 0;
+  // })
 }
 
 onUnmounted(() => {
   clearInterval(timeInterval)
 });
+
+
+const promotedBulkActions = [
+  {
+    content: 'Create shipping labels',
+    onAction: () => console.log('Todo: implement create shipping labels'),
+  },
+  {
+    content: 'Mark as fulfilled',
+    onAction: () => console.log('Todo: implement mark as fulfilled'),
+  },
+  {
+    content: 'Capture payment',
+    onAction: () => console.log('Todo: implement capture payment'),
+  },
+];
+const bulkActions = [
+  {
+    content: 'Add tags',
+    onAction: () => console.log('Todo: implement bulk add tags'),
+  },
+  {
+    content: 'Remove tags',
+    onAction: () => console.log('Todo: implement bulk remove tags'),
+  },
+  {
+    title: 'Import',
+    items: [
+      {
+        content: 'Import from PDF',
+        onAction: () => console.log('Todo: implement PDF importing'),
+      },
+      {
+        content: 'Import from CSV',
+        onAction: () => console.log('Todo: implement CSV importing'),
+      },
+    ],
+  },
+  {
+    icon: DeleteMinor,
+    destructive: true,
+    content: 'Delete customers',
+    onAction: () => console.log('Todo: implement bulk delete'),
+  },
+];
 
 </script>

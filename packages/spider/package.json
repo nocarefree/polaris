@@ -15,9 +15,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.9.7",
     "@ncpl/ncpl-icons": "workspace:^",
     "@ncpl/ncpl-polaris": "workspace:^",
+    "@vue/apollo-composable": "^4.0.2",
     "axios": "^1.6.7",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6",
     "pinia": "^2.1.7",
     "sass": "^1.70.0",
     "vue-prismjs": "^1.2.0",

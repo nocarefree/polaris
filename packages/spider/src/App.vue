@@ -6,14 +6,19 @@ import { NpActionList, NpTopBarSearchField, NpFrame, NpNavigation, NpNavigationS
 import { TemplateMinor, OrdersFilledMinor } from "@ncpl/ncpl-icons"
 import en from "@ncpl/ncpl-polaris/locales/zh-CN.json"
 
+import LogoColor from './assets/jaded-pixel-logo-color.svg';
+import LogoGray from './assets/jaded-pixel-logo-gray.svg';
+import { provide } from 'vue'
+import { ApolloClients } from '@vue/apollo-composable';
+import { apolloClient } from "./apollo";
+
+
 const route = useRoute();
 
 const logo = {
   width: 124,
-  topBarSource:
-    'https://cdn.shopify.com/s/files/1/0446/6937/files/jaded-pixel-logo-color.svg?6215648040070010999',
-  contextualSaveBarSource:
-    'https://cdn.shopify.com/s/files/1/0446/6937/files/jaded-pixel-logo-gray.svg?6215648040070010999',
+  topBarSource: LogoColor,
+  contextualSaveBarSource: LogoGray,
   url: '#',
   accessibilityLabel: 'Jaded Pixel',
 };
@@ -51,36 +56,56 @@ const searchActive = computed(() => {
   return searchValue.value.length > 0
 })
 
+
+provide(ApolloClients, {
+  default: apolloClient,
+})
+
 </script>
 
 <template>
-  <NpAppProvider :i18n="en" router>
-    <NpFrame :logo="logo" v-model:showMobileNavigation="showMobileNavigation">
-      <template #topBar>
-        <NpTopBar show-navigation-toggle v-model:searchResultsVisible="searchActive"
-          @searchResultsDismiss="searchValue = ''" @navigationToggle="showMobileNavigation = !showMobileNavigation">
-          <template #userMenu>
-            <NpTopBarUserMenu :actions="userMenuActions" name="Dharma" :detail="storeName" initials="D"
-              v-model:open="userMenuActive" />
+  <div class="OuterContainer">
+    <NpAppProvider :i18n="en" router>
+      <div id="AppFrame" class="AppFrame">
+        <NpFrame :logo="logo" v-model:showMobileNavigation="showMobileNavigation">
+          <template #topBar>
+            <NpTopBar show-navigation-toggle v-model:searchResultsVisible="searchActive"
+              @searchResultsDismiss="searchValue = ''" @navigationToggle="showMobileNavigation = !showMobileNavigation">
+              <template #userMenu>
+                <NpTopBarUserMenu :actions="userMenuActions" name="Dharma" :detail="storeName" initials="D"
+                  v-model:open="userMenuActive" />
+              </template>
+              <template #searchField>
+                <NpTopBarSearchField v-model="searchValue" placeholder="Search" />
+              </template>
+              <template #searchResults>
+                <NpActionList :items="searchResult" />
+              </template>
+            </NpTopBar>
           </template>
-          <template #searchField>
-            <NpTopBarSearchField v-model="searchValue" placeholder="Search" />
+          <template #navigation>
+            <NpNavigation :location="String(route.path)">
+              <NpNavigationSection fill :items="navItems" />
+            </NpNavigation>
           </template>
-          <template #searchResults>
-            <NpActionList :items="searchResult" />
-          </template>
-        </NpTopBar>
-      </template>
-      <template #navigation>
-        <NpNavigation :location="String(route.path)">
-          <NpNavigationSection fill :items="navItems" />
-        </NpNavigation>
-      </template>
-      <div><router-view></router-view></div>
-    </NpFrame>
-  </NpAppProvider>
+          <div><router-view></router-view></div>
+        </NpFrame>
+      </div>
+    </NpAppProvider>
+  </div>
 </template>
 
 <style lang="scss">
 @import "./styles/globals.scss";
+</style>
+
+<style>
+.OuterContainer {
+  transition: height var(--p-motion-duration-200) var(--p-motion-ease);
+  height: 100vh;
+}
+
+.AppFrame {
+  scrollbar-color: auto;
+}
 </style>

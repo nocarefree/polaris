@@ -9,7 +9,7 @@
       </Tooltip>
     </template>
     <Box min-width="148px" padding-inline-start="300" padding-inline-end="300" padding-block-start="200"
-      padding-block-end="200" border-block-end-width="025" border-color="border-subdued">
+      padding-block-end="200" border-block-end-width="025" border-color="border-secondary">
       <ChoiceList :title="i18n.translate('Polaris.IndexFilters.SortButton.title')" :choices="choiceListChoices"
         :selected="selected" @change="handleChangeChoiceList" />
     </Box>

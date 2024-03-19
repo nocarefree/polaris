@@ -1,20 +1,18 @@
 <template>
   <div :class="styles.BulkActionButton" ref="bulkActionButton">
-    <Tooltip v-if="isActivatorForMoreActionsPopover" :content="content" preferred-position="above">
+    <Tooltip v-if="isActivatorForMoreActionsPopover" :content="content" preferred-position="below">
       <Button :external="external" :url="url" :accessibility-label="isActivatorForMoreActionsPopover ? content :
-        accessibilityLabel" :disclosure="disclosure && showContentInButton" @click="onAction" :disabled="disabled"
-        size="slim">
+    accessibilityLabel" :disclosure="disclosure && showContentInButton" @click="onAction" :disabled="disabled"
+        :size="size">
         <template #icon>
           <Icon :source="HorizontalDotsMinor" tone="base"></Icon>
         </template>
-        {{ buttonContent }}
+        <template #default v-if="buttonContent">{{ buttonContent }}</template>
       </Button>
     </Tooltip>
     <Button v-else :external="external" :url="url" :accessibility-label="isActivatorForMoreActionsPopover ? content :
-      accessibilityLabel" :disclosure="disclosure && showContentInButton" @click="onAction" :disabled="disabled"
-      size="slim">
-      {{ buttonContent }}
-    </Button>
+    accessibilityLabel" :disclosure="disclosure && showContentInButton" @click="onAction" :disabled="disabled"
+      :size="size"><template #default v-if="buttonContent">{{ buttonContent }}</template></Button>
     <Indicator v-if="indicator" />
   </div>
 </template>

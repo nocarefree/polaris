@@ -7,9 +7,10 @@
       <div :class="styles.LoadingPanelRow">
         <Spinner size="small" />
         <span :class="styles.LoadingPanelText">
-          {{ i18n.translate('Polaris.IndexTable.resourceLoadingAccessibilityLabel', {
-            resourceNamePlural: resourceNamePlural,
-          })
+          {{
+    i18n.translate('Polaris.IndexTable.resourceLoadingAccessibilityLabel', {
+      resourceNamePlural: resourceNamePlural,
+    })
           }}
         </span>
       </div>

@@ -1,63 +1,56 @@
 <template>
-  <Sticky :bounding-element="stickyWrapper">
-    <template #default="{ isSticky }">
-      <div v-if="indexTable.shouldShowBulkActions && !indexTable.condensed" :class="selectAllActionsClassName(isSticky)">
-        <SelectAllActions :label="i18n.translate('Polaris.IndexTable.selected', {
-          selectedItemsCount: selectedItemsCountLabel as number,
-        })" :accessibility-label="indexTable.bulkActionsAccessibilityLabel" :selected="indexTable.bulkSelectState"
-          :select-mode="indexTable.selectMode" @toggleAll="handleTogglePage"
-          :paginated-select-all-text="indexTable.paginatedSelectAllText"
-          :paginated-select-all-action="indexTable.paginatedSelectAllAction" />
-        <slot name="loading"></slot>
-      </div>
-      <div v-else-if="indexTable.condensed" :class="classNames(
-        styles.HeaderWrapper,
-        (!indexTable.selectable || indexTable.condensed) && styles.unselectable,
-      )">
-        <slot name="loading"></slot>
-        <slot name="sort"></slot>
-      </div>
-      <div v-else :class="stickyHeaderClassNames(isSticky)" ref="stickyHeaderWrapperElement">
-        <slot name="loading"></slot>
-        <div :class="styles.StickyTableColumnHeader">
-          <div :class="classNames(styles.TableHeading, indexTable.selectable &&
-            styles['TableHeading-first'], firstHeading.flush &&
-          styles['TableHeading-flush'])" :style="stickyColumnHeaderStyle" data-index-table-sticky-heading="true">
-            <LegacyStack spacing="none" :wrap="false" alignment="center">
-              <template v-if="indexTable.selectable">
-                <div :class="styles.FirstStickyHeaderElement" ref="firstStickyHeaderElement">
-                  <div :class="styles.ColumnHeaderCheckboxWrapper">
-                    <Checkbox
-                      :label="i18n.translate('Polaris.IndexTable.selectAllLabel', { resourceNamePlural: indexTable.resourceName?.plural, })"
-                      label-hidden @change="handleTogglePage" :checked="indexTable.bulkSelectState" />
+  <div :class="classNames(styles.StickyTable, condensed && styles['StickyTable-condensed'])" role="presentation">
+    <Sticky :bounding-element="stickyWrapper">
+      <template #default="{ isSticky }">
+        <div v-if="indexTable.condensed" :class="classNames(
+    styles.HeaderWrapper,
+    (!indexTable.selectable || indexTable.condensed) && styles.unselectable,
+  )">
+          <slot name="loading"></slot>
+          <slot name="sort"></slot>
+        </div>
+        <div v-else :class="stickyHeaderClassNames(isSticky)" ref="stickyHeaderWrapperElement">
+          <slot name="loading"></slot>
+          <div :class="styles.StickyTableColumnHeader">
+            <div :class="classNames(styles.TableHeading, indexTable.selectable &&
+    styles['TableHeading-first'], firstHeading.flush &&
+  styles['TableHeading-flush'])" :style="stickyColumnHeaderStyle" data-index-table-sticky-heading="true">
+              <LegacyStack spacing="none" :wrap="false" alignment="center">
+                <template v-if="indexTable.selectable">
+                  <div :class="styles.FirstStickyHeaderElement" ref="firstStickyHeaderElement">
+                    <div :class="styles.ColumnHeaderCheckboxWrapper">
+                      <Checkbox
+                        :label="i18n.translate('Polaris.IndexTable.selectAllLabel', { resourceNamePlural: indexTable.resourceName?.plural, })"
+                        label-hidden @change="handleTogglePage" :checked="indexTable.bulkSelectState" />
+                    </div>
                   </div>
+                  <div :class="styles['StickyTableHeading-second-scrolling']">
+                    <RenderHeadingContent v-bind="firstHeading" :index="0"></RenderHeadingContent>
+                  </div>
+                </template>
+                <div v-else :class="classNames(styles.FirstStickyHeaderElement)" ref="firstStickyHeaderElement">
+                  <RenderHeadingContent v-bind="firstHeading" :index="0"></RenderHeadingContent>
                 </div>
-                <div :class="styles['StickyTableHeading-second-scrolling']">
-                  <HeaderContent v-bind="firstHeading" :index="0"></HeaderContent>
-                </div>
-              </template>
-              <div v-else :class="classNames(styles.FirstStickyHeaderElement)" ref="firstStickyHeaderElement">
-                <HeaderContent v-bind="firstHeading" :index="0"></HeaderContent>
-              </div>
-            </LegacyStack>
+              </LegacyStack>
+            </div>
+          </div>
+          <div :class="styles.StickyTableHeadings" ref="stickyHeaderElement">
+            <div v-for="(heading, index) in indexTable.headings" v-bind="headerAttributes(heading, index)"
+              data-index-table-sticky-heading="true">
+              <RenderHeadingContent v-bind="heading" :index="index"></RenderHeadingContent>
+            </div>
           </div>
         </div>
-        <div :class="styles.StickyTableHeadings" ref="stickyHeaderElement">
-          <div v-for="(heading, index) in indexTable.headings" v-bind="headerAttributes(heading, index)"
-            data-index-table-sticky-heading="true">
-            <HeaderContent v-bind="heading" :index="index"></HeaderContent>
-          </div>
-        </div>
-      </div>
-    </template>
-  </Sticky>
+        <slot :is-sticky="isSticky"></slot>
+      </template>
+    </Sticky>
+  </div>
 </template>
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import styles from "../IndexTable.module.scss";
 import { classNames } from "@ncpl-polaris/utils";
-import SelectAllActions from "../../SelectAllActions";
-import HeaderContent from "../HeaderContent/HeaderContent.vue";
+import RenderHeadingContent from "../RenderHeadingContent/RenderHeadingContent.vue";
 import Sticky from "../../Sticky";
 import LegacyStack from "../../LegacyStack";
 import Checkbox from "../../Checkbox";
@@ -78,6 +71,7 @@ const stickyHeaderWrapperElement = ref<HTMLElement>();
 
 
 const props = defineProps<{
+  condensed: boolean;
   stickyWrapper: HTMLElement;
   scrollLeft?: number;
 }>()
@@ -85,16 +79,6 @@ const props = defineProps<{
 const firstHeading = computed(() => {
   return indexTable.value.headings[0]
 })
-
-const selectedItemsCountLabel = computed(() => indexTable.value.selected === SELECT_ALL_ITEMS ? `${indexTable.value.itemCount}+` : indexTable.value.selectedItemsCount)
-
-const selectAllActionsClassName = (isSticky: boolean) => {
-  return classNames(
-    styles.SelectAllActionsWrapper,
-    indexTable.value.condensed && styles['StickyTableHeader-condensed'],
-    isSticky && styles['StickyTableHeader-isSticky'],
-  );
-}
 
 const stickyHeaderClassNames = (isSticky: boolean) => {
   return classNames(
@@ -197,7 +181,6 @@ watch(() => [indexTable.value.headings, firstStickyHeaderElement.value], () => {
   tableHeadings.value = getTableHeadingsBySelector(props.stickyWrapper, '[data-index-table-heading]',);
   stickyTableHeadings.value = getTableHeadingsBySelector(stickyHeaderWrapperElement.value, '[data-index-table-sticky-heading]',);
 
-  //console.log(tableHeadings.value, stickyTableHeadings.value)
   resizeTableHeadings();
 }, { flush: 'post', immediate: true })
 

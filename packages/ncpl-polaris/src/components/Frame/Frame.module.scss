@@ -183,6 +183,7 @@ $sidebar-breakpoint: 1200px;
   flex: 1;
   display: flex;
   align-items: stretch;
+  border-inline-end: var(--p-border-width-025) solid var(--p-color-border);
 
   min-width: 0;
   @media #{$p-breakpoints-sm-up} {

@@ -7,7 +7,7 @@
 import { computed, useSlots, h } from 'vue'
 import styles from './FormLayout.module.scss'
 import Item from "./Item"
-import Group from "./group"
+import Group from "./Group"
 import { elementChildren } from '../../utils';
 
 defineOptions({

@@ -1,27 +1,33 @@
 <template>
   <div :class="styles.IndexTable">
     <div :class="tableWrapperClassNames" ref="tableMeasurerRef">
-      <Loading v-if="!shouldShowBulkActions && !condensed" :loading="loading"
-        :resource-name-plural="resourceNamePlural.toLocaleLowerCase()"></Loading>
+      <LoadingMarkup v-if="!condensed" :loading="loading"
+        :resource-name-plural="resourceNamePlural.toLocaleLowerCase()">
+      </LoadingMarkup>
       <template v-if="itemCount > 0">
-        <div :class="classNames(styles.StickyTable, condensed && styles['StickyTable-condensed'])" role="presentation">
-          <StickyHeader v-if="stickyWrapper" :sticky-wrapper="stickyWrapper" :scroll-left="scrollLeft"
-            :set-sticky-header-wrapper-element="stickyHeaderWrapperElement">
-            <template #loading>
-              <Loading :resource-name-plural="resourceNamePlural.toLocaleLowerCase()"></Loading>
-            </template>
-            <template v-if="$slots.sort" #sort>
-              <slot name="sort"></slot>
-            </template>
-          </StickyHeader>
-          <div v-if="shouldShowBulkActions && !condensed" :class="bulkActionClassNames"
-            :style="{ insetBlockStart: isBulkActionsSticky ? undefined : `${bulkActionsAbsoluteOffset}px`, width: `${bulkActionsMaxWidth}px`, insetInlineStart: isBulkActionsSticky ? `${bulkActionsOffsetLeft}px` : undefined }">
-            <BulkActions :select-mode="selectMode" :promoted-actions="promotedActions" :actions="actions"
-              :is-sticky="isBulkActionsSticky" :width="bulkActionsMaxWidth" />
-          </div>
-        </div>
+        <StickyHeaderMarkup v-if="isMounted && stickyWrapper" :condensed="Boolean(condensed)"
+          :sticky-wrapper="stickyWrapper!" :scroll-left="scrollLeft"
+          :set-sticky-header-wrapper-element="stickyHeaderWrapperElement">
+          <template #loading>
+            <LoadingMarkup :resource-name-plural="resourceNamePlural.toLocaleLowerCase()"></LoadingMarkup>
+          </template>
+          <template v-if="$slots.sort" #sort>
+            <slot name="sort"></slot>
+          </template>
+          <template #default="{ isSticky }">
+            <div v-if="shouldShowActions && !condensed"
+              :class="classNames(styles.BulkActionsWrapper, selectMode && styles.BulkActionsWrapperVisible, condensed && styles['StickyTableHeader-condensed'], isSticky && styles['StickyTableHeader-isSticky'],)">
+              <BulkActions :select-mode="selectMode" :promoted-actions="promotedActions" :actions="actions"
+                @toggleAll="handleTogglePage" :paginated-select-all-text="indexTableProvide.paginatedSelectAllText"
+                :paginated-select-All-action="indexTableProvide.paginatedSelectAllAction" :selected="bulkSelectState"
+                :label="i18n.translate('Polaris.IndexTable.selected', { selectedItemsCount: selectedItemsCount })"
+                button-size="micro" />
+            </div>
+          </template>
+        </StickyHeaderMarkup>
         <ul v-if="condensed" :data-selectmode="Boolean(selectMode)"
-          :class="classNames(styles.CondensedList, hasZebraStriping && styles.ZebraStriping)" ref="condensedListElement">
+          :class="classNames(styles.CondensedList, hasZebraStriping && styles.ZebraStriping)"
+          ref="condensedListElement">
           <slot></slot>
         </ul>
         <ScrollContainer v-else :ref="(e: any) => scrollableContainerElement = e?.$el"
@@ -40,31 +46,33 @@
                 </th>
                 <th v-for="(heading, index) in headings" v-bind="headerThAttributes(heading, index)"
                   data-index-table-heading>
-                  <HeaderContent v-bind="heading" :index="index"></HeaderContent>
+                  <RenderHeadingContent v-bind="heading" :index="index"></RenderHeadingContent>
                 </th>
               </tr>
             </thead>
             <tbody :ref="e => setTableBodyRef(e)">
               <template v-for="(row, index) in rows">
-                <slot :index="index" :row="row"></slot>
+                <slot :row="row" :index="index"></slot>
               </template>
-
             </tbody>
           </table>
         </ScrollContainer>
       </template>
       <div v-else :class="styles.EmptySearchResultWrapper">
         <EmptySearchResult v-if="!$slots.emptyState" :title="i18n.translate('Polaris.IndexTable.emptySearchTitle', {
-          resourceNamePlural: resourceNamePlural,
-        })" :description="i18n.translate('Polaris.IndexTable.emptySearchDescription')" with-illustration />
+    resourceNamePlural: resourceNamePlural,
+  })" :description="i18n.translate('Polaris.IndexTable.emptySearchDescription')" with-illustration />
         <slot v-else name="emptyState"></slot>
       </div>
-    </div>
-    <div ref="bulkActionsIntersectionRef" />
-  </div>
-  <div v-if="itemCount > 0" :class="scrollBarWrapperClassNames" ref="scrollContainerElement">
-    <div @scroll="handleScrollBarScroll" :class="styles.ScrollBar" ref="scrollBarElement">
-      <div :class="classNames(tableElement && tableInitialized && styles.ScrollBarContent)" />
+
+      <div v-if="itemCount > 0" :class="scrollBarWrapperClassNames" ref="scrollContainerElement">
+        <div @scroll="handleScrollBarScroll" :class="styles.ScrollBar" ref="scrollBarElement">
+          <div :class="classNames(tableElement && tableInitialized && styles.ScrollBarContent)" />
+        </div>
+      </div>
+      <div :className="styles.PaginationWrapper">
+        <Pagination type="table" v-bind="pagination" />
+      </div>
     </div>
   </div>
 </template>
@@ -75,16 +83,17 @@ import { SELECT_ALL_ITEMS, SelectionType } from './types';
 import EmptySearchResult from "../EmptySearchResult";
 import styles from './IndexTable.module.scss';
 import { useI18n, indexTableContext } from "../context";
-import ScrollContainer from "./ScrollContainer"
-import Loading from "./Loading"
-import StickyHeader from "./StickyHeader"
-import HeaderContent from "./HeaderContent";
+import ScrollContainer from "./ScrollContainer";
+import LoadingMarkup from "./LoadingMarkup/LoadingMarkup.vue";
+import RenderHeadingContent from "./RenderHeadingContent/RenderHeadingContent.vue";
+import StickyHeaderMarkup from "./StickyHeaderMarkup/StickyHeaderMarkup.vue";
 import Checkbox from "../Checkbox";
 import { classNames } from "@ncpl-polaris/utils";
 import BulkActions from "../BulkActions";
 import { useIsBulkActionsSticky } from '../BulkActions/use-is-bulk-actions-sticky';
 import { debounce } from "@ncpl-polaris/utils/debounce";
 import { useEventListener } from "@vueuse/core";
+import Pagination from "../Pagination";
 
 interface TableHeadingRect {
   offsetWidth: number;
@@ -109,9 +118,6 @@ const props = withDefaults(defineProps<IndexTableProps>(), {
   rows: () => [],
 })
 
-
-const itemCount = computed(() => props.rows.length)
-
 const selectedItems = computed(() => props.selected === 'All' ? props.rows.map(i => i.id) : [...props.selected]);
 const selectedItemsCount = computed(() => selectedItems.value.length);
 
@@ -134,9 +140,10 @@ const scrollingWithBar = ref(false);
 const canFitStickyColumn = ref(true);
 const canScrollRight = ref(true);
 const scrollLeft = ref<number | undefined>();
+const itemCount = computed(() => props.rows.length);
 const isSortable = computed(() => props.sortable?.some((value) => value))
 const selectMode = computed(() => selectedItemsCount.value > 0);
-const shouldShowActions = computed(() => !props.condensed || selectMode.value);
+const shouldShowActions = computed(() => !props.condensed || selectedItemsCount.value);
 const promotedActions = computed(() => shouldShowActions.value ? props.promotedBulkActions : []);
 const bulkActionsSelectable = computed(() => Boolean(
   props.promotedBulkActions.length > 0 || props.bulkActions.length > 0,
@@ -180,13 +187,9 @@ const tableClassNames = computed(() => classNames(
 
 const scrollBarWrapperClassNames = computed(() => classNames(
   styles.ScrollBarContainer,
+  props.pagination && styles.ScrollBarContainerWithPagination,
   props.condensed && styles.scrollBarContainerCondensed,
   hideScrollContainer.value && styles.scrollBarContainerHidden,
-))
-
-const bulkActionClassNames = computed(() => classNames(
-  styles.BulkActionsWrapper,
-  isBulkActionsSticky.value && styles.BulkActionsWrapperSticky,
 ))
 
 const bulkActionsAccessibilityLabel = computed(() => {
@@ -238,17 +241,6 @@ const bulkSelectState = computed<boolean | 'indeterminate'>(() => {
   }
   return bulkSelectState;
 })
-
-const {
-  bulkActionsIntersectionRef,
-  tableMeasurerRef,
-  isBulkActionsSticky,
-  bulkActionsAbsoluteOffset,
-  bulkActionsMaxWidth,
-  bulkActionsOffsetLeft,
-  computeTableDimensions,
-} = useIsBulkActionsSticky(selectMode);
-
 
 const headerThAttributes = (heading: IndexTableHeading, index: number) => {
   const { headings, sortable, selectable } = props;
@@ -340,6 +332,12 @@ const resizeTableScrollBar = () => {
   }
 }
 
+const handleTogglePage = () => {
+  selectionChange(
+    SelectionType.Page,
+    Boolean(!bulkSelectState.value || bulkSelectState.value === 'indeterminate'),
+  );
+};
 
 const handleSelectAllItemsInStore = () => {
   selectionChange(props.selected === SELECT_ALL_ITEMS ? SelectionType.Page : SelectionType.All, true);
@@ -539,11 +537,12 @@ indexTableContext.provide(indexTableProvide);
 
 useEventListener(window, 'resize', handleResize)
 
-watch(() => props.rows, computeTableDimensions, { flush: 'post' });
+//watch(() => props.rows, computeTableDimensions, { flush: 'post' });
 
 
 onMounted(() => {
   handleCanScrollRight();
+  isMounted.value = true;
 })
 
 watch(() => [props.condensed, tableInitialized.value, isMounted.value], () => {

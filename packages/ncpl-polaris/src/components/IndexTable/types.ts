@@ -1,7 +1,8 @@
 import type { NonEmptyArray } from "../types";
 import type { Component } from "vue";
 import type { Width } from '../Tooltip';
-import { BulkActionsProps } from "../BulkActions";
+import type { BulkActionsProps } from "../BulkActions";
+import type { PaginationProps } from "../Pagination";
 
 
 export type IndexTableSortDirection = 'ascending' | 'descending';
@@ -105,6 +106,8 @@ interface IndexTableSortToggleLabels {
     [key: number]: IndexTableSortToggleLabel;
 }
 
+export type IndexTablePaginationProps = Omit<PaginationProps, 'type'>;
+
 export interface IndexTableProps extends IndexProviderProps {
     headings: NonEmptyArray<IndexTableHeading>;
     promotedBulkActions?: BulkActionsProps['promotedActions'];
@@ -133,4 +136,6 @@ export interface IndexTableProps extends IndexProviderProps {
     //itemCount: number;
     selected?: string[] | 'All';
     rows?: { id: string, [key: string]: any }[];
+    pagination?: IndexTablePaginationProps;
+    itemCount?: number;
 }

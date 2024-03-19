@@ -142,7 +142,7 @@ export const linkContext = {
 
 //FrameContext
 import type { FrameLogo } from "@ncpl-polaris/components/Frame/Frame";
-import type { ToastMessage, ToastID } from "@ncpl-polaris/components/Frame/ToastManager/ToastManager";
+import type { ToastMessage, ToastID } from "@ncpl-polaris/components/Frame/ToastManager/types";
 
 export type FrameContext = {
   logo: Ref<FrameLogo | undefined>;
