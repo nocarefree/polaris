@@ -70,8 +70,9 @@
           <div :class="classNames(tableElement && tableInitialized && styles.ScrollBarContent)" />
         </div>
       </div>
-      <div :className="styles.PaginationWrapper">
-        <Pagination type="table" v-bind="pagination" />
+      <div v-if="pagination" :className="styles.PaginationWrapper">
+        <Pagination type="table" :has-next="pagination.hasNext" :has-previous="pagination.hasPrevious"
+          @next="pagination.onNext" @previous="pagination.onPrevious" />
       </div>
     </div>
   </div>

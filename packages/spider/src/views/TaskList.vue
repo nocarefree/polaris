@@ -1,6 +1,6 @@
 <template>
   <NpLoading v-if="tasksLoading"></NpLoading>
-  <SkeletonList v-if="tasksLoading" />
+  <SkeletonList v-if="firstLoading" />
   <NpPage v-else title="任务" full-width>
     <template #primaryAction>
       <NpButton variant="primary" @click="router.push('/tasks/new')">添加任务</NpButton>
@@ -11,20 +11,16 @@
           v-model:sort-selected="sortSelected" :sort-options="sortOptions" v-model:query-value="queryValue"
           :filters="filters" can-create-new-view>
         </NpIndexFilters>
-        <NpIndexTable 
-          :resource-name="resourceName" :has-more-items="true"
+        <NpIndexTable :resource-name="resourceName" :has-more-items="true"
           :headings="[{ title: 'ID' }, { title: '任务名' }, { title: '抓取数量' }, { title: '产品数量' }, { title: '状态' }, { title: '状态' }]"
-          :rows="result.tasks.data" 
-          :pagination="{ hasNext: true, onNext: () => { } }"
-          :promoted-bulk-actions="promotedBulkActions"
-          :bulk-actions="bulkActions"
-          v-model:selected="selectedResources">
+          :rows="result.tasks.data" :pagination="taskPagination" :promoted-bulk-actions="promotedBulkActions"
+          :bulk-actions="bulkActions" v-model:selected="selectedResources">
           <template #default="{ index, row: task }">
             <NpIndexTableRow :id="task.id" :selected="selectedResources == 'All' || selectedResources.includes(task.id)"
               :position="index">
               <NpIndexTableCell>
                 <NpText variant="bodyMd" font-weight="bold" as="span">
-                  <NpButton variant="plain" @click="router.push(`/task/${task.id}`)">#{{ task.id }}</NpButton>
+                  <NpButton variant="plain" @click="router.push(`/ task / ${task.id} `)">#{{ task.id }}</NpButton>
                 </NpText>
               </NpIndexTableCell>
               <NpIndexTableCell>
@@ -57,7 +53,7 @@
               <NpIndexTableCell>
                 <NpButtonGroup>
                   <NpButton :disabled="task.status == 'RUNNING' || task.loading"
-                    @click="router.push(`/webs/${task.map.id}/`)">设置规则
+                    @click="router.push(`/ webs / ${task.map.id} /`)">设置规则
                   </NpButton>
                   <NpButton :pressed="task.status == 'RUNNING'" :loading="task.loading" @click="onToggleTask(task)">
                     {{ task.status == 'RUNNING' ? '暂停运行' : `开始运行` }}
@@ -81,7 +77,7 @@
   </NpPage>
 </template>
 <script setup lang="ts">
-import { ref, onUnmounted, watch } from "vue";
+import { ref, onUnmounted, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useQuery } from '@vue/apollo-composable';
 import ExportButton from "../components/Task/ExportButton.vue";
@@ -92,6 +88,7 @@ import { gql } from "graphql-tag";
 
 const router = useRouter();
 const filters = ref([])
+const firstLoading = ref(false);
 
 const resourceName = {
   singular: 'tasks',
@@ -149,17 +146,7 @@ const tasksVariables = ref({
   orderBy: [{ column: 'ID', order: 'DESC' }],
 })
 
-watch(() => tasksVariables, () => {
-  tasksVariables.value.orderBy = sortSelected.value.map((i: string) => {
-    const [column, order] = i.split(' ');
-    return {
-      column: column.toUpperCase(),
-      order: order.toUpperCase(),
-    }
-  })
-})
-
-const { restart, loading: tasksLoading, result } = useQuery(gql`query GetTasks( $page:Int, $orderBy: [QueryTasksOrderByOrderByClause!]){
+const { restart, loading: tasksLoading, result, onResult } = useQuery(gql`query GetTasks( $page:Int, $orderBy: [QueryTasksOrderByOrderByClause!]){
     tasks( page: $page, orderBy: $orderBy ){
       data{
         id
@@ -177,9 +164,35 @@ const { restart, loading: tasksLoading, result } = useQuery(gql`query GetTasks( 
       paginatorInfo{
         total
         currentPage
+        hasMorePages
+        firstItem
       }
     }
   }`, tasksVariables)
+
+const taskPagination = computed(() => {
+  const { tasks: { paginatorInfo } } = result.value
+  return {
+    hasNext: paginatorInfo.hasMorePages,
+    onNext: () => tasksVariables.value.page += 1,
+    hasPrevious: paginatorInfo.currentPage > 1,
+    onPrevious: () => tasksVariables.value.page -= 1,
+  }
+});
+
+onResult((queryResult) => {
+  firstLoading.value = false;
+})
+
+watch(() => sortSelected, () => {
+  tasksVariables.value.orderBy = sortSelected.value.map((i: string) => {
+    const [column, order] = i.split(' ');
+    return {
+      column: column.toUpperCase(),
+      order: order.toUpperCase(),
+    }
+  })
+})
 
 
 

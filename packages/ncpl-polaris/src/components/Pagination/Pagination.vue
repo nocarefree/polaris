@@ -79,7 +79,7 @@ const constructedPrevious = computed(() => {
     icon: ChevronLeftMinor,
     accessibilityLabel: previousLabel.value,
     url: previousURL,
-    onClick: emit('previous'),
+    onClick: () => emit('previous'),
     disabled: !hasPrevious,
     id: "previousURL"
   }, { default: null })
@@ -93,7 +93,7 @@ const constructedNext = computed(() => {
     icon: ChevronRightMinor,
     accessibilityLabel: nextLabel.value,
     url: nextURL,
-    onClick: emit('next'),
+    onClick: () => emit('next'),
     disabled: !hasNext,
     id: "previousURL",
   }, { default: null })

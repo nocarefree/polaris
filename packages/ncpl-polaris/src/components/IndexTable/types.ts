@@ -136,6 +136,6 @@ export interface IndexTableProps extends IndexProviderProps {
     //itemCount: number;
     selected?: string[] | 'All';
     rows?: { id: string, [key: string]: any }[];
-    pagination?: IndexTablePaginationProps;
+    pagination?: IndexTablePaginationProps & { onNext?: () => void; onPrevious?: () => void };
     itemCount?: number;
 }

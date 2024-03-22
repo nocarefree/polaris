@@ -34,7 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from "vue";
 import type { ButtonProps } from "./Button";
 import type { TextProps } from '../Text';
 
@@ -54,9 +53,6 @@ import {
 } from "@ncpl-polaris/utils";
 
 import { useI18n } from "../context";
-
-
-const slots = useSlots();
 
 
 const props = withDefaults(defineProps<ButtonProps>(), {
