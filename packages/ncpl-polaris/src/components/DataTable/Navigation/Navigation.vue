@@ -1,12 +1,12 @@
 <template>
     <div :class="styles.Navigation" :ref="(e: any) => setRef && setRef(e)">
-        <Button variant="tertiary" :icon="ChevronLeftMinor" :disabled="isScrolledFarthestLeft"
+        <Button variant="tertiary" :icon="ChevronLeftIcon" :disabled="isScrolledFarthestLeft"
             :accessibility-label="leftA11yLabel" @click="$emit('navigateTableLeft')" />
         <template v-for="( column, index ) in  columnVisibilityData ">
-            <div v-if="index < fixedFirstColumns" :class="classNames(styles.Pip, column.isVisible && styles['Pip-visible'])"
-                :key="`pip-${index}`" />
+            <div v-if="index < fixedFirstColumns"
+                :class="classNames(styles.Pip, column.isVisible && styles['Pip-visible'])" :key="`pip-${index}`" />
         </template>
-        <Button variant="tertiary" :icon="ChevronRightMinor" :disabled="isScrolledFarthestRight"
+        <Button variant="tertiary" :icon="ChevronRightIcon" :disabled="isScrolledFarthestRight"
             :accessibility-label="rightA11yLabel" @click="$emit('navigateTableRight')" />
     </div>
 </template>
@@ -17,7 +17,7 @@ import Button from "../../Button";
 import styles from "../DataTable.module.scss";
 import type { NavigationProps } from "./types";
 import { classNames } from "@ncpl-polaris/utils";
-import { ChevronLeftMinor, ChevronRightMinor } from "@ncpl/ncpl-icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@ncpl/ncpl-icons";
 
 defineProps<NavigationProps>()
 defineEmits(['navigateTableLeft', 'navigateTableRight'])

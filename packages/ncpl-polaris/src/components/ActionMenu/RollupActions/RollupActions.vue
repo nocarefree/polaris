@@ -3,8 +3,8 @@
     @close="toggleRollupOpen" hide-on-print>
     <template #activator>
       <div :class="styles.RollupActivator">
-        <Button outline :icon="HorizontalDotsMinor" :accessibility-label="accessibilityLabel ||
-          i18n.translate('Polaris.ActionMenu.RollupActions.rollupButton')" @click="toggleRollupOpen" />
+        <Button outline :icon="MenuHorizontalIcon" :accessibility-label="accessibilityLabel ||
+    i18n.translate('Polaris.ActionMenu.RollupActions.rollupButton')" @click="toggleRollupOpen" />
       </div>
     </template>
     <ActionList :items="items" :sections="sections" @actionAnyItem="toggleRollupOpen" />
@@ -18,7 +18,7 @@ import Popover from "@ncpl-polaris/components/Popover"
 import Button from "@ncpl-polaris/components/Button"
 import ActionList from "@ncpl-polaris/components/ActionList"
 import { useI18n } from '../../context';
-import { HorizontalDotsMinor } from "@ncpl/ncpl-icons"
+import { MenuHorizontalIcon } from "@ncpl/ncpl-icons"
 
 
 withDefaults(defineProps<RollupActionsProps>(), { items: () => [], sections: () => [] })

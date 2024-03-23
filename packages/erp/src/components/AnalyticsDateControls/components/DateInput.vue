@@ -4,17 +4,18 @@
         @modelValue="onChange" @focus="onFocus" @blur="onBlur"></NpTextField>
 </template>
 <script setup lang="ts">
-import { inject, ref, watch, computed } from "vue";
-import { type I18n, NpTextField } from "@ncpl/ncpl-polaris";
-import { fAe } from "../../../utils/date-format";
+import { ref, watch, computed } from "vue";
+import { NpTextField } from "@ncpl/ncpl-polaris";
+import { stringToDate } from "../../../utils/date-format";
+import { useCommon } from "../../context";
 
 const formatDate = (...e: any) => { }
 
 function isDateString(t?: string) {
-    return t && fAe(t) != null
+    return t && stringToDate(t) != null
 }
 
-const i18n = inject<I18n>('AnalyticsDateControls');
+
 const emit = defineEmits(['change'])
 
 const props = defineProps<{
@@ -24,12 +25,13 @@ const props = defineProps<{
     disableDatesAfter: Date;
 }>()
 
+const { i18n } = useCommon();
 const focused = ref(false)
 const dateValue = ref(props.value)
 const showValue = computed(() => {
     if (!dateValue.value || focused.value)
         return '';
-    const u = fAe(dateValue.value);
+    const u = stringToDate(dateValue.value);
     return u == null ? dateValue.value : formatDate(u, {
         day: "numeric",
         month: props.shouldDisplayAbbreviatedMonth ? "short" : "long",
@@ -43,7 +45,7 @@ const onFocus = () => {
 };
 
 const onBlur = () => {
-    dateValue.value = dateValue.value || !isDateString(dateValue.value) || props.disableDatesAfter && new Date(dateValue.value) > props.disableDatesAfter ? props.value : dateValue.value,
+    dateValue.value = !dateValue.value || !isDateString(dateValue.value) || props.disableDatesAfter && new Date(dateValue.value) > props.disableDatesAfter ? props.value : dateValue.value,
         focused.value = false
 };
 

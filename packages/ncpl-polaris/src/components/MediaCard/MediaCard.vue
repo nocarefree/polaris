@@ -19,18 +19,18 @@
                     preferredAlignment="left" preferred-position="below">
                     <template #activator>
                       <InlineStack block-align="center">
-                        <Button :icon="HorizontalDotsMinor" @click="togglePopoverActive" size="slim"
+                        <Button :icon="MenuHorizontalIcon" @click="togglePopoverActive" size="slim"
                           accessibility-lLabel="i18n.translate('Polaris.MediaCard.popoverButton')" variant="tertiary" />
                       </InlineStack>
                     </template>
                     <ActionList :items="popoverActions" @actionAnyItem="togglePopoverActive" />
                   </Popover>
-                  <Button v-if="dismiss" :icon="CancelMinor" @click="$emit('dismiss')" size="slim"
+                  <Button v-if="dismiss" :icon="XIcon" @click="$emit('dismiss')" size="slim"
                     :accessibility-label="i18n.translate('Polaris.MediaCard.dismissButton')" variant="tertiary" />
                 </InlineStack>
               </Box>
             </InlineStack>
-            <p :class="styles.Description">{{description}}</p>
+            <p :class="styles.Description">{{ description }}</p>
             <div v-if="primaryAction || secondaryAction" :class="actionClassName">
               <ButtonGroup>
                 <div v-if="primaryAction">
@@ -63,7 +63,7 @@ import ActionList from "../ActionList";
 import { useI18n } from "../context"
 import { classNames } from "@ncpl-polaris/utils";
 import { buttonFrom } from "../Button/utils"
-import { HorizontalDotsMinor, CancelMinor } from "@ncpl/ncpl-icons";
+import { XIcon, MenuHorizontalIcon } from "@ncpl/ncpl-icons";
 
 defineOptions({
   name: 'NpMediaCard',

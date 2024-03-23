@@ -8,7 +8,7 @@ import {
   InfoIcon,
   AlertTriangleIcon,
   CheckIcon,
-} from '@shopify/polaris-icons';
+} from '@ncpl/ncpl-icons';
 import { ref } from 'vue';
 
 import type { IconSource } from '../types';

@@ -1,10 +1,10 @@
 <template>
-  <Popover :active="active && !disabled" autofocus-target="first-node" @close="active = false" preferred-alignment="right"
-    fluid-content>
+  <Popover :active="active && !disabled" autofocus-target="first-node" @close="active = false"
+    preferred-alignment="right" fluid-content>
     <template #activator>
       <Tooltip :content="i18n.translate('Polaris.IndexFilters.SortButton.tooltip')" preferred-position="above"
         :hover-delay="400">
-        <Button size="slim" :icon="SortMinor" @click="active = !active" :disabled="disabled"
+        <Button size="slim" :icon="SortIcon" @click="active = !active" :disabled="disabled"
           :accessibility-label="i18n.translate('Polaris.IndexFilters.SortButton.ariaLabel')" />
       </Tooltip>
     </template>
@@ -37,7 +37,7 @@ import type { ChoiceListProps } from "../../ChoiceList";
 import { SortButtonDirection } from './SortButton';
 import DirectionButton from "./DirectionButton"
 import { useI18n } from "../../context"
-import { SortMinor } from "@ncpl/ncpl-icons"
+import { SortIcon } from "@ncpl/ncpl-icons"
 
 defineOptions({
   name: 'NpIndexFiltersSortButton',

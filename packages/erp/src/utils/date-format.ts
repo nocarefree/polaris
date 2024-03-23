@@ -113,7 +113,7 @@ const Sie:{[key:string]:number} = {
     Saturday: 5,
     Sunday: 6
 };
-function tAe(e) {
+function tAe(e:string) {
     return Object.keys(Sie).some(t => t === e)
 }
 function nAe(e: string) {
@@ -321,7 +321,7 @@ function dateStringParse(e: string) {
         timeZoneMinute: m
     }
 }
-function fAe(e: string, t?: string) {
+function stringToDate(e: string, t?: string) {
     const n = dateStringParse(e);
     if (n == null)
         return null;
@@ -354,4 +354,4 @@ function fAe(e: string, t?: string) {
     }
 }
 
-export { useDateFun, fAe, Fa, getTimeZoneOffset, getUTCDate, aAe, DV, isEqualDay, isEqualYear };
+export { useDateFun, stringToDate, Fa, getTimeZoneOffset, getUTCDate, aAe, DV, isEqualDay, isEqualYear, Zc };

@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { NpActionList, NpTopBarSearchField, NpFrame, NpNavigation, NpNavigationSection, NpAppProvider, NpTopBar, NpTopBarUserMenu } from "@ncpl/ncpl-polaris"
-import { TemplateMinor, OrdersFilledMinor } from "@ncpl/ncpl-icons"
+import { HomeIcon, ThemeTemplateIcon, OrderFilledIcon } from "@ncpl/ncpl-icons"
 import zhCn from "@ncpl/ncpl-polaris/locales/zh-CN.json"
 
 import LogoColor from './assets/jaded-pixel-logo-color.svg';
@@ -25,9 +25,14 @@ const logo = {
 
 const navItems = [
   {
+    url: '/',
+    label: '主页',
+    icon: HomeIcon,
+  },
+  {
     url: '/tasks',
     label: '任务',
-    icon: OrdersFilledMinor,
+    icon: OrderFilledIcon,
     subNavigationItems: [
       { url: '/export_logs', label: '导出日志' },
     ]
@@ -36,7 +41,7 @@ const navItems = [
     url: '#templates',
     excludePaths: ['#'],
     label: '模板',
-    icon: TemplateMinor,
+    icon: ThemeTemplateIcon,
   },
 ];
 

@@ -26,10 +26,10 @@
                   @change="handleLargerSelectionArea">
                   <UseId>
                     <template #default="{ id }">
-                      <Checkbox :id="id" :label="name || accessibilityLabel || i18n.translate('Polaris.Common.checkbox')"
-                        label-hidden :checked="selected" :disabled="context.loading" bleed-inline-start="300"
-                        bleed-inline-end="300" bleed-blockStart="300" bleed-block-end="300" fill
-                        :label-class-name="styles.CheckboxLabel" />
+                      <Checkbox :id="id"
+                        :label="name || accessibilityLabel || i18n.translate('Polaris.Common.checkbox')" label-hidden
+                        :checked="selected" :disabled="context.loading" bleed-inline-start="300" bleed-inline-end="300"
+                        bleed-blockStart="300" bleed-block-end="300" fill :label-class-name="styles.CheckboxLabel" />
                     </template>
                   </UseId>
                 </div>
@@ -52,11 +52,11 @@
                   <Popover @close="handleCloseRequest" :active="state.actionsMenuVisible">
                     <template #activator>
                       <NpButton :accessibility-label="name
-                        ? i18n.translate('Polaris.ResourceList.Item.actionsDropdownLabel', {
-                          accessibilityLabel: name,
-                        })
-                        : i18n.translate('Polaris.ResourceList.Item.actionsDropdown')" @click="handleActionsClick"
-                        variant="tertiary" :icon="HorizontalDotsMinor" />
+      ? i18n.translate('Polaris.ResourceList.Item.actionsDropdownLabel', {
+        accessibilityLabel: name,
+      })
+      : i18n.translate('Polaris.ResourceList.Item.actionsDropdown')" @click="handleActionsClick"
+                        variant="tertiary" :icon="MenuHorizontalIcon" />
                     </template>
                     <ActionList :items="shortcutActions" />
                   </Popover>
@@ -95,7 +95,7 @@ import Popover from "../Popover";
 import NpButton from "../Button";
 import ActionList from "../ActionList";
 import { buttonsFrom } from "../Button/utils";
-import { HorizontalDotsMinor } from "@ncpl/ncpl-icons";
+import { MenuHorizontalIcon } from "@ncpl/ncpl-icons";
 
 
 defineOptions({

@@ -1,5 +1,5 @@
-import { useDateFun, fAe as q, type DateFunType, aAe as w, isEqualDay,isEqualYear } from "../../utils/date-format";
-import { formatDateToString as z } from "./format";
+import { useDateFun, stringToDate as q, type DateFunType, aAe as w, isEqualDay, isEqualYear, Zc } from "../../../utils/date-format";
+import { formatDateToString as z } from "../format";
 
 interface RangeDateOptions {
     title?: string;
@@ -26,27 +26,19 @@ interface QuantityUnit {
     unit: string;
 }
 
-interface SinceUntil {
-    since: string;
-    unit: string;
-}
-
 interface DatePeriod {
     since: Date;
     until: Date;
+    unit?: "ms" | "h" | "d";
+    timeZone?: string;
 }
 
-
-interface DatePeriodUnit {
-    since: Date;
-    until: Date;
-    unit: "ms" | "h" | "d";
-}
 
 interface QueryPeriod {
     since: string;
     until: string;
 }
+type QuarterType = 1 | 2 | 3 | 4;
 
 var C = Object.defineProperty;
 var b = (e: any, t: any, n: any) => t in e ? C(e, t, {
@@ -55,7 +47,7 @@ var b = (e: any, t: any, n: any) => t in e ? C(e, t, {
     writable: !0,
     value: n
 }) : e[t] = n;
-var g = (e: any, t: any, n?: any) => (b(e, typeof t != "symbol" ? t + "" : t, n), n);
+export var g = (e: any, t: any, n?: any) => (b(e, typeof t != "symbol" ? t + "" : t, n), n);
 
 
 const Y = ["ms", "s", "m", "h", "d", "w", "m", "q", "y"]
@@ -85,7 +77,7 @@ function getHumanizedUnit(e: any): QuantityUnit | null {
 function getDateFromUTC({ year, month = 1, day = 1, hour = 0, minute = 0, second = 0, millisecond = 0 }: DateObject) {
     return new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond))
 }
-function getAgoDateByUnit(e: Date, { quantity: t, unit: n }: QuantityUnit, s: string) {
+function getAgoDateByUnit(e: Date, { quantity: t, unit: n }: QuantityUnit, s?: string) {
     switch (n) {
         case "d":
             return getAgoDay(e, t, s);
@@ -101,7 +93,7 @@ function getAgoDateByUnit(e: Date, { quantity: t, unit: n }: QuantityUnit, s: st
             throw new RangeError(`Unhandled relative time unit ${n}`)
     }
 }
-function p(e: number, t: number, n: number, s: number, a: number, i: number, o: number, r: string) {
+function p(e: number, t: number, n: number, s: number, a: number, i: number, o: number, r?: string) {
     const u = getDateFromUTC({
         year: e,
         month: t,
@@ -113,25 +105,25 @@ function p(e: number, t: number, n: number, s: number, a: number, i: number, o: 
     });
     return w(u, r, "UTC")
 }
-function getAgoDay(e: Date, t: number, n: string) {
-    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, n);
-    return p(s(), a(), i() - t, o(), r(), u(), e.getUTCMilliseconds(), n)
+function getAgoDay(e: Date, offset: number, timeZone?: string) {
+    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, timeZone);
+    return p(s(), a(), i() - offset, o(), r(), u(), e.getUTCMilliseconds(), timeZone)
 }
-function getAgoMonth(e: Date, t: number, n: string) {
-    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, n)
-        , c = p(s(), a() - t, i(), o(), r(), u(), e.getUTCMilliseconds(), n)
-        , h = t >= a() ? a() - t + 12 : a() - t
-        , d = useDateFun(c, n);
-    return d.month() !== h ? p(d.year(), h + 1, 0, o(), r(), u(), e.getUTCMilliseconds(), n) : c
+function getAgoMonth(e: Date, offset: number, timeZone?: string) {
+    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, timeZone)
+        , c = p(s(), a() - offset, i(), o(), r(), u(), e.getUTCMilliseconds(), timeZone)
+        , h = offset >= a() ? a() - offset + 12 : a() - offset
+        , d = useDateFun(c, timeZone);
+    return d.month() !== h ? p(d.year(), h + 1, 0, o(), r(), u(), e.getUTCMilliseconds(), timeZone) : c
 }
-function getAgoQuarter(e: Date, t: number, n: string) {
-    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, n);
-    return p(s(), a() - t * 3, i(), o(), r(), u(), e.getUTCMilliseconds(), n)
+function getAgoQuarter(e: Date, offset: number, timeZone?: string) {
+    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, timeZone);
+    return p(s(), a() - offset * 3, i(), o(), r(), u(), e.getUTCMilliseconds(), timeZone)
 }
-function getAgoYear(e: Date, t: number, n: string) {
-    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, n)
-        , c = p(s() - t, a(), i(), o(), r(), u(), e.getUTCMilliseconds(), n);
-    return useDateFun(c, n).month() !== a() ? p(s() - t, a() + 1, 0, o(), r(), u(), e.getUTCMilliseconds(), n) : c
+function getAgoYear(e: Date, offset: number, timeZone?: string) {
+    const { year: s, month: a, day: i, hour: o, minute: r, second: u } = useDateFun(e, timeZone)
+        , c = p(s() - offset, a(), i(), o(), r(), u(), e.getUTCMilliseconds(), timeZone);
+    return useDateFun(c, timeZone).month() !== a() ? p(s() - offset, a() + 1, 0, o(), r(), u(), e.getUTCMilliseconds(), timeZone) : c
 }
 function F(e: string) {
     const t = z(new Date, "YYYY-MM-DD", e);
@@ -231,61 +223,55 @@ function getOffsetUntilDateByQuarter(e: number, t: number) {
 function getOffsetUntilDateByYear(e: number) {
     return getOffsetUntilDateByMonth(e, 12)
 }
-const m = Intl.DateTimeFormat().resolvedOptions().timeZone
-    , V = {
-        second: 1e3,
-        minute: 6e4,
-        hour: 36e5,
-        day: 864e5,
-        week: 6048e5,
-        month: 2628e6,
-        year: 3154e7
-    }
-    , Rt = "none"
-    , Z = [{
-        minRange: 0,
-        maxRange: 1,
-        dimensions: ["hour"]
-    }, {
-        minRange: 2,
-        maxRange: 6,
-        dimensions: ["hour", "day", "hour_of_day"]
-    }, {
-        minRange: 7,
-        maxRange: 13,
-        dimensions: ["hour", "day", "week", "hour_of_day"]
-    }, {
-        minRange: 14,
-        maxRange: 27,
-        dimensions: ["hour", "day", "week", "hour_of_day", "day_of_week"]
-    }, {
-        minRange: 28,
-        maxRange: 89,
-        dimensions: ["hour", "day", "week", "month", "hour_of_day", "day_of_week"]
-    }, {
-        minRange: 90,
-        maxRange: 364,
-        dimensions: ["day", "week", "month", "quarter", "hour_of_day", "day_of_week"]
-    }, {
-        minRange: 365,
-        maxRange: 729,
-        dimensions: ["day", "week", "month", "quarter", "year", "hour_of_day", "day_of_week"]
-    }, {
-        minRange: 730,
-        maxRange: 1 / 0,
-        dimensions: ["day", "week", "month", "quarter", "year", "hour_of_day", "day_of_week", "month_of_year"]
-    }]
-    , tt = ["hour", "day", "week", "month"]
-    , E = {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-    }
-    , et = {
-        day: "numeric",
-        month: "short"
-    };
-type QuarterType = 1 | 2 | 3 | 4;
+const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone, V = {
+    second: 1e3,
+    minute: 6e4,
+    hour: 36e5,
+    day: 864e5,
+    week: 6048e5,
+    month: 2628e6,
+    year: 3154e7
+}, Z = [{
+    minRange: 0,
+    maxRange: 1,
+    dimensions: ["hour"]
+}, {
+    minRange: 2,
+    maxRange: 6,
+    dimensions: ["hour", "day", "hour_of_day"]
+}, {
+    minRange: 7,
+    maxRange: 13,
+    dimensions: ["hour", "day", "week", "hour_of_day"]
+}, {
+    minRange: 14,
+    maxRange: 27,
+    dimensions: ["hour", "day", "week", "hour_of_day", "day_of_week"]
+}, {
+    minRange: 28,
+    maxRange: 89,
+    dimensions: ["hour", "day", "week", "month", "hour_of_day", "day_of_week"]
+}, {
+    minRange: 90,
+    maxRange: 364,
+    dimensions: ["day", "week", "month", "quarter", "hour_of_day", "day_of_week"]
+}, {
+    minRange: 365,
+    maxRange: 729,
+    dimensions: ["day", "week", "month", "quarter", "year", "hour_of_day", "day_of_week"]
+}, {
+    minRange: 730,
+    maxRange: 1 / 0,
+    dimensions: ["day", "week", "month", "quarter", "year", "hour_of_day", "day_of_week", "month_of_year"]
+}], tt = ["hour", "day", "week", "month"], E = {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+}, et = {
+    day: "numeric",
+    month: "short"
+};
+
 class HumanizedDate {
     shopTimezone: string;
     value: Date;
@@ -300,7 +286,7 @@ class HumanizedDate {
             this.relativeDateParts = a);
         const i = t instanceof Date ? t : stringToDate({
             date: t,
-            browserTimezone: m,
+            browserTimezone,
             shopTimezone: this.shopTimezone
         });
         if (s == null)
@@ -309,10 +295,10 @@ class HumanizedDate {
             const { unit: o } = a ?? {
                 unit: "d"
             }
-                , r = s === "since" ? W(i, o, m) : X(i, o, m);
+                , r = s === "since" ? W(i, o, browserTimezone) : X(i, o, browserTimezone);
             this.value = r
         }
-        this.parts = useDateFun(this.value, m)
+        this.parts = useDateFun(this.value, browserTimezone)
     }
     get year(): number {
         return this.parts.year()
@@ -362,7 +348,7 @@ class HumanizedDate {
         const s = getAgoDateByUnit(this.value, {
             quantity: t,
             unit: n
-        }, m);
+        }, browserTimezone);
         return new HumanizedDate(s, this.shopTimezone)
     }
     isToday() {
@@ -373,7 +359,7 @@ class HumanizedDate {
         return ["today", "-0d", "0d"].includes(String(this.relativeDate))
     }
 }
-function _({ since: e, until: t, unit: n }: DatePeriodUnit) {
+function _({ since: e, until: t, unit: n }: DatePeriod) {
     const s = t.valueOf() - e.valueOf() + 1
         , a = s / 1e3 / 60 / 60
         , i = Math.round(a / 24);
@@ -413,25 +399,34 @@ function it({ since: e, until: t }: DatePeriod) {
         , a = Z.find(i => s >= i.minRange && s <= i.maxRange);
     return a == null ? tt : a.dimensions
 }
-function rt({ since: e, until: t }: DatePeriod, n, s) {
-    let a = n.formatDate(e, {
+function rt({ since: e, until: t }: DatePeriod, n?: any, s?: string) {
+
+    const formatDate = n?.formatDate || Zc;
+    const translate = n?.translate || ((type: string, o: {
+        startDate: string;
+        endDate: string;
+    }) => {
+        return `${o.startDate} - ${o.endDate}`;
+    });
+
+
+    let a = formatDate(e, {
         timeZone: s,
         ...E
     });
-    const i = n.formatDate(t, {
+    const i = formatDate(t, {
         timeZone: s,
         ...E
     });
-    return isEqualDay(e, t, s) ? a : (isEqualYear(e, t, s) && (a = n.formatDate(e, {
+    return isEqualDay(e, t, s) ? a : (isEqualYear(e, t, s) && (a = formatDate(e, {
         timeZone: s,
         ...et
-    })),
-        n.translate("date.range", {
-            startDate: a,
-            endDate: i
-        }))
+    })), translate("date.range", {
+        startDate: a,
+        endDate: i
+    }))
 }
-function ot({ since: e, until: t, timeZone: n }) {
+function ot({ since: e, until: t, timeZone: n }: DatePeriod) {
     const s = _({
         since: e,
         until: t,
@@ -450,7 +445,7 @@ function ot({ since: e, until: t, timeZone: n }) {
         until: i
     }
 }
-function ut({ since: e, until: t, timeZone: n }: DatePeriod & { timeZone: string }) {
+function ut({ since: e, until: t, timeZone: n }: DatePeriod) {
     return {
         since: getAgoDateByUnit(e, {
             quantity: 1,
@@ -463,7 +458,7 @@ function ut({ since: e, until: t, timeZone: n }: DatePeriod & { timeZone: string
     }
 }
 
-interface RangeDateType {
+export interface RangeDateType {
     title?: string;
     alias: string;
     since: HumanizedDate;
@@ -483,7 +478,7 @@ interface RangeDateType {
     getCompareToIdentifier: () => string;
 }
 const ct = ["today", "yesterday", "previousPeriod", "previousYear"];
-const rangeDateFunction:any = {
+const rangeDateFunction: any = {
     getTimeDimensions() {
         return it({
             since: this.since.value,
@@ -496,16 +491,16 @@ const rangeDateFunction:any = {
             until: this.until.value
         })
     },
-    toHumanizedString(e) {
+    toHumanizedString(e?: any) {
         return rt({
             since: this.since.value,
             until: this.until.value
-        }, e, m)
+        }, e, browserTimezone)
     },
     isEqual(e: RangeDateType) {
         return isEqualDay(this.since.value, e.since.value) && isEqualDay(this.until.value, e.until.value)
     },
-    getComparisonRange(e) {
+    getComparisonRange(e: { type: string; title: string; }) {
         const { type: t, title: n } = e
             , s = {
                 title: n,
@@ -550,7 +545,7 @@ const rangeDateFunction:any = {
         const o = {
             since: this.since.value,
             until: this.until.value,
-            timeZone: m
+            timeZone: browserTimezone
         }
             , { since: r, until: u } = t === "previousPeriod" ? ot(o) : ut(o);
         return rangeDate({
@@ -559,7 +554,7 @@ const rangeDateFunction:any = {
             until: u
         })
     },
-    clampUntil(e:Date) {
+    clampUntil(e: Date) {
         return this.until.value <= e ? this : rangeDate({
             title: this.title,
             alias: this.alias,
@@ -611,13 +606,13 @@ function rangeDate({ since: e, until: t, timeZone: n, title: s, alias: a, compar
     };
     return Object.assign(Object.create(rangeDateFunction), o)
 }
-function Mt(e, t) {
+function rangeStringDate(e: string, timeZone: string) {
     try {
         const { since: n, until: s, alias: a, comparisonOf: i } = JSON.parse(e);
         return rangeDate({
             since: n,
             until: s,
-            timeZone: t,
+            timeZone,
             alias: a,
             comparisonOf: i
         })
@@ -628,7 +623,7 @@ function Mt(e, t) {
 function isRangeDateType(e: any) {
     return Object.getPrototypeOf(e) === rangeDateFunction
 }
-const lt = "_Message_1vu2x_1"
+export const lt = "_Message_1vu2x_1"
     , ht = {
         Message: lt
     }
@@ -652,4 +647,4 @@ const lt = "_Message_1vu2x_1"
         "zh-CN": ft
     };
 
-export { f as A, m as B, Rt as T, rangeDate, Mt as d, St as i, HumanizedDate, isRangeDateType };
+export { browserTimezone, rangeDate, rangeStringDate, HumanizedDate, isRangeDateType };

@@ -8,7 +8,7 @@
     </div>
     <div :class="contentsClassName">
       <div :class="styles.MessageContainer">
-        <Icon :source="RiskMajor" />
+        <Icon :source="AlertTriangleIcon" />
         <Text v-if="message" as="h2" variant="headingMd" tone="text-inverse" truncate>{{ message }}</Text>
       </div>
 
@@ -43,7 +43,7 @@ import Icon from "../../Icon"
 import DiscardConfirmationModal from "./DiscardConfirmationModal/DiscardConfirmationModal.vue"
 import { classNames } from "@ncpl-polaris/utils";
 import { useFrame, useI18n } from "../../context"
-import { RiskMajor } from "@ncpl/ncpl-icons"
+import { AlertTriangleIcon } from "@ncpl/ncpl-icons"
 
 
 

@@ -1,15 +1,15 @@
 <template>
   <Labelled :id="uniqId" :label="labelValue" :action="labelAction" :label-Hidden="labelHiddenValue">
     <div ref="node" :class="classNames(
-      styles.DropZone,
-      outline && styles.hasOutline,
-      focused && styles.focused,
-      (active || dragging) && styles.isDragging,
-      disabled && styles.isDisabled,
-      (internalError || error) && styles.hasError,
-      !variableHeight && styles[variationName('size', size)],
-      measuring && styles.measuring,
-    )" :aria-disabled="disabled" @click="open" @drag-start="stopEvent">
+    styles.DropZone,
+    outline && styles.hasOutline,
+    focused && styles.focused,
+    (active || dragging) && styles.isDragging,
+    disabled && styles.isDisabled,
+    (internalError || error) && styles.hasError,
+    !variableHeight && styles[variationName('size', size)],
+    measuring && styles.measuring,
+  )" :aria-disabled="disabled" @click="open" @drag-start="stopEvent">
       <component :is="dragOverlay"></component>
       <component :is="dragErrorOverlay"></component>
       <Text variant="bodySm" as="span" visually-hidden>
@@ -33,7 +33,7 @@ import styles from './DropZone.module.scss'
 import { useI18n, useId } from "../context"
 import { defaultAllowMultiple, createAllowMultipleKey, getDataTransferFiles, fileAccepted, type DropZoneEvent } from "./utils"
 import { capitalize } from "lodash"
-import { UploadMajor, CircleAlertMajor } from "@ncpl/ncpl-icons"
+import { UploadIcon, AlertCircleIcon } from "@ncpl/ncpl-icons"
 import { classNames, variationName } from "@ncpl-polaris/utils"
 import { debounce } from "@ncpl-polaris/utils/debounce"
 import { useEventListener } from "@vueuse/core"
@@ -85,13 +85,13 @@ const dragOverlay = computed(() =>
   !internalError.value &&
   !props.error &&
   props.overlay &&
-  overlayMarkup(UploadMajor,overlayTextWithDefault.value)
+  overlayMarkup(UploadIcon, overlayTextWithDefault.value)
 );
 
 const dragErrorOverlay = computed(() =>
   dragging.value &&
   (internalError.value || props.error) &&
-  overlayMarkup(CircleAlertMajor,errorOverlayTextWithDefault.value)
+  overlayMarkup(AlertCircleIcon, errorOverlayTextWithDefault.value)
 );
 
 

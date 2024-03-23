@@ -18,7 +18,7 @@
                   <Text :variant="labelVariant" as="span">
                     {{ i18n.translate('Polaris.Filters.addFilter') + " " }}
                   </Text>
-                  <PlusMinor />
+                  <PlusIcon />
                 </UnstyledButton>
               </div>
             </template>
@@ -54,7 +54,7 @@ import FilterPill from "../FilterPill";
 
 import { classNames } from '@ncpl-polaris/utils';
 import { useI18n, useBreakpoints } from '../../context';
-import { PlusMinor } from "@ncpl/ncpl-icons";
+import { PlusIcon } from "@ncpl/ncpl-icons";
 import styles from '../Filters.module.scss';
 
 

@@ -46,7 +46,7 @@ import Text from "../Text";
 import Tooltip from "../Tooltip";
 import InlineStack from "../InlineStack";
 import styles from './Pagination.module.scss';
-import { ChevronLeftMinor, ChevronRightMinor } from "@ncpl/ncpl-icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@ncpl/ncpl-icons";
 import { useI18n } from "../context";
 import { useEventListener } from "@vueuse/core";
 import { isInputFocused } from '@ncpl-polaris/utils/is-input-focused';
@@ -76,7 +76,7 @@ const constructedPrevious = computed(() => {
   const { previousURL, hasPrevious, previousTooltip } = props;
   const button = () => h(Button, {
     outline: true,
-    icon: ChevronLeftMinor,
+    icon: ChevronLeftIcon,
     accessibilityLabel: previousLabel.value,
     url: previousURL,
     onClick: () => emit('previous'),
@@ -90,7 +90,7 @@ const constructedNext = computed(() => {
   const { nextURL, hasNext, nextTooltip } = props;
   const button = () => h(Button, {
     outline: true,
-    icon: ChevronRightMinor,
+    icon: ChevronRightIcon,
     accessibilityLabel: nextLabel.value,
     url: nextURL,
     onClick: () => emit('next'),
