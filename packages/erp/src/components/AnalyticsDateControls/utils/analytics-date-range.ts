@@ -467,7 +467,7 @@ export interface RangeDateType {
     comparisonOf?: string;
     getTimeDimensions: () => string[];
     getBestTimeDimension: () => "hour" | "day" | "month";
-    toHumanizedString: (e: any) => any;
+    toHumanizedString: (e?: any) => any;
     isEqual: (e: RangeDateType) => boolean;
     getComparisonRange: (e: any) => RangeDateType;
     clampUntil: (e: any) => RangeDateType;

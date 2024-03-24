@@ -1,8 +1,12 @@
 <template>
     <NpScrollable :shadow="true" style="height: 330px">
-        <NpOptionList :options="quickPicks.common.map((y: any) => ({ value: y.alias, label: y.title }))"></NpOptionList>
+        <NpOptionList :selected="selectedDateRange ? [selectedDateRange.alias] : ['noComparison']"
+            @update:selected="$emit('change')"
+            :options="quickPicks.common.map((y: any) => ({ value: y.alias, label: y.title }))"></NpOptionList>
         <DateListItemSection :title="quarters.title" :alias="quarters.alias">
-            <NpOptionList :options="quarters.options.map((y: any) => ({ value: y.alias, label: y.title }))">
+            <NpOptionList :selected="selectedDateRange ? [selectedDateRange.alias] : ['noComparison']"
+                @update:selected="$emit('change')"
+                :options="quarters.options.map((y: any) => ({ value: y.alias, label: y.title }))">
             </NpOptionList>
         </DateListItemSection>
     </NpScrollable>

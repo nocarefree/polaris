@@ -3,7 +3,7 @@
         <NpBlockStack>
             <div :class="$style.metricsControllerPadding">
                 <div style="margin-top: var(--pc-stack-spacing);">
-                    <AnalyticsDateControls></AnalyticsDateControls>
+                    <AnalyticsDateControls :initial-state=initialState></AnalyticsDateControls>
                 </div>
             </div>
         </NpBlockStack>
@@ -19,8 +19,20 @@
     </NpPage>
 </template>
 <script setup lang="ts">
-import { NpBlockStack, NpPage } from "@ncpl/ncpl-polaris";
+import { ref } from "vue";
+import { NpBlockStack, NpPage, NpCard } from "@ncpl/ncpl-polaris";
 import AnalyticsDateControls from "./AnalyticsDateControls/AnalyticsDateControls.vue";
+import { rangeDate } from "./AnalyticsDateControls/utils/analytics-date-range";
+
+const initialState = ref({
+    primaryRange: rangeDate({
+        since: 'today',
+        until: 'today',
+        alias: 'today',
+        timeZone: 'UTC'
+    })
+})
+
 </script>
 <style module>
 .metricsControllerPadding {

@@ -157,4 +157,3 @@ function formatDateToString(o: Date, s: string, m?: string, locals?: string) {
     )
 }
 export { formatDateToString };
-//# sourceMappingURL=https://web-sourcemaps.shopify.io/v1/zh-CN/format-B7sqcQ7bnZ-0.js.map
