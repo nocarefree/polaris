@@ -1,12 +1,13 @@
 
 import { HumanizedDate, rangeDate, type RangeDateType } from "./analytics-date-range";
-import { useCommon } from "../../context";
-
-const { i18n, shopTimeZone } = useCommon();
+import { useCommon } from "../../context"
 
 
 const quarterTitle = (h: string) => {
-    const p = new HumanizedDate(h, shopTimeZone)
+
+    const { i18n, shopTimeZone } = useCommon();
+
+    const p = new HumanizedDate(h, shopTimeZone.value)
         , D = {
             1: "AnalyticsDateControls.quickPicks.firstQuarter",
             2: "AnalyticsDateControls.quickPicks.secondQuarter",
@@ -52,6 +53,10 @@ export interface QuickPicksType {
 }
 
 export const useQuickPicks = (selectedRangeDate: RangeDateType): QuickPicksType => {
+
+
+    const { i18n, shopTimeZone } = useCommon();
+
     const baseOpitons = [{
         title: i18n.value.translate("AnalyticsDateControls.quickPicks.today"),
         alias: "today",
@@ -119,7 +124,7 @@ export const useQuickPicks = (selectedRangeDate: RangeDateType): QuickPicksType 
         until: "today"
     }].map(h => rangeDate({
         ...h,
-        timeZone: shopTimeZone
+        timeZone: shopTimeZone.value
     }));
 
 
@@ -148,7 +153,7 @@ export const useQuickPicks = (selectedRangeDate: RangeDateType): QuickPicksType 
         comparisonOf: quarterTitle("-3q").alias
     }].map(h => rangeDate({
         ...h,
-        timeZone: shopTimeZone
+        timeZone: shopTimeZone.value
     }));
 
     const u = {

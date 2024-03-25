@@ -1,4 +1,4 @@
-import { useDateFun, stringToDate as q, type DateFunType, aAe as w, isEqualDay, isEqualYear, Zc } from "../../../utils/date-format";
+import { useDateFun, stringToDate as q, type DateFunType, aAe as w, isEqualDay, isEqualYear, formatDateTime } from "../../../utils/date-format";
 import { formatDateToString as z } from "../format";
 
 interface RangeDateOptions {
@@ -129,7 +129,7 @@ function F(e: string) {
     const t = z(new Date, "YYYY-MM-DD", e);
     return new Date(`${t}T00:00:00`)
 }
-function stringToDate({ date: e, browserTimezone: t, shopTimezone: n }: { date: string, browserTimezone: string, shopTimezone: string }) {
+function stringToDate({ date: e, browserTimeZone: t, shopTimezone: n }: { date: string, browserTimeZone: string, shopTimezone: string }) {
     const s = q(e, t);
     if (s != null)
         return s;
@@ -223,7 +223,7 @@ function getOffsetUntilDateByQuarter(e: number, t: number) {
 function getOffsetUntilDateByYear(e: number) {
     return getOffsetUntilDateByMonth(e, 12)
 }
-const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone, V = {
+const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone, V = {
     second: 1e3,
     minute: 6e4,
     hour: 36e5,
@@ -286,7 +286,7 @@ class HumanizedDate {
             this.relativeDateParts = a);
         const i = t instanceof Date ? t : stringToDate({
             date: t,
-            browserTimezone,
+            browserTimeZone,
             shopTimezone: this.shopTimezone
         });
         if (s == null)
@@ -295,10 +295,10 @@ class HumanizedDate {
             const { unit: o } = a ?? {
                 unit: "d"
             }
-                , r = s === "since" ? W(i, o, browserTimezone) : X(i, o, browserTimezone);
+                , r = s === "since" ? W(i, o, browserTimeZone) : X(i, o, browserTimeZone);
             this.value = r
         }
-        this.parts = useDateFun(this.value, browserTimezone)
+        this.parts = useDateFun(this.value, browserTimeZone)
     }
     get year(): number {
         return this.parts.year()
@@ -348,7 +348,7 @@ class HumanizedDate {
         const s = getAgoDateByUnit(this.value, {
             quantity: t,
             unit: n
-        }, browserTimezone);
+        }, browserTimeZone);
         return new HumanizedDate(s, this.shopTimezone)
     }
     isToday() {
@@ -401,7 +401,7 @@ function it({ since: e, until: t }: DatePeriod) {
 }
 function rt({ since: e, until: t }: DatePeriod, n?: any, s?: string) {
 
-    const formatDate = n?.formatDate || Zc;
+    const formatDate = n?.formatDate || formatDateTime;
     const translate = n?.translate || ((type: string, o: {
         startDate: string;
         endDate: string;
@@ -495,7 +495,7 @@ const rangeDateFunction: any = {
         return rt({
             since: this.since.value,
             until: this.until.value
-        }, e, browserTimezone)
+        }, e, browserTimeZone)
     },
     isEqual(e: RangeDateType) {
         return isEqualDay(this.since.value, e.since.value) && isEqualDay(this.until.value, e.until.value)
@@ -545,7 +545,7 @@ const rangeDateFunction: any = {
         const o = {
             since: this.since.value,
             until: this.until.value,
-            timeZone: browserTimezone
+            timeZone: browserTimeZone
         }
             , { since: r, until: u } = t === "previousPeriod" ? ot(o) : ut(o);
         return rangeDate({
@@ -647,4 +647,4 @@ export const lt = "_Message_1vu2x_1"
         "zh-CN": ft
     };
 
-export { browserTimezone, rangeDate, rangeStringDate, HumanizedDate, isRangeDateType };
+export { browserTimeZone, rangeDate, rangeStringDate, HumanizedDate, isRangeDateType };

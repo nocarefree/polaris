@@ -1,5 +1,6 @@
 <template>
-    <NpSelect :options="options" :model-value="selectedDateRange?.alias || U" @update:modelValue="onChange"></NpSelect>
+    <NpSelect :options="options" :model-value="selectedDateRange?.alias || 'noComparison'"
+        @update:modelValue="onChange"></NpSelect>
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
@@ -16,7 +17,6 @@ const props = defineProps<{
 
 const emit = defineEmits(['change']);
 
-const U = 'noComparison';
 const { i18n } = useCommon();
 
 const options = computed(() => {
@@ -33,7 +33,7 @@ const options = computed(() => {
 })
 
 const onChange = (value: string) => {
-    if (value == U) {
+    if (value == 'noComparison') {
         emit('change', null);
         return;
     }

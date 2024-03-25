@@ -1,15 +1,14 @@
 <template>
     <NpTextField :label="i18n?.translate(`AnalyticsDateControls.textFields.${type}TextFieldLabel`)" :label-hidden="true"
         :placeholder="i18n?.translate('AnalyticsDateControls.textFields.placeholderDateValue')" :model-value="showValue"
-        @modelValue="onChange" @focus="onFocus" @blur="onBlur"></NpTextField>
+        @update:modelValue="onChange" @focus="onFocus" @blur="onBlur"></NpTextField>
 </template>
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { NpTextField } from "@ncpl/ncpl-polaris";
-import { stringToDate } from "../../../utils/date-format";
+import { stringToDate, formatDateTime } from "../../../utils/date-format";
 import { useCommon } from "../../context";
 
-const formatDate = (...e: any) => { }
 
 function isDateString(t?: string) {
     return t && stringToDate(t) != null
@@ -22,21 +21,21 @@ const props = defineProps<{
     value?: string;
     type: string;
     shouldDisplayAbbreviatedMonth?: boolean;
-    disableDatesAfter: Date;
+    disableDatesAfter?: Date;
 }>()
 
-const { i18n } = useCommon();
+const { i18n, browserTimeZone, locale } = useCommon();
 const focused = ref(false)
 const dateValue = ref(props.value)
 const showValue = computed(() => {
     if (!dateValue.value || focused.value)
-        return '';
+        return dateValue.value;
     const u = stringToDate(dateValue.value);
-    return u == null ? dateValue.value : formatDate(u, {
+    return u == null ? dateValue.value : formatDateTime(u, locale.value, {
         day: "numeric",
         month: props.shouldDisplayAbbreviatedMonth ? "short" : "long",
         year: "numeric",
-        timeZone: undefined
+        timeZone: browserTimeZone
     })
 })
 
@@ -51,7 +50,7 @@ const onBlur = () => {
 
 const onChange = (value: string) => {
     dateValue.value = value;
-    isDateString(value) && (props.disableDatesAfter != null && new Date(value) > props.disableDatesAfter || emit('change', value, props.type))
+    isDateString(value) && (props.disableDatesAfter && new Date(value) > props.disableDatesAfter || emit('change', value, props.type))
 };
 
 watch(() => props.value, () => {

@@ -1,11 +1,11 @@
 <template>
     <NpInlineStack>
-        <NpPopover v-model:active="active">
+        <NpPopover v-model:active="active" preferred-position="below" preferred-alignment="left" :sectioned="false"
+            :fluid-content="true" :z-index-override="Number(theme.zIndex['z-index-5'])">
             <template #activator>
                 <div :class="$style.Wrapper">
                     <NpButton size="slim" @click="active = !active" :icon="CalendarIcon" :disabled="false"
-                        :show-notification-dot="false">{{
-            buttonContent }}</NpButton>
+                        :show-notification-dot="false">{{ buttonContent }}</NpButton>
                 </div>
             </template>
             <Dialog :date-range="initialState.primaryRange" @change="onChange" @cancel="active = false"
@@ -16,7 +16,7 @@
 </template>
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { NpPopover, NpInlineStack, NpButton, useBreakpoints } from '@ncpl/ncpl-polaris';
+import { NpPopover, NpInlineStack, NpButton, useBreakpoints, useTheme } from '@ncpl/ncpl-polaris';
 import { CalendarIcon } from "@ncpl/ncpl-icons";
 import { RangeDateType, isRangeDateType } from "./utils/analytics-date-range";
 import { useQuickPicks } from "./utils/use-quick-picks";
@@ -26,12 +26,13 @@ type PropsType = {
     initialState: {
         primaryRange: RangeDateType;
         comparisonRange?: RangeDateType;
-    }
+    };
 }
 
 const props = defineProps<PropsType>();
 const active = ref(false);
 const { mdDown, lgUp } = useBreakpoints();
+const theme = useTheme();
 
 const buttonContent = computed(() => {
     const rangeDate = props.initialState.primaryRange

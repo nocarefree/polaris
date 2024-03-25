@@ -1,5 +1,6 @@
 import { ref, inject, type Ref } from "vue"
 import { I18n } from "@ncpl/ncpl-polaris";
+import { browserTimeZone } from "./AnalyticsDateControls/utils/analytics-date-range";
 
 
 const i18nContent = {
@@ -123,12 +124,16 @@ const i18nContent = {
 
 const i18n = ref(new I18n(i18nContent.zh));
 
-export const ianaTimeZoneKey = Symbol("InjectionKey");
+export const shopTimeZoneKey = Symbol("ShopTimeZoneKey");
+export const localeKey = Symbol("LocaleKey");
+
+
 export const useCommon = () => {
     return {
-        ianaTimeZone: inject<Ref<string>>(ianaTimeZoneKey, ref('UTC')),
         i18n: i18n,
-        shopTimeZone: "America/New_York",
+        shopTimeZone: inject<Ref<string>>(shopTimeZoneKey, ref("Asia/Shanghai")),
+        browserTimeZone,
+        locale: inject<Ref<string>>(localeKey, ref("zh-CN"))
     }
 }
 

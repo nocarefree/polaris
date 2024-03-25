@@ -1,7 +1,7 @@
 <template>
     <div :style="{ maxWidth }">
         <NpBox v-if="layout === 'small'" padding="400">
-            <NpBlockStack>
+            <NpBlockStack gap="400">
                 <DateSelect :selected-date-range="currentDateRange" :quick-picks="quickPicks"
                     @change="onUpdateDateRangeFromQuickPicks"></DateSelect>
                 <NpInlineGrid columns="1fr auto 1fr" align-items="center" gap="200">
@@ -11,7 +11,7 @@
                     <div class="ArrowIcon">
                         <NpIcon :source="ArrowRightIcon" tone="subdued"></NpIcon>
                     </div>
-                    <DateInput type="until" :value="!currentDateRange ? void 0 : currentDateRange.since.toSqlString()"
+                    <DateInput type="until" :value="!currentDateRange ? void 0 : currentDateRange.until.toSqlString()"
                         @change="onUpdateDateRangeFromTextField" :should-display-abbreviated-month="false"
                         :disable-dates-after="todayDate"></DateInput>
                 </NpInlineGrid>
@@ -19,7 +19,7 @@
                 <NpBox>
                     <NpDatePicker @monthChange="" :month="calendarPosition.month" :year="calendarPosition.year"
                         @update:modelValue="onUpdateDateRangeFromCalendar" :model-value="selectedDate"
-                        :allow-range="true" :multi-month="false" :disableDatesAfter="false">
+                        :allow-range="true" :multi-month="false" :disable-dates-aAfter="todayDate">
                     </NpDatePicker>
                 </NpBox>
             </NpBlockStack>
@@ -31,7 +31,7 @@
                     @change="onUpdateDateRangeFromQuickPicks"></DateList>
             </NpBox>
             <NpBox padding="400">
-                <NpBlockStack>
+                <NpBlockStack gap="400">
                     <NpInlineGrid columns="1fr auto 1fr" align-items="center" gap="200">
                         <DateInput type="since"
                             :value="!currentDateRange ? void 0 : currentDateRange.since.toSqlString()"
@@ -42,7 +42,7 @@
                             <NpIcon :source="ArrowRightIcon" tone="subdued"></NpIcon>
                         </div>
                         <DateInput type="until"
-                            :value="!currentDateRange ? void 0 : currentDateRange.since.toSqlString()"
+                            :value="!currentDateRange ? void 0 : currentDateRange.until.toSqlString()"
                             @change="onUpdateDateRangeFromTextField"
                             :should-display-abbreviated-month="layout === 'medium'" :disable-dates-after="todayDate">
                         </DateInput>
@@ -51,7 +51,7 @@
                         <NpDatePicker @monthChange="onUpdateCalendarPosition" :month="calendarPosition.month"
                             :year="calendarPosition.year" @update:modelValue="onUpdateDateRangeFromCalendar"
                             :model-value="selectedDate" :allow-range="true" :multi-month="true"
-                            :disableDatesAfter="false">
+                            :disable-dates-aAfter="todayDate">
                         </NpDatePicker>
                     </NpBox>
                 </NpBlockStack>
@@ -79,7 +79,7 @@ import type { PrimaryQuickPicks } from "../utils/use-quick-picks";
 import type { DatePickerProps } from "@ncpl/ncpl-polaris"
 
 
-const { ianaTimeZone } = useCommon();
+const { shopTimeZone } = useCommon();
 const props = defineProps<{
     dateRange?: RangeDateType,
     quickPicks: PrimaryQuickPicks;
@@ -101,7 +101,7 @@ const maxWidth = computed(() => {
 });
 
 const todayDate = computed(() => {
-    const p = new HumanizedDate("today", ianaTimeZone.value).value
+    const p = new HumanizedDate("today", shopTimeZone.value).value
         , D = new Date
     return p > D ? p : D
 })
@@ -116,7 +116,7 @@ function getCalendarPosition(dateRange?: RangeDateType) {
     const n = dateRange ?? rangeDate({
         since: 'today',
         until: 'today',
-        timeZone: ianaTimeZone.value
+        timeZone: shopTimeZone.value
     }), a = n.until.getPrevious({
         quantity: 1,
         unit: 'm'
@@ -181,7 +181,7 @@ function onUpdateDateRangeFromCalendar(range: DatePickerProps['modelValue']) {
         a = rangeDate({
             since: s,
             until: n,
-            timeZone: ianaTimeZone.value
+            timeZone: shopTimeZone.value
         }),
         l = ae(a, props.quickPicks.all);
     currentDateRange.value = l ?? a;
@@ -189,6 +189,8 @@ function onUpdateDateRangeFromCalendar(range: DatePickerProps['modelValue']) {
     source.value = 'calendar';
 }
 function onUpdateDateRangeFromQuickPicks(s: RangeDateType, n?: string) {
+    console.log(s);
+
     const a = isCalendarPosition(s);
     !a && s != null &&
         (
@@ -204,7 +206,7 @@ function onUpdateCalendarPosition(month: number, year: number) {
 }
 function onUpdateDateRangeFromTextField(inputValue: string, type: "since" | "until") {
     const selectedDateRange = currentDateRange.value;
-    const timeZone = ianaTimeZone.value
+    const timeZone = shopTimeZone.value
 
     let a = rangeDate({
         since: inputValue,

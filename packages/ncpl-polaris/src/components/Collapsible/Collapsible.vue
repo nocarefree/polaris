@@ -18,7 +18,7 @@ defineOptions({
 
 
 
-const props = defineProps<CollapsibleProps>();
+const props = withDefaults(defineProps<CollapsibleProps>(), { transition: true });
 const emit = defineEmits(['animationEnd']);
 
 
@@ -38,8 +38,8 @@ const wrapperClassName = computed(() => {
 });
 
 
+const zeroDurationRegex = /^0(ms|s)$/;
 const isTransitionDisabled = computed(() => {
-  const zeroDurationRegex = /^0(ms|s)$/;
   let transitionProp = props.transition;
   if (typeof transitionProp === 'boolean' || !transitionProp) {
     return !transitionProp;

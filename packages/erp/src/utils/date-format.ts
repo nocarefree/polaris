@@ -8,20 +8,7 @@ export interface DateFunType {
     second: () => number;
 }
 
-function FV(e) {
-    const t = e.split("-");
-    return t.length > 1 ? [`${t[0]}-${t[1].toUpperCase()}`, t[0]] : [e]
-}
-function Q3e(e) {
-    return e != null && e.then != null
-}
-function o4(e, t) {
-    return `${e}__${t}`
-}
-function Y3e() { }
-function X3e(e) {
-    return typeof e == "function" ? e : t => e[t]
-}
+
 const J3e = 50;
 function Ql(e: Function, t: any) {
     const n = new WeakMap
@@ -29,14 +16,14 @@ function Ql(e: Function, t: any) {
         , a: any = [];
     return function (...o: any) {
         if (typeof window > "u")
-            return e.apply(this, o);
+            return e(...o);
         const s = o.length === 1 && typeof o[0] == "object" && !t;
         let l;
         s ? l = o[0] : t && t instanceof Function ? l = t(...o) : l = o[0];
         const c = s ? n : r;
         if (c.has(l))
             return c.get(l);
-        const u = e.apply(this, o);
+        const u = e(...o);
         if (s)
             n.set(l, u);
         else if (r.set(l, u),
@@ -49,7 +36,7 @@ function Ql(e: Function, t: any) {
         return u
     }
 }
-function Y_(e:string) {
+function Y_(e: string) {
     return e.replace("‎", "")
 }
 const s4 = new Map;
@@ -62,7 +49,7 @@ function DV(e?: string, t?: Intl.DateTimeFormatOptions) {
 }
 const LV = Intl.DateTimeFormat("en", { hour: "numeric" })
     , BV = typeof LV.resolvedOptions > "u" ? void 0 : LV.resolvedOptions();
-function Zc(e: Date, locales: string, n: Intl.DateTimeFormatOptions = {}) {
+function formatDateTime(e: Date, locales: string, n: Intl.DateTimeFormatOptions = {}) {
     if (BV != null && n.hour12 === !1 && BV.hourCycle != null && (n.hour12 = void 0,
         n.hourCycle = "h23"),
         n.timeZone != null && n.timeZone === "Etc/GMT+12") {
@@ -104,7 +91,7 @@ var UV: any;
         e.Sunday = "Sunday"
 }
 )(UV || (UV = {}));
-const Sie:{[key:string]:number} = {
+const Sie: { [key: string]: number } = {
     Monday: 0,
     Tuesday: 1,
     Wednesday: 2,
@@ -113,13 +100,13 @@ const Sie:{[key:string]:number} = {
     Saturday: 5,
     Sunday: 6
 };
-function tAe(e:string) {
+function tAe(e: string) {
     return Object.keys(Sie).some(t => t === e)
 }
 function nAe(e: string) {
     throw new Error(e)
 }
-function rAe(e:string) {
+function rAe(e: string) {
     return tAe(e) ? Sie[e] : nAe(`Unexpected weekday: ${e}`)
 }
 class Fa {
@@ -127,7 +114,7 @@ class Fa {
     static getYear = Ql((e: Date, t?: string) => {
         if (isNaN(e.valueOf()))
             throw new Error(`Unable to parse date: ${e} for timezone: ${t}`);
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             year: "numeric"
         })
@@ -139,7 +126,7 @@ class Fa {
     }, Id("year"));
 
     static getMonth = Ql((e: Date, t?: string) => {
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             month: "numeric"
         })
@@ -151,7 +138,7 @@ class Fa {
     }, Id("month"));
 
     static getDay = Ql((e: Date, t?: string) => {
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             day: "numeric"
         })
@@ -163,7 +150,7 @@ class Fa {
     }
         , Id("day"));
     static getWeekday = Ql((e: Date, t?: string) => {
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             weekday: "long"
         })
@@ -171,7 +158,7 @@ class Fa {
         return rAe(r)
     }, Id("weekday"));
     static getHour = Ql((e: Date, t?: string) => {
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             hour12: !1,
             hour: "numeric"
@@ -181,7 +168,7 @@ class Fa {
             r
     }, Id("hour"));
     static getMinute = Ql((e: Date, t?: string) => {
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             minute: "numeric"
         });
@@ -190,7 +177,7 @@ class Fa {
             r
     }, Id("minute"));
     static getSecond = Ql((e: Date, t?: string) => {
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             second: "numeric"
         });
@@ -199,7 +186,7 @@ class Fa {
             r
     }, Id("second"));
     static getTimePartsFallback = Ql((e: Date, t?: string) => {
-        const n = Zc(e, "en", {
+        const n = formatDateTime(e, "en", {
             timeZone: t,
             hour12: !1,
             hour: "2-digit",
@@ -234,8 +221,8 @@ function getUTCDate(e: Date, t?: string) {
 }
 function aAe(e: Date, t?: string, n?: string) {
     const r = getTimeZoneOffset(e, t, n)
-    , a = new Date(e.valueOf() - r * 60 * 1e3)
-    , o = getTimeZoneOffset(a, t, n) - r;
+        , a = new Date(e.valueOf() - r * 60 * 1e3)
+        , o = getTimeZoneOffset(a, t, n) - r;
     return new Date(a.valueOf() - o * 60 * 1e3)
 }
 let $l: any;
@@ -249,7 +236,7 @@ let $l: any;
 }
 )($l || ($l = {}));
 
-function iAe(e:number, t:Date, n = new Date) {
+function iAe(e: number, t: Date, n = new Date) {
     return Math.floor((n.getTime() - t.getTime()) / e)
 }
 function isBeforeToday(e: Date, t = new Date) {
@@ -354,4 +341,4 @@ function stringToDate(e: string, t?: string) {
     }
 }
 
-export { useDateFun, stringToDate, Fa, getTimeZoneOffset, getUTCDate, aAe, DV, isEqualDay, isEqualYear, Zc };
+export { useDateFun, stringToDate, Fa, getTimeZoneOffset, getUTCDate, aAe, DV, isEqualDay, isEqualYear, formatDateTime };

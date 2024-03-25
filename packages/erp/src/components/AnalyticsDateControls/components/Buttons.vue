@@ -1,16 +1,17 @@
 <template>
-    <NpInlineStack :align="align ? 'between' : 'end'">
+    <NpInlineStack :align="align ? 'between' : 'end'" gap="200">
         <NpButton @click="$emit('cancel')">
             {{ i18n.translate("AnalyticsDateControls.actionButtons.cancel") }}
         </NpButton>
-        <NpButton disabled="disableApplyButton" variant="primary" @click="$emit('apply')">
-            {{ i18n.translate("AnalyticsDateControls.actionButtons.cancel") }}
+        <NpButton :disabled="disableApplyButton" variant="primary" @click="$emit('apply')">
+            {{ i18n.translate("AnalyticsDateControls.actionButtons.apply") }}
         </NpButton>
     </NpInlineStack>
 </template>
 <script setup lang="ts">
-import { NpInlineStack, NpButton, useI18n } from "@ncpl/ncpl-polaris";
+import { NpInlineStack, NpButton } from "@ncpl/ncpl-polaris";
 import { isCondensedPage } from "../../../utils";
+import { useCommon } from "../../context";
 
 
 withDefaults(defineProps<{
@@ -19,7 +20,7 @@ withDefaults(defineProps<{
     disableApplyButton: false,
 });
 defineEmits(['cancel', 'apply']);
-const i18n = useI18n();
+const { i18n } = useCommon();
 const align = isCondensedPage();
 
 </script>

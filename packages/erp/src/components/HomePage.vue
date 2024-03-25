@@ -1,26 +1,35 @@
 <template>
     <NpPage>
-        <NpBlockStack>
-            <div :class="$style.metricsControllerPadding">
-                <div style="margin-top: var(--pc-stack-spacing);">
-                    <AnalyticsDateControls :initial-state=initialState></AnalyticsDateControls>
+        <div class="analyticsContainer">
+            <NpBlockStack gap="400">
+                <div :class="smDown ? $style.metricsControllerPadding : void 0">
+                    <div style="margin-top: var(--pc-stack-spacing);">
+                        <AnalyticsDateControls :initial-state="initialState"></AnalyticsDateControls>
+                    </div>
                 </div>
-            </div>
-        </NpBlockStack>
-        <NpCard>
-            <div>
-                <div :class="$style.metricsButtonContainer">
-                </div>
-            </div>
-            <div :class="$style.MetricCardContainer">
+                <NpCard padding="200" rounded-above="sm">
+                    <div>
+                        <div :class="$style.metricsButtonContainer">
+                            <div :class="$style.metricButtonStack">
+                                <NpInlineStack>
+                                    <MetricsButton v-for="button in buttons" :title="button.title" :items="[]">
+                                    </MetricsButton>
+                                </NpInlineStack>
+                            </div>
+                        </div>
+                    </div>
+                    <div :class="$style.MetricCardContainer">
 
-            </div>
-        </NpCard>
+                    </div>
+                </NpCard>
+            </NpBlockStack>
+        </div>
     </NpPage>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { NpBlockStack, NpPage, NpCard } from "@ncpl/ncpl-polaris";
+import { NpBlockStack, NpPage, NpCard, NpInlineStack, useBreakpoints } from "@ncpl/ncpl-polaris";
+import MetricsButton from "./MetricsButton";
 import AnalyticsDateControls from "./AnalyticsDateControls/AnalyticsDateControls.vue";
 import { rangeDate } from "./AnalyticsDateControls/utils/analytics-date-range";
 
@@ -29,12 +38,23 @@ const initialState = ref({
         since: 'today',
         until: 'today',
         alias: 'today',
-        timeZone: 'UTC'
+        timeZone: 'Asia/Shanghai',
     })
 })
 
+const { smDown } = useBreakpoints();
+const buttons = ref<any[]>([]);
+
 </script>
 <style module>
+.analyticsContainer {
+    box-sizing: content-box;
+    max-width: 49.75rem;
+    padding: 0;
+    margin: 0 auto;
+    margin-top: var(--p-space-500)
+}
+
 .metricsControllerPadding {
     margin-left: var(--p-space-400);
     margin-right: var(--p-space-400)

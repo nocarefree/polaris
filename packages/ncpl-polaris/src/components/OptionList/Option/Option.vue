@@ -1,33 +1,33 @@
 <template>
   <li :key="id" :class="styles.Option" :tabIndex="-1" @pointerenter="handlePointerEnter">
     <label v-if="allowMultiple" :for="id" :class="classNames(
-      styles.Label,
-      disabled && styles.disabled,
-      active && styles.active,
-      select && styles.select,
-      verticalAlign && styles[variationName('verticalAlign', verticalAlign)],
-      allowMultiple && styles.CheckboxLabel,
-      allowMultiple && styles.MultiSelectOption,
-    )">
+    styles.Label,
+    disabled && styles.disabled,
+    active && styles.active,
+    select && styles.select,
+    verticalAlign && styles[variationName('verticalAlign', verticalAlign)],
+    allowMultiple && styles.CheckboxLabel,
+    allowMultiple && styles.MultiSelectOption,
+  )">
       <div :class="styles.Checkbox">
         <PolarisCheckbox :id="id" label="" :aria-described-by="`${id}-label`" :value="value" :checked="select"
           :disabled="disabled" @change="handleClick" />
       </div>
-      <div :class="styles.Media">{{ media }}</div>
+      <div v-if="media" :class="styles.Media">{{ media }}</div>
       <span :id="`${id}-label`">{{ label }}</span>
     </label>
     <button v-else :id="id" type="button" :class="classNames(
-      styles.SingleSelectOption,
-      focused && styles.focused,
-      disabled && styles.disabled,
-      select && styles.select,
-      active && styles.active,
-      verticalAlign && styles[variationName('verticalAlign', verticalAlign)],
-    )" @click="handleClick" :disabled="disabled" @focus="handleFocus" @blur="focused = false"
+    styles.SingleSelectOption,
+    focused && styles.focused,
+    disabled && styles.disabled,
+    select && styles.select,
+    active && styles.active,
+    verticalAlign && styles[variationName('verticalAlign', verticalAlign)],
+  )" @click="handleClick" :disabled="disabled" @focus="handleFocus" @blur="focused = false"
       :aria-pressed="active || select">
 
       <InlineStack :wrap="false" :block-align="verticalAlignToBlockAlign(verticalAlign)">
-        <div :class="styles.Media">{{ media }}</div>
+        <div v-if="media" :class="styles.Media">{{ media }}</div>
         {{ label }}
       </InlineStack>
       <span v-if="select || active" :class="styles.Icon">
