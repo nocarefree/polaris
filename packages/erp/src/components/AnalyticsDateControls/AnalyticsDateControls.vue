@@ -1,17 +1,20 @@
 <template>
     <NpInlineStack>
-        <NpPopover v-model:active="active" preferred-position="below" preferred-alignment="left" :sectioned="false"
-            :fluid-content="true" :z-index-override="Number(theme.zIndex['z-index-5'])">
-            <template #activator>
-                <div :class="$style.Wrapper">
-                    <NpButton size="slim" @click="active = !active" :icon="CalendarIcon" :disabled="false"
-                        :show-notification-dot="false">{{ buttonContent }}</NpButton>
-                </div>
-            </template>
-            <Dialog :date-range="initialState.primaryRange" @change="onChange" @cancel="active = false"
-                :quick-picks="quickPicks.primaryQuickPicks" :layout="lgUp ? 'large' : mdDown ? 'small' : 'medium'">
-            </Dialog>
-        </NpPopover>
+        <template v-for="value in ['primary', 'comparison', 'timeDimension']">
+            <NpPopover v-if="controls.includes(value)" v-model:active="active" preferred-position="below"
+                preferred-alignment="left" :sectioned="false" :fluid-content="true"
+                :z-index-override="Number(theme.zIndex['z-index-5'])">
+                <template #activator>
+                    <div :class="$style.Wrapper">
+                        <NpButton size="slim" @click="active = !active" :icon="CalendarIcon" :disabled="false"
+                            :show-notification-dot="false">{{ buttonContent }}</NpButton>
+                    </div>
+                </template>
+                <Picker :date-range="initialState.primaryRange" @change="onChange" @cancel="active = false"
+                    :quick-picks="quickPicks.primaryQuickPicks" :layout="lgUp ? 'large' : mdDown ? 'small' : 'medium'">
+                </Picker>
+            </NpPopover>
+        </template>
     </NpInlineStack>
 </template>
 <script setup lang="ts">
@@ -20,16 +23,19 @@ import { NpPopover, NpInlineStack, NpButton, useBreakpoints, useTheme } from '@n
 import { CalendarIcon } from "@ncpl/ncpl-icons";
 import { RangeDateType, isRangeDateType } from "./utils/analytics-date-range";
 import { useQuickPicks } from "./utils/use-quick-picks";
-import Dialog from "./components/Dialog.vue";
+import Picker from "./components/Picker.vue";
 
 type PropsType = {
     initialState: {
         primaryRange: RangeDateType;
         comparisonRange?: RangeDateType;
     };
+    controls?: string[]
 }
 
-const props = defineProps<PropsType>();
+const props = withDefaults(defineProps<PropsType>(), {
+    controls: () => ['primary', 'comparison'],
+});
 const active = ref(false);
 const { mdDown, lgUp } = useBreakpoints();
 const theme = useTheme();

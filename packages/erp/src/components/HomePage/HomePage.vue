@@ -29,9 +29,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { NpBlockStack, NpPage, NpCard, NpInlineStack, useBreakpoints } from "@ncpl/ncpl-polaris";
-import MetricsButton from "./MetricsButton";
-import AnalyticsDateControls from "./AnalyticsDateControls/AnalyticsDateControls.vue";
-import { rangeDate } from "./AnalyticsDateControls/utils/analytics-date-range";
+import MetricsButton from "../MetricsButton";
+import AnalyticsDateControls from "../AnalyticsDateControls/AnalyticsDateControls.vue";
+import { rangeDate } from "../AnalyticsDateControls/utils/analytics-date-range";
 
 const initialState = ref({
     primaryRange: rangeDate({

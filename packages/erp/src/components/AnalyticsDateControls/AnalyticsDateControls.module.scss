@@ -1,0 +1,45 @@
+.ArrowIcon {
+    height: var(--p-space-400);
+    width: var(--p-space-400);
+}
+.Container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-bottom: var(--p-space-100);
+}
+.Container:last-child {
+    margin-bottom: 0;
+}
+.Button {
+    background: none;
+    border: none;
+    font-size: inherit;
+    line-height: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1 1;
+    text-align: left;
+    padding: var(--p-space-200);
+    margin: 0 var(--p-space-100);
+    border-radius: var(--p-border-radius-200);
+}
+.Button:hover {
+    background: var(--p-color-bg-surface-hover);
+    outline: var(--p-border-width-025) solid transparent;
+}
+.Content * > li > button {
+    padding-left: var(--p-space-600);
+}
+.Content * > ul {
+    padding-top: 0;
+}
+.Wrapper {
+    position: relative;
+}
+.Dot {
+    position: absolute;
+    top: -0.625rem;
+    right: -0.625rem;
+}
