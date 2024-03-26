@@ -123,6 +123,11 @@ const i18nContent = {
 }
 
 
+export interface MetricType{
+    id:string;
+    
+}
+
 const metrics = [
     {
         "id": "total-sales",

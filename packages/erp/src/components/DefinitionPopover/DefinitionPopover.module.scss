@@ -1,0 +1,30 @@
+.Button {
+    text-align: left;
+    margin-left: calc(var(--p-space-100) * -1);
+    padding: 0 var(--p-space-100);
+    border-radius: var(--p-border-radius-100);
+    border: var(--p-border-width-025) solid transparent;
+    cursor: default;
+    background: transparent;
+    color: unset;
+}
+.Button.Inline {
+    padding: 0;
+    margin-left: 0;
+}
+.Button.Active {
+    border-color: var(--p-color-border-emphasis);
+}
+.Button:hover {
+    background-color: var(--p-color-bg-surface-hover);
+}
+.Button:active {
+    background-color: var(--p-color-bg-surface-active);
+}
+.WrappedContent {
+    border-bottom: 0.125rem dotted var(--p-color-border-tertiary);
+    border-color: var(--p-color-border-tertiary);
+}
+.DefinitionContainer {
+    max-width: 15.625rem;
+}

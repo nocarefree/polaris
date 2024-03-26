@@ -2,9 +2,10 @@
   <component :is="activatorWrapper || 'div'" ref="activatorContainer">
     <slot name="activator"></slot>
     <Portal v-if="activatorNode" id-prefix="popover">
-      <PopoverOverlay ref="overlayRef" :id="id" :activator="activatorNode" :prefer-input-activator="preferInputActivator"
-        @close="handleClose" :active="active" @update:active="e => $emit('update:active', e)" :fixed="fixed"
-        :z-index-override="zIndexOverride" :autofocus-target="autofocusTarget" v-bind="overlayProps">
+      <PopoverOverlay ref="overlayRef" :id="id" :activator="activatorNode"
+        :prefer-input-activator="preferInputActivator" @close="handleClose" :active="active"
+        @update:active="e => $emit('update:active', e)" :fixed="fixed" :z-index-override="zIndexOverride"
+        :autofocus-target="autofocusTarget" v-bind="overlayProps">
         <slot></slot>
       </PopoverOverlay>
     </Portal>
@@ -108,5 +109,11 @@ const setAccessibilityAttributes = () => {
 
 watch(() => [props.active, activatorNode.value], () => {
   setAccessibilityAttributes();
+});
+
+defineExpose({
+  overlayEl: computed(() => {
+    return overlayRef.value?.$el || undefined
+  })
 });
 </script>

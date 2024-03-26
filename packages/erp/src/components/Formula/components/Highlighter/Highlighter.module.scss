@@ -1,0 +1,23 @@
+.FormulaVariable {
+    color: #308023;
+    margin-right: var(--p-space-100);
+}
+.FormulaResult {
+    color: #0b608f;
+    margin-right: var(--p-space-100);
+}
+.FormulaOperatorOrNumber {
+    color: #8f5da6;
+    margin-right: var(--p-space-100);
+}
+.FormulaBracketOrEquals {
+    color: #616a75;
+    margin-right: var(--p-space-100);
+}
+.Formula {
+    font-family: var(--p-font-family-mono);
+    font-size: var(--p-font-size-300);
+    font-weight: var(--p-font-weight-regular);
+    display: flex;
+    flex-wrap: wrap;
+}

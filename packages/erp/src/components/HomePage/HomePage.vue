@@ -1,6 +1,6 @@
 <template>
     <NpPage>
-        <div class="analyticsContainer">
+        <div :class="$style.analyticsContainer">
             <NpBlockStack gap="400">
                 <div :class="smDown ? $style.metricsControllerPadding : void 0">
                     <div style="margin-top: var(--pc-stack-spacing);">
@@ -12,15 +12,13 @@
                         <div :class="$style.metricsButtonContainer">
                             <div :class="$style.metricButtonStack">
                                 <NpInlineStack>
-                                    <MetricsButton v-for="button in buttons" :title="button.title" :items="[]">
+                                    <MetricsButton v-for="card in cards" :card="card" :items="[]">
                                     </MetricsButton>
                                 </NpInlineStack>
                             </div>
                         </div>
                     </div>
-                    <div :class="$style.MetricCardContainer">
-
-                    </div>
+            
                 </NpCard>
             </NpBlockStack>
         </div>
@@ -39,7 +37,8 @@ const initialState = ref({
         until: 'today',
         alias: 'today',
         timeZone: 'Asia/Shanghai',
-    })
+    }),
+    controls: ['primary'],
 })
 
 const { smDown } = useBreakpoints();

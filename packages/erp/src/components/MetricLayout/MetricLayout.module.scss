@@ -1,0 +1,124 @@
+.CloseButton {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    pointer-events: all;
+    outline: none;
+    border: none;
+    background: transparent;
+    border-radius: var(--p-border-radius-100);
+}
+.CloseButton svg {
+    fill: var(--p-color-icon-secondary);
+}
+.CloseButton:hover svg {
+    fill: var(--p-color-icon-active);
+}
+.DropdownContainer {
+    margin-right: var(--p-space-150);
+}
+.MetricLayout {
+    --header-height: 1.25rem;
+    --compact-metric-card-height: 2.625rem;
+    --flex-gap: var(--p-space-400);
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    gap: var(--p-space-100);
+}
+.Wrapper {
+    height: 100%;
+}
+.Wrapper.Compact {
+    height: var(--compact-metric-card-height);
+}
+.Wrapper > [class*="Polaris-ShadowBevel"] {
+    height: 100%;
+}
+.Wrapper > [class*="Polaris-ShadowBevel"] > [class*="Polaris-Box"] {
+    height: 100%;
+}
+.HeaderButton {
+    display: flex;
+    padding: var(--p-space-400) var(--p-space-400) var(--p-space-200);
+}
+.HeaderButton:hover {
+    background: var(--p-color-bg-surface-hover);
+}
+.Header {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    height: var(--header-height);
+    width: 100%;
+}
+.Content {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: var(--flex-gap);
+    flex-grow: 1;
+    min-height: 0;
+}
+.CohortsCard {
+    justify-content: space-between;
+}
+.Title {
+    flex-grow: 1;
+    min-width: 0;
+}
+.Title.HasPrimaryAction {
+    margin-right: var(--p-space-600);
+}
+.PrimaryAction {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.Compact {
+    height: var(--compact-metric-card-height);
+}
+.Compact .PrimaryAction {
+    top: calc(var(--p-space-100) * -1);
+}
+.Compact .Content {
+    flex-direction: row;
+    gap: var(--flex-gap);
+    justify-content: space-between;
+}
+.Button {
+    background: unset;
+    border: unset;
+    text-align: unset;
+    color: unset;
+    text-decoration: unset;
+}
+.FormulaVariable {
+    color: #308023;
+    margin-right: var(--p-space-100);
+}
+.FormulaResult {
+    color: #0b608f;
+    margin-right: var(--p-space-100);
+}
+.FormulaOperatorOrNumber {
+    color: #8f5da6;
+    margin-right: var(--p-space-100);
+}
+.FormulaBracketOrEquals {
+    color: #616a75;
+    margin-right: var(--p-space-100);
+}
+.Formula {
+    font-family: var(--p-font-family-mono);
+    font-size: var(--p-font-size-300);
+    font-weight: var(--p-font-weight-regular);
+    display: flex;
+    flex-wrap: wrap;
+}
