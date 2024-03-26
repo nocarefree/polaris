@@ -11,7 +11,6 @@ import MetricLayout from "../MetricLayout";
 
 defineProps<{
   title: string;
-  wrapper?: "card";
   popover?: {
     formula?: string;
     definition?: string;
