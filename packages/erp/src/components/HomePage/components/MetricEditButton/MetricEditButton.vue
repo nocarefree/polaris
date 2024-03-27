@@ -62,6 +62,7 @@ const F2 = ({
 
 const items = computed(() => {
   return metrics.filter((i: any) => i.report.ignoreDatePicker == false).map((p: any) => {
+    var C: any, g: any, b: any;
     return {
       content: p.title,
       active: p.handle === props.activeHandle,
