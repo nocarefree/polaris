@@ -1,10 +1,13 @@
 <template>
-  <div :class="classNames($style.metricsButton, $style.metricsButtonWidth, active && $style.metricButtonSelected)">
-    <NpBox background="t ? 'bg' : 'bg-surface'" padding="300" padding-block-start="150" padding-block-end="150"
+  <div :class="classNames(styles.metricsButton, styles.metricsButtonWidth, selected && styles.metricButtonSelected)"
+    role="button" tabindex="0" @click="emit('click')">
+    <NpBox :background="selected ? 'bg' : 'bg-surface'" padding="300" padding-block-start="150" padding-block-end="150"
       border-radius="200">
-      <Metric title="Order">
+      <CompactPrimaryMetricSkeleton v-if="loading" :has-title="Boolean(card.card.title)" :type="card.card.type"
+        :wrapper="card.card.wrapper" />
+      <MetricCard v-else-if="card.data" v-bind="card" empty-state-text="—">
         <template #action>
-          <div :class="$style.pencilContainer">
+          <div :class="styles.pencilContainer">
             <NpPopover>
               <template #activator>
                 <NpButton size="slim" @click="active = !active" :icon="EditIcon" :disabled="false"
@@ -21,7 +24,7 @@
             </NpPopover>
           </div>
         </template>
-      </Metric>
+      </MetricCard>
     </NpBox>
   </div>
 </template>
@@ -29,11 +32,17 @@
 import { ref } from "vue";
 
 import { NpBox, NpPopover, NpButton, NpTextField, classNames, NpActionList } from "@ncpl/ncpl-polaris";
-import Metric from "../Metric";
+import MetricCard from "../../../MetricCard";
 import { SearchIcon, EditIcon } from "@ncpl/ncpl-icons";
+import styles from "../../HomePage.module.scss";
 
 defineProps<{
-  items: any[];
+  selected?: boolean;
+  metricsLoading?: boolean;
+  card: {
+    data: any[];
+    card: any
+  };
 }>()
 
 const active = ref(false);

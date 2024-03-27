@@ -1,34 +1,13 @@
 <template>
     <NpPage>
-        <div :class="$style.analyticsContainer">
-            <NpBlockStack gap="400">
-                <div :class="smDown ? $style.metricsControllerPadding : void 0">
-                    <div style="margin-top: var(--pc-stack-spacing);">
-                        <AnalyticsDateControls :initial-state="initialState"></AnalyticsDateControls>
-                    </div>
-                </div>
-                <NpCard padding="200" rounded-above="sm">
-                    <div>
-                        <div :class="$style.metricsButtonContainer">
-                            <div :class="$style.metricButtonStack">
-                                <NpInlineStack>
-                                    <MetricsButton v-for="card in cards" :card="card" :items="[]">
-                                    </MetricsButton>
-                                </NpInlineStack>
-                            </div>
-                        </div>
-                    </div>
-            
-                </NpCard>
-            </NpBlockStack>
-        </div>
+        <AnalyticsConstainer></AnalyticsConstainer>
     </NpPage>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { NpBlockStack, NpPage, NpCard, NpInlineStack, useBreakpoints } from "@ncpl/ncpl-polaris";
 import MetricsButton from "../MetricsButton";
-import AnalyticsDateControls from "../AnalyticsDateControls/AnalyticsDateControls.vue";
+import AnalyticsConstainer from "./components/AnalyticsConstainer";
 import { rangeDate } from "../AnalyticsDateControls/utils/analytics-date-range";
 
 const initialState = ref({

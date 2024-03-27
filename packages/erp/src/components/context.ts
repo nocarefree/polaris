@@ -128,7 +128,7 @@ export interface MetricType{
     
 }
 
-const metrics = [
+export const metrics = [
     {
         "id": "total-sales",
         "cardType": "full",
