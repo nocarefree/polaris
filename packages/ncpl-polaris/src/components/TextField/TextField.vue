@@ -24,11 +24,11 @@
     focus && !disabled && styles.focus,
     borderless && styles.borderless,
   )" @click="handleClick">
-        <div v-if="prefixComponent" :class="styles.Prefix" :id="`${inputId}-Prefix`" ref="prefixRef">
-          <component :is="prefixComponent"></component>
+        <div v-if="$slots.prefix" :class="styles.Prefix" :id="`${inputId}-Prefix`" ref="prefixRef">
+          <slot name="prefix"></slot>
         </div>
 
-        <div v-if="slots.verticalContent" :class="styles.VerticalContent" :id="`${inputId}-VerticalContent`"
+        <div v-if="$slots.verticalContent" :class="styles.VerticalContent" :id="`${inputId}-VerticalContent`"
           ref="verticalContentRef" @click="handleClickChild">
           <slot name="verticalContent"></slot>
           <component :is="multiline?'textarea':'input'" v-bind="attributes" />
@@ -36,8 +36,8 @@
         <component v-else :is="multiline?'textarea':'input'" v-bind="attributes" />
 
 
-        <div v-if="suffixComponent" :class="styles.Suffix" :id="`${inputId}-Suffix`" ref="suffixRef">
-          <component :is="suffixComponent"></component>
+        <div v-if="$slots.suffix" :class="styles.Suffix" :id="`${inputId}-Suffix`" ref="suffixRef">
+          <slot name="suffix"></slot>
         </div>
         <div v-if="showCharacterCount" :id="`${id}CharacterCounter`" :class="classNames(
     styles.CharacterCount,
@@ -143,8 +143,6 @@ const focus = ref<boolean>(Boolean(props.focused));
 const inputId = useId(toRef(props, 'id'));
 const isComposing = ref(false);
 const hasVerticalContent = ref<boolean>(Boolean(slots.verticalContent));
-const hasSuffix = ref<boolean>(Boolean(slots.suffix));
-const hasPrefix = ref<boolean>(Boolean(slots.prefix));
 
 
 const normalizedValue = computed(() => {
@@ -156,14 +154,6 @@ const currentHeight = ref(null);
 
 const characterCount = computed(() => {
   return normalizedValue.value.length;
-})
-
-const prefixComponent = computed(() => {
-  return hasPrefix.value ? slots.prefix : (props.prefix ? () => [props.prefix] : null);
-})
-
-const suffixComponent = computed(() => {
-  return hasSuffix.value ? slots.suffix : (props.suffix ? () => [props.suffix] : null);
 })
 
 const characterCountLabel = computed(() => {
@@ -191,26 +181,26 @@ const describedBy = computed(() => {
   return data;
 })
 
-const labelledBy = computed(() => {
+const labelledBy = () => {
   let data: string[] = [], id = inputId.value;
 
-  if (prefixComponent.value) {
+  if (slots.prefix) {
     data.push(`${id}-Prefix`);
   }
 
-  if (suffixComponent.value) {
+  if (slots.suffix) {
     data.push(`${id}-Suffix`);
   }
 
-  if (hasVerticalContent.value) {
+  if (slots.verticalContent) {
     data.push(`${id}-VerticalContent`);
   }
 
   data.unshift(labelID(id));
 
-  return data;
+  return data.join(' ');
 
-})
+}
 
 const setNativeInputValue = () => {
   if (inputRef.value) {
@@ -486,7 +476,7 @@ const attributes = computed(() => {
     className: classNames(
       styles.Input,
       align && styles[variationName('Input-align', align)],
-      suffixComponent.value && styles['Input-suffixed'],
+      slots.suffix && styles['Input-suffixed'],
       clearButton && styles['Input-hasClearButton'],
       monospaced && styles.monospaced,
       suggestion && styles.suggestion,
@@ -502,7 +492,7 @@ const attributes = computed(() => {
     type: type === 'currency' ? 'text' : type,
     rows: getRows(multiline),
     'aria-describedby': describedBy.value.length ? describedBy.value.join(' ') : undefined,
-    'aria-labelledby': labelledBy.value.join(' '),
+    'aria-labelledby': labelledBy(),
     'aria-invalid': Boolean(error),
     'aria-owns': ariaOwns,
     'aria-activedescendant': ariaActiveDescendant,
@@ -543,9 +533,6 @@ watch(() => props.focused, (newValue, oldValue) => {
 
 let verticalContentChanged = false;
 onBeforeUpdate(() => {
-  hasSuffix.value = Boolean(slots.suffix);
-  hasPrefix.value = Boolean(slots.prefix);
-
   if (hasVerticalContent.value != Boolean(slots.verticalContent)) {
     verticalContentChanged = true;
     hasVerticalContent.value = Boolean(slots.verticalContent)

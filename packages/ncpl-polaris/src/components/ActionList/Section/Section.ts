@@ -1,4 +1,4 @@
-import type { ActionListItemDescriptor, ActionListSection } from '../../types';
+import type { ActionListSection } from '../../types';
 
 
 export interface ActionListSectionProps {

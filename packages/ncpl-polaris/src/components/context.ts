@@ -141,8 +141,8 @@ export const linkContext = {
 };
 
 //FrameContext
-import type { FrameLogo } from "@ncpl-polaris/components/Frame/Frame";
-import type { ToastMessage, ToastID } from "@ncpl-polaris/components/Frame/ToastManager/types";
+import type { FrameLogo } from "./Frame/Frame";
+import type { ToastMessage, ToastID } from "./Frame/ToastManager/types";
 
 export type FrameContext = {
   logo: Ref<FrameLogo | undefined>;
@@ -538,6 +538,20 @@ export const indexTableRowContext = {
     provide(indexTableRowContextKey, value);
   },
 }
+
+//filterActionsContext
+export const filterActionsContextKey: InjectionKey<Ref<boolean>> = Symbol(
+  "indexTableRowContextKey"
+);
+export const filterActionsContext = {
+  inject: () => {
+    return inject(filterActionsContextKey, computed(() => false));
+  },
+  provide: (value: ComputedRef<Ref<boolean>>) => {
+    provide(filterActionsContextKey, computed(() => true));
+  },
+}
+
 
 export function useIndexTableRow() {
   const indexTableRow = indexTableRowContext.inject();

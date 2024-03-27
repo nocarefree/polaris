@@ -12,7 +12,7 @@
     <PrimaryMetric v-if="primaryMetric" :value="primaryMetric.value" :tooltip="primaryMetric.tooltip"
       :disabled="disabled" :type="type"></PrimaryMetric>
     <div v-if="visualization" :class="styles.VisualizationWrapper">
-      <Visualization :visualization></Visualization>
+      <Visualization :visualization="visualization"></Visualization>
     </div>
   </MetricLayout>
 </template>
