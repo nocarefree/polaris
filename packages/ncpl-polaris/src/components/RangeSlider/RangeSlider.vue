@@ -1,13 +1,22 @@
 <template>
-  <component :is="isDualThumb(modelValue)?DualThumb:SingleThumb" :model-value="modelValue"
-    @update:modelValue="e => $emit('update:modelValue', e)" v-bind="sharedProps">
+  <DualThumb v-if="isDualThumb(modelValue)" :model-value="modelValue"
+    @update:modelValue="(e: RangeSliderValue) => $emit('update:modelValue', e)" v-bind="sharedProps">
     <template v-if="$slots.prefix" #prefix>
       <slot name="prefix"></slot>
     </template>
     <template v-if="$slots.suffix" #suffix>
       <slot name="suffix"></slot>
     </template>
-  </component>
+  </DualThumb>
+  <SingleThumb v-else :model-value="modelValue"
+    @update:modelValue="(e: RangeSliderValue) => $emit('update:modelValue', e)" v-bind="sharedProps">
+    <template v-if="$slots.prefix" #prefix>
+      <slot name="prefix"></slot>
+    </template>
+    <template v-if="$slots.suffix" #suffix>
+      <slot name="suffix"></slot>
+    </template>
+  </SingleThumb>
 </template>
 <script setup lang="ts">
 import { computed } from 'vue'

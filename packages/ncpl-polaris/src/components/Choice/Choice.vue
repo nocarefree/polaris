@@ -4,8 +4,8 @@
       <div>
         <component :is="children"></component>
         <div :class="styles.Descriptions">
-          <div v-if="hasError" :class="styles.Error">
-            <InlineError :message="error!" :field-id="id" />
+          <div v-if="error" :class="styles.Error">
+            <InlineError :message="error" :field-id="id" />
           </div>
           <div v-if="helpText" ;class="styles.HelpText" :id="helpTextID(id)">
             <Text as="span" :tone="disabled ? undefined : 'subdued'">
@@ -15,7 +15,8 @@
         </div>
       </div>
     </template>
-    <label :class="className" :htmlFor="id" @click="e => $emit('click', e)" :style="sanitizeCustomProperties(labelStyle)">
+    <label :class="className" :htmlFor="id" @click="e => $emit('click', e)"
+      :style="sanitizeCustomProperties(labelStyle)">
       <span :class="styles.Control">
         <slot></slot>
       </span>

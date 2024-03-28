@@ -44,7 +44,7 @@ import Item from "../Item/Item.vue"
 import Text from "../../Text/Text.vue";
 
 defineOptions({
-  name: 'NpSection',
+  name: 'NpActionSection',
 })
 
 const props = defineProps<ActionListSectionProps>()

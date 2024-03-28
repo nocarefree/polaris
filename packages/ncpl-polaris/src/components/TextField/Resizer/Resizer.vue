@@ -18,7 +18,7 @@ const emit = defineEmits(['update:height'])
 const contentNode = ref();
 const minimumLinesNode = ref();
 
-const ENTITIES_TO_REPLACE = {
+const ENTITIES_TO_REPLACE:{[key:string]:string} = {
   '&': '&amp;',
   '<': '&lt;',
   '>': '&gt;',

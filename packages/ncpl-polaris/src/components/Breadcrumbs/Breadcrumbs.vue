@@ -1,8 +1,9 @@
 <template>
   <nav role="navigation">
     <Button :key="backAction.content" :url="'url' in backAction ? backAction.url : undefined"
-      @click="e => 'onAction' in backAction ? backAction.onAction(e) : undefined" @pointerDown="handleMouseUpByBlurring"
-      :icon="ArrowLeftIcon" :accessibility-label="backAction.accessibilityLabel ?? backAction.content" />
+      @click="(e: any) => 'onAction' in backAction ? backAction.onAction() : undefined"
+      @pointerDown="handleMouseUpByBlurring" :icon="ArrowLeftIcon"
+      :accessibility-label="backAction.accessibilityLabel ?? backAction.content" />
   </nav>
 </template>
 <script setup lang="ts">

@@ -10,8 +10,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ActionMenuProps } from './ActionMenu'
-import type { MenuGroupDescriptor } from "../types"
-import type { ActionListSection } from "../ActionList/Section"
+import type { MenuGroupDescriptor, ActionListSection } from "../types";
 import styles from './ActionMenu.module.scss'
 import RollupActions from "./RollupActions";
 import Actions from "./Actions"

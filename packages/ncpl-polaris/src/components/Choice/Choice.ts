@@ -51,7 +51,7 @@ export interface ChoiceProps extends ChoiceBleedProps {
     /** Grow to fill the space. Equivalent to width: 100%; height: 100% */
     fill?: ResponsiveProp<boolean>;
     /** Display an error message */
-    error?: Error | boolean;
+    error?: Error | "false";
     /** Label for the checkbox */
     label: string | Component;
     /** Additional text to aide in use */

@@ -49,7 +49,7 @@ import { classNames } from '../../../utils';
 
 
 defineOptions({
-  name: 'NpItem',
+  name: 'NpActionItem',
 })
 const props = defineProps<ActionListItemProps>()
 
