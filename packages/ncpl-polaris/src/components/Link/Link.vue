@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { NpUnstyledLink } from "@ncpl-polaris/components";
-import { classNames } from "@ncpl-polaris/utils";
+import { NpUnstyledLink } from "../../components";
+import { classNames } from "../../utils";
 import { bannerContext } from "../context";
 import type { LinkProps } from "./Link";
 import styles from "./Link.module.scss";

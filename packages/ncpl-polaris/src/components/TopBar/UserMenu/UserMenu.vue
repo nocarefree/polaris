@@ -24,9 +24,9 @@
 <script setup lang="ts">
 import { UserMenuProps } from './UserMenu'
 import Menu from '../Menu'
-import MessageIndicator from '@ncpl-polaris/components/MessageIndicator'
-import Avatar from '@ncpl-polaris/components/Avatar'
-import Text from '@ncpl-polaris/components/Text'
+import MessageIndicator from '../../MessageIndicator'
+import Avatar from '../../Avatar'
+import Text from '../../Text'
 import styles from './UserMenu.module.scss'
 
 defineOptions({

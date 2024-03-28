@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils';
 import ActionList from './ActionList.vue'
 
 export const NpActionList = withInstall(ActionList)

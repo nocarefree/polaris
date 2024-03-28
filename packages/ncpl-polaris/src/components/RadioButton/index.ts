@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import RadioButton from './RadioButton.vue'
 
 export const NpRadioButton = withInstall(RadioButton)

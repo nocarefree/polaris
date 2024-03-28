@@ -4,7 +4,7 @@
 <script setup lang="ts">
 import { computed, useSlots, h } from 'vue'
 import type { VerticalStackProps } from './VerticalStack'
-import { classNames, getResponsiveProps } from "@ncpl-polaris/utils";
+import { classNames, getResponsiveProps } from "../../utils";
 import styles from './VerticalStack.module.scss'
 
 defineOptions({

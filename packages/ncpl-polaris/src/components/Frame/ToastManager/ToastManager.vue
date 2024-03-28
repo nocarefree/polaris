@@ -20,7 +20,7 @@ import { ref, watch } from "vue";
 import Toast from "../Toast/Toast.vue"
 import styles from "./ToastManager.module.scss";
 import type { ToastMessagesProps } from "./types";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import Portal from "../../Portal";
 import EventListener from "../../EventListener";
 

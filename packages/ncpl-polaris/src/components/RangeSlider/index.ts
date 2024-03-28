@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import RangeSlider from './RangeSlider.vue'
 
 export const NpRangeSlider = withInstall(RangeSlider)

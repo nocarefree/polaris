@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import AnnotatedSection from './AnnotatedSection.vue'
 
 export const NpLayoutAnnotatedSection = withInstall(AnnotatedSection)

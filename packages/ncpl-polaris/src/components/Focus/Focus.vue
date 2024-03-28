@@ -4,7 +4,7 @@
 <script setup lang="ts">
 import { onUpdated, unref } from 'vue';
 import type { FocusProps } from './Focus';
-import { focusFirstFocusableNode } from "@ncpl-polaris/utils/focus";
+import { focusFirstFocusableNode } from "../../utils/focus";
 
 defineOptions({
   name: 'NpFocus',

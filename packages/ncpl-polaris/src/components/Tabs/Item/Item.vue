@@ -12,7 +12,7 @@
 import { ref, computed, watchEffect } from 'vue'
 import type { TabsItemProps } from './Item'
 import styles from '../Tabs.module.scss'
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 import UnstyledLink from "../../UnstyledLink"
 
 defineOptions({

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import InlineGrid from './InlineGrid.vue'
 
 export const NpInlineGrid = withInstall(InlineGrid)

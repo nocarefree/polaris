@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import styles from './ScrollContainer.module.scss'
-import { debounce } from "@ncpl-polaris/utils/debounce";
+import { debounce } from "../../../utils/debounce";
 import { scrollContext } from "../../context"
 
 defineOptions({

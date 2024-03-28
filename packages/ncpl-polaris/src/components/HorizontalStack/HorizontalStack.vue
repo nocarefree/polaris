@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { HorizontalStackProps } from "./HorizontalStack";
-import { getResponsiveProps } from "@ncpl-polaris/utils";
+import { getResponsiveProps } from "../../utils";
 import styles from "./HorizontalStack.module.scss";
 import type { AttrsType } from "../types"
 

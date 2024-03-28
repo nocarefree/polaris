@@ -18,7 +18,7 @@ import { computed } from 'vue'
 import type { PageProps } from './Page'
 import Header from './Header'
 import styles from './Page.module.scss'
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../utils';
 
 defineOptions({
   name: 'NpPage',

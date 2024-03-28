@@ -44,7 +44,7 @@ import Icon from "../../Icon";
 import Text from "../../Text";
 import ConditionalWrapper from "../../ConditionalWrapper";
 import styles from '../ActionList.module.css';
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 
 
 

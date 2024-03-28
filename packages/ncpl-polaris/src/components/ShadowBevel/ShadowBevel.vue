@@ -8,8 +8,8 @@
 import { computed } from 'vue'
 import type { ShadowBevelProps } from './ShadowBevel'
 import styles from './ShadowBevel.module.scss'
-import { getResponsiveValue } from "@ncpl-polaris/utils/css"
-import type { ResponsiveProp } from '@ncpl-polaris/utils/css';
+import { getResponsiveValue } from "../../utils/css"
+import type { ResponsiveProp } from '../../utils/css';
 
 defineOptions({
   name: 'NpShadowBevel',

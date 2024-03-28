@@ -13,7 +13,7 @@
 import { ref } from "vue";
 import type { CheckableButtonProps } from './CheckableButton'
 import styles from './CheckableButton.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 import Checkbox from "../Checkbox"
 
 defineOptions({

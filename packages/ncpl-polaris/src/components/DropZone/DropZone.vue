@@ -34,8 +34,8 @@ import { useI18n, useId } from "../context"
 import { defaultAllowMultiple, createAllowMultipleKey, getDataTransferFiles, fileAccepted, type DropZoneEvent } from "./utils"
 import { capitalize } from "lodash"
 import { UploadIcon, AlertCircleIcon } from "@ncpl/ncpl-icons"
-import { classNames, variationName } from "@ncpl-polaris/utils"
-import { debounce } from "@ncpl-polaris/utils/debounce"
+import { classNames, variationName } from "../../utils"
+import { debounce } from "../../utils/debounce"
 import { useEventListener } from "@vueuse/core"
 
 defineOptions({

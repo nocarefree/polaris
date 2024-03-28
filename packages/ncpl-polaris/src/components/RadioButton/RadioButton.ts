@@ -1,7 +1,7 @@
 import type { Component } from "vue";
 
 import type { ChoiceBleedProps } from '../Choice';
-import type { ResponsiveProp } from '@ncpl-polaris/utils/css';
+import type { ResponsiveProp } from '../../utils/css';
 
 
 export interface RadioButtonProps extends ChoiceBleedProps {

@@ -51,8 +51,8 @@ import Text from "../../Text"
 import styles from './DualThumb.module.scss'
 import sharedStyles from '../RangeSlider.module.scss'
 import { useEventListener } from '@vueuse/core';
-import { debounce } from "@ncpl-polaris/utils/debounce"
-import { classNames } from "@ncpl-polaris/utils"
+import { debounce } from "../../../utils/debounce"
+import { classNames } from "../../../utils"
 import { Key } from '../../types';
 
 enum Control {

@@ -58,16 +58,16 @@ import {
   reactive
 } from "vue";
 import { useI18n, useMediaQuery, frameContext, useTheme } from "../context";
-import { classNames, setRootProperty } from "@ncpl-polaris/utils";
-import type { AttrsType } from "@ncpl-polaris/components/types";
-import { dataPolarisTopBar, layer } from "@ncpl-polaris/components/shared";
+import { classNames, setRootProperty } from "../../utils";
+import type { AttrsType } from "../types";
+import { dataPolarisTopBar, layer } from "../shared";
 import type { FrameProps, ToastPropsWithID, ToastID } from "./Frame";
 import CSSAnimation from "./CSSAnimation/CSSAnimation.vue";
 import { XIcon } from "@ncpl/ncpl-icons";
-import Icon from "@ncpl-polaris/components/Icon";
-import TrapFocus from "@ncpl-polaris/components/TrapFocus";
-import Backdrop from "@ncpl-polaris/components/Backdrop";
-import CSSTransition from "@ncpl-polaris/components/CSSTransition";
+import Icon from "../Icon";
+import TrapFocus from "../TrapFocus";
+import Backdrop from "../Backdrop";
+import CSSTransition from "../CSSTransition";
 import ContextualSaveBar from "./ContextualSaveBar/ContextualSaveBar.vue";
 import LoadingBar from "./Loading/Loading.vue";
 import ToastManager from "./ToastManager/ToastManager.vue";

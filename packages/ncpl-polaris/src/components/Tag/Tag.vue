@@ -23,8 +23,8 @@
 import { computed, Text, useSlots } from 'vue'
 import type { TagProps } from './Tag';
 import styles from './Tag.module.scss';
-import { classNames } from "@ncpl-polaris/utils";
-import { handleMouseUpByBlurring } from '@ncpl-polaris/utils/focus';
+import { classNames } from "../../utils";
+import { handleMouseUpByBlurring } from '../../utils/focus';
 import { XSmallIcon } from "@ncpl/ncpl-icons";
 import { useI18n } from "../context";
 import Icon from "../Icon";

@@ -5,7 +5,7 @@
 import { computed } from 'vue'
 import type { KeyboardKeyProps } from './KeyboardKey'
 import styles from './KeyboardKey.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 
 defineOptions({
   name: 'NpKeyboardKey',

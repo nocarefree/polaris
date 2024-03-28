@@ -1,4 +1,4 @@
-import type {Range} from '@ncpl-polaris/utils/dates';
+import type {Range} from '../../../utils/dates';
 
 export type DatePickerMonthProps = {
     focusedDate?: Date;

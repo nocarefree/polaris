@@ -7,7 +7,7 @@
 import { computed } from 'vue'
 import type { InlineStackProps } from './InlineStack'
 import styles from './InlineStack.module.scss'
-import { getResponsiveProps, getResponsiveValue } from '@ncpl-polaris/utils/css';
+import { getResponsiveProps, getResponsiveValue } from '../../utils/css';
 
 defineOptions({
   name: 'NpInlineStack',

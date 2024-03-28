@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Autocomplete from './Autocomplete.vue'
 
 export const NpAutocomplete = withInstall(Autocomplete)

@@ -1,17 +1,16 @@
 import type {
   BreakpointsAlias,
   ColorBackgroundAlias,
-  BorderRadiusAliasOrScale,
   SpaceScale,
 } from '@shopify/polaris-tokens';
 
-import type { ResponsiveProp } from '@ncpl-polaris/utils/css';
+import type { ResponsiveProp } from '../../utils/css';
 type Spacing = ResponsiveProp<SpaceScale>;
 
 export type CardProps = {
   /** Background color
-* @default 'bg-surface'
-*/
+  * @default 'bg-surface'
+  */
   background?: ColorBackgroundAlias;
   /** The spacing around the card
    * @default {xs: '400', sm: '500'}

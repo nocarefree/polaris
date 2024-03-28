@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, onBeforeUnmount, type PropType } from "vue"
 
-import type { Action } from "@ncpl-polaris/components/types";
+import type { Action } from "../types";
 import { useId, useFrame } from "../context"
 
 

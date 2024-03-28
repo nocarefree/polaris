@@ -83,7 +83,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { type IndexFiltersProps, IndexFiltersMode } from './IndexFilters';
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import { useIsSticky } from "./useIsSticky";
 import Container from "./Container/Container.vue";
 import SortButton from "./SortButton";

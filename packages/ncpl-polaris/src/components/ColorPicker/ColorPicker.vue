@@ -15,15 +15,15 @@
 import { reactive, ref, onMounted, computed } from 'vue'
 import type { ColorPickerProps } from './ColorPicker'
 import styles from './ColorPicker.module.scss';
-import { classNames } from "@ncpl-polaris/utils";
-import { debounce } from "@ncpl-polaris/utils/debounce";
-import { hsbToRgb } from '@ncpl-polaris/utils/color-transformers';
+import { classNames } from "../../utils";
+import { debounce } from "../../utils/debounce";
+import { hsbToRgb } from '../../utils/color-transformers';
 import { useEventListener } from '@vueuse/core';
 import Slidable from "./Slidable";
 import HuePicker from "./HuePicker";
 import AlphaPicker from "./AlphaPicker";
 import { clamp } from "lodash";
-import type { HSBColor } from '@ncpl-polaris/utils/color-types';
+import type { HSBColor } from '../../utils/color-types';
 
 interface State {
   pickerSize: {

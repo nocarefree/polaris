@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import { useAttrs, computed } from "vue";
-import { NpUnstyledLink } from "@ncpl-polaris/components";
-import type { AttrsType } from "@ncpl-polaris/components/types"
+import NpUnstyledLink from "../UnstyledLink";
+import type { AttrsType } from "../types"
 
 defineOptions({
   name: 'NpUnstyledButton',

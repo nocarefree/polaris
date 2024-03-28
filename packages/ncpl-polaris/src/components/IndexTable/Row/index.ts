@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Row from './Row.vue'
 
 export const NpIndexTableRow = withInstall(Row)

@@ -1,4 +1,4 @@
-import { withInstall } from "@ncpl-polaris/utils";
+import { withInstall } from "../../utils";
 import LegacyStack from "./LegacyStack.vue";
 
 export const NpLegacyStack = withInstall(LegacyStack);

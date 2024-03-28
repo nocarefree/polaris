@@ -36,8 +36,8 @@
 <script setup lang="ts">
 import { ref, computed, h, defineComponent, onMounted, Fragment, watch, onUnmounted, nextTick } from 'vue'
 import type { Ref } from 'vue';
-import { classNames, elementChildren } from "@ncpl-polaris/utils"
-import { findFirstKeyboardFocusableNode } from "@ncpl-polaris/utils/focus"
+import { classNames, elementChildren } from "../../../utils"
+import { findFirstKeyboardFocusableNode } from "../../../utils/focus"
 import { type PopoverOverlayProps, PopoverCloseSource } from './PopoverOverlay'
 import { overlay } from "../../shared";
 import EventListener from "../../EventListener";
@@ -45,7 +45,7 @@ import KeypressListener from "../../KeypressListener"
 import { Key } from "../../types";
 import styles from '../Popover.module.scss'
 import Pane from "../Pane/Pane.vue";
-import PositionedOverlay from "@ncpl-polaris/components/PositionedOverlay/PositionedOverlay.vue"
+import PositionedOverlay from "../../PositionedOverlay/PositionedOverlay.vue"
 import { useTheme, usePortalsManager } from '../../context';
 
 

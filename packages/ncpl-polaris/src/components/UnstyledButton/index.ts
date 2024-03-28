@@ -1,4 +1,4 @@
-import { withInstall } from "@ncpl-polaris/utils";
+import { withInstall } from "../../utils";
 import UnstyledButton from "./UnstyledButton.vue";
 
 export const NpUnstyledButton = withInstall(UnstyledButton);

@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, reactive, nextTick } from 'vue'
 import type { StickyProps } from './Sticky'
-import { getRectForNode } from "@ncpl-polaris/utils"
+import { getRectForNode } from "../../utils"
 import { useStickyManager } from "../context"
 
 defineOptions({

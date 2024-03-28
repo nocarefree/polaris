@@ -38,7 +38,7 @@ import styles from './SingleThumb.module.scss'
 import sharedStyles from "../RangeSlider.module.scss"
 import Labelled from "../../Labelled"
 import Text from "../../Text"
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 import { clamp } from 'lodash'
 import { helpTextID } from '../../Labelled';
 

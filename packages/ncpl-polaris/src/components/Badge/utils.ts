@@ -1,4 +1,4 @@
-import type { I18n } from '@ncpl-polaris/utils/i18n';
+import type { I18n } from '../../utils/i18n';
 
 import { ProgressValue, ToneValue } from './types';
 import type { Progress, Tone } from './types';

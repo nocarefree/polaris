@@ -37,7 +37,7 @@ import Form from '../../../Form';
 import FormLayout from '../../../FormLayout';
 import TextField from '../../../TextField';
 import { useI18n } from '../../../context';
-import { focusFirstFocusableNode } from "@ncpl-polaris/utils/focus"
+import { focusFirstFocusableNode } from "../../../../utils/focus"
 
 const MAX_VIEW_NAME_LENGTH = 40;
 

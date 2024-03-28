@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import List from './List.vue'
 
 export const NpTabsList = withInstall(List)

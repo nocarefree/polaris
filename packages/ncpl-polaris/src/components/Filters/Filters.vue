@@ -34,7 +34,7 @@ import Box from "../Box";
 import SearchField from "./SearchField";
 import FiltersBar from "./FiltersBar";
 
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../utils';
 import styles from './Filters.module.scss';
 
 defineOptions({

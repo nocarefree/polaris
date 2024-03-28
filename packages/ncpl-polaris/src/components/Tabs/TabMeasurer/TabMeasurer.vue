@@ -10,7 +10,7 @@
 import { ref, watch } from 'vue'
 import type { TabMeasurerProps } from './TabMeasurer'
 import styles from '../Tabs.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 import { useEventListener } from '@vueuse/core'
 import Tab from "../Tab"
 

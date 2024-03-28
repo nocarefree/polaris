@@ -24,7 +24,7 @@ import TrapFocus from '../../TrapFocus';
 import { useTheme } from '../../context';
 import type { DialogProps } from './Dialog'
 import styles from './Dialog.module.scss'
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 import { Key } from '../../types';
 import { useEventListener } from '@vueuse/core';
 

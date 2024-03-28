@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import type { SkeletonDisplayTextProps } from './SkeletonDisplayText'
 import styles from './SkeletonDisplayText.module.scss'
-import { classNames, variationName } from "@ncpl-polaris/utils"
+import { classNames, variationName } from "../../utils"
 
 defineOptions({
   name: 'NpSkeletonDisplayText',

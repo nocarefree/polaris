@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Option from './Option.vue'
 
 export const NpOptionListOption = withInstall(Option)

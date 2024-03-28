@@ -40,7 +40,7 @@ import Text from "../Text"
 import Icon from "../Icon"
 import { SelectIcon } from "@ncpl/ncpl-icons";
 import { useId } from "../context"
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 
 interface HideableStrictOption extends StrictOption {
   hidden?: boolean;

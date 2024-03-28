@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import SkeletonPage from './SkeletonPage.vue'
 
 export const NpSkeletonPage = withInstall(SkeletonPage)

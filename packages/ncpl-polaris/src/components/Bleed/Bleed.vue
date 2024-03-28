@@ -9,8 +9,8 @@ import type { BleedProps } from './Bleed'
 import styles from './Bleed.module.scss'
 
 import type { SpaceScale } from '@shopify/polaris-tokens';
-import { getResponsiveProps, sanitizeCustomProperties } from '@ncpl-polaris/utils/css';
-import type { ResponsiveProp } from '@ncpl-polaris/utils/css';
+import { getResponsiveProps, sanitizeCustomProperties } from '../../utils/css';
+import type { ResponsiveProp } from '../../utils/css';
 
 
 type Spacing = ResponsiveProp<SpaceScale>;

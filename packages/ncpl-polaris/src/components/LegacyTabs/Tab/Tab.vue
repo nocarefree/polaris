@@ -21,8 +21,8 @@
 import { ref, computed, watchEffect } from 'vue'
 import styles from '../LegacyTabs.module.scss'
 import UnstyledLink from "../../UnstyledLink"
-import { classNames } from "@ncpl-polaris/utils"
-import { handleMouseUpByBlurring, focusFirstFocusableNode } from "@ncpl-polaris/utils/focus"
+import { classNames } from "../../../utils"
+import { handleMouseUpByBlurring, focusFirstFocusableNode } from "../../../utils/focus"
 
 defineOptions({
   name: 'NpLegacyTabsTab',

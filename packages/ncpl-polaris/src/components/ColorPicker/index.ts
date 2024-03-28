@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import ColorPicker from './ColorPicker.vue'
 
 export const NpColorPicker = withInstall(ColorPicker)

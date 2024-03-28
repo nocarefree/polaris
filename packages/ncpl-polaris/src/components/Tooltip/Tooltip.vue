@@ -19,11 +19,11 @@
 import { computed, ref, watch } from 'vue'
 import type { TooltipProps } from './Tooltip'
 import { useId } from '../context';
-import Portal from "@ncpl-polaris/components/Portal";
+import Portal from "../Portal";
 import TooltipOverlay from "./TooltipOverlay/TooltipOverlay.vue";
 import styles from './Tooltip.module.scss';
-import { classNames } from "@ncpl-polaris/utils";
-import { findFirstFocusableNode } from "@ncpl-polaris/utils/focus"
+import { classNames } from "../../utils";
+import { findFirstFocusableNode } from "../../utils/focus"
 import { useEventListener } from "@vueuse/core";
 
 const HOVER_OUT_TIMEOUT = 150;

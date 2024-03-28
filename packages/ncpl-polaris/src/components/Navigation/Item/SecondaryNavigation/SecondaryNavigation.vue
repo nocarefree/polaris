@@ -15,10 +15,10 @@
 <script setup lang="ts">
 import { computed, shallowRef } from 'vue'
 import type { SecondaryNavigationProps } from './SecondaryNavigation'
-import Collapsible from '@ncpl-polaris/components/Collapsible'
+import Collapsible from '../../../Collapsible'
 import styles from '../../Navigation.module.scss'
-import { useId, useNavigation } from '@ncpl-polaris/components/context'
-import { classNames } from '@ncpl-polaris/utils'
+import { useId, useNavigation } from '../../../context'
+import { classNames } from '../../../../utils'
 import { isEqual } from "lodash";
 
 defineOptions({

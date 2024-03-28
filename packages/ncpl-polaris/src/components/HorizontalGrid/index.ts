@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import HorizontalGrid from './HorizontalGrid.vue'
 
 export const NpHorizontalGrid = withInstall(HorizontalGrid)

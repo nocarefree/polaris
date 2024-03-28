@@ -1,11 +1,10 @@
-import type { ActionListItemProps } from '@ncpl-polaris/components/ActionList/Item';
-import type { ActionListSection } from '@ncpl-polaris/components/ActionList/Section';
+import type { ActionListSection, ActionListItemDescriptor } from '../../types';
 
 export interface RollupActionsProps {
     /** Accessibilty label */
     accessibilityLabel?: string;
     /** Collection of actions for the list */
-    items?: ActionListItemProps[];
+    items?: ActionListItemDescriptor[];
     /** Collection of sectioned action items */
     sections?: ActionListSection[];
 }

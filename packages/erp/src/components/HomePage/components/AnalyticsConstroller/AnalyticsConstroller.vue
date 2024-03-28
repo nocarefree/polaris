@@ -1,5 +1,5 @@
 <template>
-  <div :class="smDown ? $style.metricsControllerPadding : void 0">
+  <div :class="smDown ? styles.metricsControllerPadding : void 0">
     <div style="margin-top: var(--pc-stack-spacing);">
       <AnalyticsDateControls :initial-state="initialState"></AnalyticsDateControls>
     </div>

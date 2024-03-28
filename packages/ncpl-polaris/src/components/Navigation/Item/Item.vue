@@ -127,7 +127,7 @@ import styles from '../Navigation.module.scss'
 import { MatchState } from "../types"
 import type { ItemURLDetails } from "../types"
 import { useNavigation, useMediaQuery, useI18n, useId } from '../../context'
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 
 
 

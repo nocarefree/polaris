@@ -8,8 +8,8 @@
   <ScrollLock />
 </template>
 <script setup lang="ts">
-import ScrollLock from "@ncpl-polaris/components/ScrollLock/ScrollLock.vue"
-import { classNames } from "@ncpl-polaris/utils";
+import ScrollLock from "../ScrollLock"
+import { classNames } from "../../utils";
 import type { BackdropProps } from "./Backdrop"
 import styles from "./Backdrop.module.scss";
 

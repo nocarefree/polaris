@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Transition from './Transition.vue'
 
 export const NpTransition = withInstall(Transition)

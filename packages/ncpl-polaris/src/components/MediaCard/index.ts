@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import MediaCard from './MediaCard.vue'
 
 export const NpMediaCard = withInstall(MediaCard)

@@ -26,14 +26,14 @@
 <script setup lang="ts">
 import { ref, computed, watchEffect, onMounted } from 'vue'
 import type { TabsCreateViewModalProps } from "./CreateViewModal"
-import { useIsTouchDevice } from "@ncpl-polaris/utils"
+import { useIsTouchDevice } from "../../../utils"
 import Modal from '../../Modal';
 import ModalSection from '../../Modal/Section';
 import Form from '../../Form';
 import FormLayout from '../../FormLayout';
 import TextField from '../../TextField';
 import { useI18n } from '../../context';
-import { focusFirstFocusableNode } from "@ncpl-polaris/utils/focus"
+import { focusFirstFocusableNode } from "../../../utils/focus"
 
 
 const MAX_VIEW_NAME_LENGTH = 40;

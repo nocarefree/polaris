@@ -1,6 +1,6 @@
 import { onBeforeUnmount, onMounted, ref, computed, watchEffect } from 'vue';
 
-import { debounce } from '@ncpl-polaris/utils/debounce';
+import { debounce } from '../../utils/debounce';
 
 export enum IndexFiltersMode {
   Default = 'DEFAULT',

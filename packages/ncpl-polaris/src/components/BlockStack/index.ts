@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import BlockStack from './BlockStack.vue'
 
 export const NpBlockStack = withInstall(BlockStack)

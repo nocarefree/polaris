@@ -18,14 +18,14 @@
 </template>
 <script setup lang="ts">
 import { reactive, toRef } from "vue";
-import Scrollable from "@ncpl-polaris/components/Scrollable"
-import UnstyledLink from "@ncpl-polaris/components/UnstyledLink"
-import Image from "@ncpl-polaris/components/Image"
+import Scrollable from "../Scrollable"
+import UnstyledLink from "../UnstyledLink"
+import Image from "../Image"
 import type { NavigationProps } from './Navigation'
 import styles from './Navigation.module.scss'
 
 import { navigationContext, withinContentContext, useFrame } from "../context";
-import { getWidth, classNames } from "@ncpl-polaris/utils"
+import { getWidth, classNames } from "../../utils"
 
 defineOptions({
   name: 'NpNavigation',

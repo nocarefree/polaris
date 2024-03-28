@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import ProgressBar from './ProgressBar.vue'
 
 export const NpProgressBar = withInstall(ProgressBar)

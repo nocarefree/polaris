@@ -25,7 +25,7 @@
 import { ref,computed } from 'vue'
 import type { SelectAllActionsProps } from './SelectAllActions'
 import styles from './SelectAllActions.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 import CheckableButton from "../CheckableButton"
 import UnstyledButton from "../UnstyledButton"
 import MyTransition from "../Transition"

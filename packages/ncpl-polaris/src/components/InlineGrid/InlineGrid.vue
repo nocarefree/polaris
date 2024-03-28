@@ -7,8 +7,8 @@
 import { computed } from 'vue'
 import type { InlineGridProps } from './InlineGrid'
 import styles from './InlineGrid.module.scss'
-import { sanitizeCustomProperties, getResponsiveValue, getResponsiveProps } from "@ncpl-polaris/utils/css"
-import type { ResponsiveValue, ResponsiveProp } from '@ncpl-polaris/utils/css';
+import { sanitizeCustomProperties, getResponsiveValue, getResponsiveProps } from "../../utils/css"
+import type { ResponsiveValue, ResponsiveProp } from '../../utils/css';
 
 type ColumnsAlias = 'oneThird' | 'oneHalf' | 'twoThirds';
 type ColumnsType = number | string | ColumnsAlias[];

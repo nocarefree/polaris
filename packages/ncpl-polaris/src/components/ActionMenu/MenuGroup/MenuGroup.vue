@@ -15,9 +15,9 @@
 <script setup lang="ts">
 import type { MenuGroupProps } from './MenuGroup'
 import styles from './MenuGroup.module.scss'
-import Popover from "@ncpl-polaris/components/Popover"
+import Popover from "../../Popover"
 import SecondaryAction from "../SecondaryAction"
-import ActionList from "@ncpl-polaris/components/ActionList"
+import ActionList from "../../ActionList"
 
 defineOptions({
   name: 'NpActionMenuMenuGroup',

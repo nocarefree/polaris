@@ -8,7 +8,7 @@
 import { computed, useAttrs, unref, getCurrentInstance } from "vue"
 import { linkContext, routerContext } from '../context';
 import { UnstyledLinkProps } from "./UnstyledLink"
-import { unstyled } from "@ncpl-polaris/components/shared"
+import { unstyled } from "../shared"
 
 defineOptions({
   name: 'NpUnstyledLink',

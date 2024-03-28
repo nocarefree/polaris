@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import type { BreadcrumbsProps } from './Breadcrumbs';
 import Button from "../Button";
-import { handleMouseUpByBlurring } from '@ncpl-polaris/utils/focus';
+import { handleMouseUpByBlurring } from '../../utils/focus';
 import { ArrowLeftIcon } from "@ncpl/ncpl-icons";
 
 defineOptions({

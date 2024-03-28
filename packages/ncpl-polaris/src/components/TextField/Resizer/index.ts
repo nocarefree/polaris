@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Resizer from './Resizer.vue'
 
 export const NpTextFieldResizer = withInstall(Resizer)

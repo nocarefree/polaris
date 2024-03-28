@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import CloseButton from './CloseButton.vue'
 
 export const NpModalCloseButton = withInstall(CloseButton)

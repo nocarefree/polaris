@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { classNames, useFocus } from "@ncpl-polaris/utils"
+import { classNames, useFocus } from "../../../utils"
 import styles from '../ButtonGroup.module.scss'
 
 const props = defineProps<{ button: any }>();

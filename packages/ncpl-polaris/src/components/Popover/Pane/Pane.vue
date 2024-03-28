@@ -5,10 +5,10 @@
 </template>
 <script setup lang="ts">
 import { computed, h, defineComponent } from "vue";
-import Scrollable from "@ncpl-polaris/components/Scrollable"
+import Scrollable from "../../Scrollable"
 import Section from "../Section/Section.vue"
 import type { PaneProps } from "./Pane"
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import styles from '../Popover.module.scss';
 
 //defineOptions({ name: 'Pane' });

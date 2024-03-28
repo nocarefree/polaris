@@ -12,8 +12,8 @@
 import { computed } from "vue";
 import type { IconProps } from "./Icon";
 
-import Text from "@ncpl-polaris/components/Text";
-import { classNames, variationName } from "@ncpl-polaris/utils";
+import Text from "../Text";
+import { classNames, variationName } from "../../utils";
 import styles from "./Icon.module.scss"
 
 const props = defineProps<IconProps>();

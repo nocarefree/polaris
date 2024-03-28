@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Tooltip from './Tooltip.vue'
 
 export const NpTooltip = withInstall(Tooltip)

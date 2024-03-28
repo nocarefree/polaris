@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Label from './Label.vue'
 
 export const NpLabel = withInstall(Label)

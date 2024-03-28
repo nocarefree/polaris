@@ -17,7 +17,7 @@ import type { ListboxProps, ArrowKeys, NavigableOption } from './Listbox';
 import Text from '../Text';
 import styles from './Listbox.module.scss';
 import { onKeyDown } from '@vueuse/core';
-import { debounce } from "@ncpl-polaris/utils/debounce"
+import { debounce } from "../../utils/debounce"
 import { scrollOptionIntoView } from "./utils";
 import { useComboboxListbox } from "../Combobox"
 import { useId } from "../context"
@@ -66,7 +66,7 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (listboxRef.value) {
-    scrollableRef.value = listboxRef.value.closest(scrollable.selector);
+    scrollableRef.value = listboxRef.value.closest(scrollable.selector) as (HTMLElement | null);
   }
 }, { flush: 'post' });
 
@@ -142,7 +142,7 @@ const getNextValidOption = async (key: ArrowKeys) => {
   const { autoSelection } = props;
   let currentIndex = activeOption.value?.index || 0;
   let nextIndex = 0;
-  let element = activeOption.value?.element;
+  let element:any = activeOption.value?.element;
   let totalOptions = -1;
 
   if (!activeOption.value && autoSelection === AutoSelection.None) {
@@ -189,7 +189,7 @@ const getFormattedOption = (element: HTMLElement, index: number) => {
 
 const handleScrollIntoView = (option: NavigableOption) => {
   if (scrollableRef.value) {
-    scrollOptionIntoView(option.element, scrollableRef.value);
+    scrollOptionIntoView(option.element, scrollableRef.value!);
   }
 };
 const handleScrollIntoViewDebounced = debounce(handleScrollIntoView, 50);

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Pagination from './Pagination.vue'
 
 export const NpPagination = withInstall(Pagination)

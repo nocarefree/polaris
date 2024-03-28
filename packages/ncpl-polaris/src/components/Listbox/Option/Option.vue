@@ -33,7 +33,7 @@ import { useId } from "../../context";
 import { useSection, listboxWithinSectionDataSelector } from "../Section";
 import TextOption from "../TextOption";
 import UnstyledLink from "../../UnstyledLink";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 
 
 defineOptions({

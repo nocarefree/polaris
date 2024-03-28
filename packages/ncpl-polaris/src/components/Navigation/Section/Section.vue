@@ -44,7 +44,7 @@ import { computed, ref } from "vue";
 import type { NavigationSectionProps } from './Section'
 import type { ItemProps } from '../types';
 import Item from '../Item'
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import Text from "../../Text";
 import Icon from "../../Icon";
 import Collapsible from "../../Collapsible";

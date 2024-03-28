@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
 import styles from '../LegacyTabs.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 defineOptions({
   name: 'NpLegacyTabsPanel',

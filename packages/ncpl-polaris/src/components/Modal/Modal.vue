@@ -36,23 +36,23 @@
   <slot name="activator"></slot>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { ModalProps } from './Modal'
+import { ref, computed } from 'vue';
+import type { ModalProps } from './Modal';
 import { useId } from "../context";
-import Portal from "../Portal"
-import Backdrop from "../Backdrop"
-import Scrollable from "../Scrollable"
-import InlineStack from "../InlineStack"
-import Spinner from "../Spinner"
-import Box from "../Box"
-import Header from "./Header"
-import Footer from "./Footer"
-import Dialog from "./Dialog"
-import ConditionalWrapper from "../ConditionalWrapper"
-import Section from "./Section"
-import styles from './Modal.module.scss'
-import { focusFirstFocusableNode } from "@ncpl-polaris/utils/focus"
-import { withinContentContext, useI18n } from "../context"
+import Portal from "../Portal";
+import Backdrop from "../Backdrop";
+import Scrollable from "../Scrollable";
+import InlineStack from "../InlineStack";
+import Spinner from "../Spinner";
+import Box from "../Box";
+import Header from "./Header";
+import Footer from "./Footer";
+import Dialog from "./Dialog";
+import ConditionalWrapper from "../ConditionalWrapper";
+import Section from "./Section";
+import styles from './Modal.module.scss';
+import { focusFirstFocusableNode } from "../../utils/focus";
+import { withinContentContext, useI18n } from "../context";
 
 defineOptions({
   name: 'NpModal',

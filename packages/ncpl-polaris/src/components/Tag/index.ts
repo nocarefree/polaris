@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Tag from './Tag.vue'
 
 export const NpTag = withInstall(Tag)

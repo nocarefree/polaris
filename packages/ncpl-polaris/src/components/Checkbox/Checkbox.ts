@@ -1,6 +1,6 @@
 import type { ChoiceBleedProps } from '../Choice';
 import type { Component } from 'vue';
-import type { ResponsiveProp } from "@ncpl-polaris/utils/css"
+import type { ResponsiveProp } from "../../utils/css"
 
 export interface CheckboxProps extends ChoiceBleedProps {
     /** Indicates the ID of the element that is controlled by the checkbox */

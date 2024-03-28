@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import LegacyFilters from './LegacyFilters.vue'
 
 export const NpLegacyFilters = withInstall(LegacyFilters)

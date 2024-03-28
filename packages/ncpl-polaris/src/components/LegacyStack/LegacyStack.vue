@@ -8,7 +8,7 @@
 <script setup lang="ts">
 
 import { computed, useSlots } from "vue";
-import { classNames, elementChildren, variationName } from "@ncpl-polaris/utils"
+import { classNames, elementChildren, variationName } from "../../utils"
 import type { LegacyStackProps } from "./LegacyStack"
 import Item from "./Item/Item.vue";
 import styles from "./LegacyStack.module.scss";

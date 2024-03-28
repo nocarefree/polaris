@@ -17,14 +17,14 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import type { ActionMenuActionsProps } from './Actions'
-import ButtonGroup from '@ncpl-polaris/components/ButtonGroup';
+import ButtonGroup from '../../ButtonGroup';
 import SecondaryAction from '../SecondaryAction';
 import MenuGroup from '../MenuGroup';
 
 import styles from './Actions.module.scss'
 import { useI18n } from '../../context';
 import { useEventListener } from '@vueuse/core';
-import { debounce } from "@ncpl-polaris/utils/debounce"
+import { debounce } from "../../../utils/debounce"
 
 import type {
   MenuActionDescriptor,

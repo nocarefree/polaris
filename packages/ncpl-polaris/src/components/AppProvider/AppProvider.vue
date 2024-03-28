@@ -2,9 +2,9 @@
 import { reactive, onMounted, computed, nextTick } from "vue";
 import type { AppProviderProps } from "./AppProvider"
 import { routerContext, i18nContext, mediaQueryContext, stickyManagerContext, scrollLockManagerContext, featuresContext, themeContext } from "../context";
-import FocusManager from "@ncpl-polaris/components/FocusManager";
-import PortalsManager from "@ncpl-polaris/components/PortalsManager";
-import { I18n, StickyManager, ScrollLockManager } from "@ncpl-polaris/utils";
+import FocusManager from "../FocusManager";
+import PortalsManager from "../PortalsManager";
+import { I18n, StickyManager, ScrollLockManager } from "../../utils";
 import { useMediaQuery } from "@vueuse/core";
 import {
   createThemeClassName,

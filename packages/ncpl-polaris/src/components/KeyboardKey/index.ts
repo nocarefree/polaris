@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import KeyboardKey from './KeyboardKey.vue'
 
 export const NpKeyboardKey = withInstall(KeyboardKey)

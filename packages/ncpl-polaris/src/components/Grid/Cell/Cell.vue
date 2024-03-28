@@ -23,10 +23,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { GridCellProps } from './Cell'
-import styles from './Cell.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import type { GridCellProps } from './Cell';
+import styles from './Cell.module.scss';
+import { classNames } from "../../../utils";
 
 defineOptions({
   name: 'NpGridCell',

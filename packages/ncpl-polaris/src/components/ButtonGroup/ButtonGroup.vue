@@ -14,7 +14,7 @@
 import { useSlots, computed } from 'vue'
 import Item from "./Item/Item.vue";
 import type { ButtonGroupProps } from './ButtonGroup'
-import { classNames, variationName, elementChildren } from "@ncpl-polaris/utils"
+import { classNames, variationName, elementChildren } from "../../utils"
 import styles from './ButtonGroup.module.scss'
 
 defineOptions({

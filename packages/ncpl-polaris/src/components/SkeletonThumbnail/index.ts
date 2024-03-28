@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import SkeletonThumbnail from './SkeletonThumbnail.vue'
 
 export const NpSkeletonThumbnail = withInstall(SkeletonThumbnail)

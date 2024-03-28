@@ -17,5 +17,5 @@
     </div>
 </template>
 <script setup lang="ts">
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 </script>

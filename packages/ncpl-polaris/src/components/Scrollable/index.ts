@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Scrollable from './Scrollable.vue'
 
 export const NpScrollable = withInstall(Scrollable)

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import MessageIndicator from './MessageIndicator.vue'
 
 export const NpMessageIndicator = withInstall(MessageIndicator)

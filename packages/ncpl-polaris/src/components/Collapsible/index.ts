@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Collapsible from './Collapsible.vue'
 
 export const NpCollapsible = withInstall(Collapsible)

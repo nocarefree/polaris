@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import DuplicateModal from './DuplicateModal.vue'
 
 export const NpTabsTabDuplicateModal = withInstall(DuplicateModal)

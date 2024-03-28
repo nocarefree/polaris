@@ -74,7 +74,7 @@ import type { HeaderContentProps } from "../types"
 import UnstyledButton from "../../UnstyledButton"
 import Tooltip from "../../Tooltip"
 import styles from "../IndexTable.module.scss";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import { SortAscendingIcon, SortDescendingIcon } from "@ncpl/ncpl-icons"
 
 

@@ -8,9 +8,9 @@
 import { reactive, computed } from 'vue'
 import styles from '../ColorPicker.module.scss'
 import { calculateDraggerY, alphaForDraggerY } from "./utils"
-import { hsbToRgb } from '@ncpl-polaris/utils/color-transformers';
+import { hsbToRgb } from '../../../utils/color-transformers';
 import Slidable from "../Slidable"
-import type { HSBColor } from '@ncpl-polaris/utils/color-types';
+import type { HSBColor } from '../../../utils/color-types';
 
 defineOptions({
   name: 'NpColorPickerHuePicker',

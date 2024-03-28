@@ -5,7 +5,7 @@
         <TextContainer>
           <Text variant="headingMd" as="h2">
             {{ title }}
-            <Badge v-if="badge" :status="badge.status">{{ badge.content }}</Badge>
+            <Badge v-if="badge" :tone="badge.tone">{{ badge.content }}</Badge>
           </Text>
           <p>{{ description }}</p>
         </TextContainer>
@@ -21,13 +21,13 @@
 </template>
 <script setup lang="ts">
 import { MessageProps } from "./Message"
-import PopoverSection from '@ncpl-polaris/components/Popover/Section';
-import LegacyStack from '@ncpl-polaris/components/LegacyStack';
-import TextContainer from '@ncpl-polaris/components/TextContainer';
-import Text from '@ncpl-polaris/components/Text';
-import Link from '@ncpl-polaris/components/Link';
-import Button from '@ncpl-polaris/components/Button';
-import Badge from '@ncpl-polaris/components/Badge';
+import PopoverSection from '../../../Popover/Section';
+import LegacyStack from '../../../LegacyStack';
+import TextContainer from '../../../TextContainer';
+import Text from '../../../Text';
+import Link from '../../../Link';
+import Button from '../../../Button';
+import Badge from '../../../Badge';
 import styles from './Message.module.scss';
 
 defineProps<MessageProps>();

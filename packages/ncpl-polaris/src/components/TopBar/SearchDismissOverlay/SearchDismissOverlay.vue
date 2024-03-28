@@ -5,9 +5,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { SearchDismissOverlayProps } from './SearchDismissOverlay'
-import ScrollLock from "@ncpl-polaris/components/ScrollLock";
+import ScrollLock from "../../ScrollLock";
 import styles from './SearchDismissOverlay.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 defineOptions({
   name: 'NpSearchDismissOverlay',

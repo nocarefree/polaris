@@ -18,8 +18,8 @@ import sharedStyles from '../IndexTable.module.scss';
 import Checkbox from "../../Checkbox"
 import { classNames } from '../../../utils'
 import { useI18n, useIndexTable, useIndexTableRow } from "../../context";
-import { debounce } from "@ncpl-polaris/utils/debounce";
-import { setRootProperty } from '@ncpl-polaris/utils/set-root-property';
+import { debounce } from "../../../utils/debounce";
+import { setRootProperty } from '../../../utils/set-root-property';
 import { useEventListener } from "@vueuse/core";
 
 

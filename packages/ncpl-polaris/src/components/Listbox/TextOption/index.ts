@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import TextOption from './TextOption.vue'
 
 export const NpListboxTextOption = withInstall(TextOption)

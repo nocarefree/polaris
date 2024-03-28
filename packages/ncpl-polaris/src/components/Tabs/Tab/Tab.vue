@@ -20,7 +20,7 @@
           :view-names="viewNames" />
         <DuplicateModal v-if="duplicateAction" :open="activeModalType === 'duplicate'"
           :name="i18n.translate('Polaris.Tabs.Tab.copy', { name: content })" @close="activeModalType = null"
-          @clickPrimaryAction="(e, done) => duplicateAction?.onPrimaryAction?.(e, done)"
+          @clickPrimaryAction="(e:string, done:()=>void) => duplicateAction?.onPrimaryAction?.(e, done)"
           :is-modal-loading="isModalLoading" :view-names="viewNames || []" />
         <Modal v-if="deleteAction" :open="activeModalType === 'delete'" @close="activeModalType = null" :primary-action="{
     content: i18n.translate('Polaris.Tabs.Tab.deleteModal.delete'),
@@ -42,7 +42,7 @@
       <component :is="urlIfNotDisabledOrSelected ? UnstyledLink: UnstyledButton" :id="id" :class="tabClassName"
         :tabindex="tabIndex" :aria-selected="selected" :aria-controls="panelId" :aria-label="accessibilityLabel"
         :role="tabIndexOverride == null ? 'tab' : undefined" :disabled="disabled" :url="urlIfNotDisabledOrSelected"
-        @focus="emit('focus')" @mouseup="event => event.target.blur()" @click="handleClick" @keydown="handleKeyDown">
+        @focus="emit('focus')" @mouseup="(event:MouseEvent) => (event.target as HTMLElement).blur()" @click="handleClick" @keydown="handleKeyDown">
         <InlineStack gap="200" align="center" block-align="center" :wrap="false">
           <Text as="span" :variant="labelVariant" font-weight="medium">
             <component v-if="icon" :is="icon"></component>
@@ -74,8 +74,8 @@ import ModalSection from "../../Modal/Section"
 import ConditionalWrapper from "../../ConditionalWrapper"
 import RenameModal from "./RenameModal"
 import DuplicateModal from "./DuplicateModal"
-import { classNames } from "@ncpl-polaris/utils"
-import { focusFirstFocusableNode } from "@ncpl-polaris/utils/focus"
+import { classNames } from "../../../utils"
+import { focusFirstFocusableNode } from "../../../utils/focus"
 import { useI18n, useBreakpoints } from '../../context'
 import {
   InfoIcon,

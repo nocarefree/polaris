@@ -38,7 +38,7 @@ import Checkbox from '../../Checkbox';
 import { CheckIcon } from "@ncpl/ncpl-icons";
 import { useComboboxListboxOption } from "../../Combobox"
 import { actionContext } from "../Listbox"
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 defineOptions({
   name: 'NpListboxTextOption',

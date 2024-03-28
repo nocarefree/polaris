@@ -49,16 +49,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import styles from "../IndexTable.module.scss";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import RenderHeadingContent from "../RenderHeadingContent/RenderHeadingContent.vue";
 import Sticky from "../../Sticky";
 import LegacyStack from "../../LegacyStack";
 import Checkbox from "../../Checkbox";
 import { useI18n, useIndexTable } from "../../context";
 import type { IndexTableHeading, TableHeadingRect } from "../types"
-import { SELECT_ALL_ITEMS, SelectionType } from "../types"
+import { SelectionType } from "../types"
 import { getTableHeadingsBySelector } from '../utils';
-import { debounce } from "@ncpl-polaris/utils/debounce";
+import { debounce } from "../../../utils/debounce";
 import { themeDefault, toPx } from '@shopify/polaris-tokens';
 import { useEventListener } from "@vueuse/core";
 

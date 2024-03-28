@@ -27,11 +27,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { SearchFieldProps } from './SearchField'
-import Text from '@ncpl-polaris/components/Text'
-import Icon from '@ncpl-polaris/components/Icon'
+import Text from '../../Text'
+import Icon from '../../Icon'
 import styles from './SearchField.module.scss'
 import { useFocus } from '@vueuse/core';
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import { useI18n, useId } from "../../context"
 import { XCircleIcon, SearchIcon } from "@ncpl/ncpl-icons"
 

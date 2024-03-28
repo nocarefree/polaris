@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import MappedAction from './MappedAction.vue'
 
 export const NpAutocompleteMappedAction = withInstall(MappedAction)

@@ -35,7 +35,7 @@ import ConditionalWrapper from '../ConditionalWrapper';
 import styles from './Choice.module.scss';
 import Text from "../Text";
 import InlineError from "../InlineError";
-import { classNames, getResponsiveProps, getResponsiveValue, sanitizeCustomProperties } from "@ncpl-polaris/utils";
+import { classNames, getResponsiveProps, getResponsiveValue, sanitizeCustomProperties } from "../../utils";
 
 defineOptions({
   name: 'NpChoice',

@@ -58,8 +58,8 @@ import FormLayout from "../../FormLayout";
 import TextField from "../../TextField";
 import ConditionalWrapper from '../../ConditionalWrapper';
 import { useI18n } from '../../context';
-import { useIsTouchDevice } from "@ncpl-polaris/utils";
-import { focusFirstFocusableNode } from "@ncpl-polaris/utils/focus"
+import { useIsTouchDevice } from "../../../utils";
+import { focusFirstFocusableNode } from "../../../utils/focus"
 
 
 const MAX_VIEW_NAME_LENGTH = 40;

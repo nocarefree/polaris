@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Pip from './Pip.vue'
 
 export const NpPip = withInstall(Pip)

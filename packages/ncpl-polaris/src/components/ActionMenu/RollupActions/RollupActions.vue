@@ -12,11 +12,11 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { RollupActionsProps } from './RollupActions'
-import styles from './RollupActions.module.scss'
-import Popover from "@ncpl-polaris/components/Popover"
-import Button from "@ncpl-polaris/components/Button"
-import ActionList from "@ncpl-polaris/components/ActionList"
+import type { RollupActionsProps } from './RollupActions';
+import styles from './RollupActions.module.scss';
+import Popover from "../../Popover";
+import Button from "../../Button";
+import ActionList from "../../ActionList";
 import { useI18n } from '../../context';
 import { MenuHorizontalIcon } from "@ncpl/ncpl-icons"
 

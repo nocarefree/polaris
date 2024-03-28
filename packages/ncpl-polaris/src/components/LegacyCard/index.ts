@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import LegacyCard from './LegacyCard.vue'
 
 export const NpLegacyCard = withInstall(LegacyCard)

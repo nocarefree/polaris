@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { LayoutSectionProps } from './Section'
 import styles from '../Layout.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 defineOptions({
   name: 'NpLayoutSection',

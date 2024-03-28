@@ -30,7 +30,7 @@ import Month from './Month';
 import styles from './DatePicker.module.scss';
 import { ArrowLeftIcon, ArrowRightIcon } from '@ncpl/ncpl-icons';
 import { useI18n } from '../context';
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 import {
   isDateAfter,
   isDateBefore,
@@ -40,7 +40,7 @@ import {
   getPreviousDisplayMonth,
   isDateDisabled,
   type Range,
-} from '@ncpl-polaris/utils/dates';
+} from '../../utils/dates';
 import { monthName } from "./utils"
 
 defineOptions({

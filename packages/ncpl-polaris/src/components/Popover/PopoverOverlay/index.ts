@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import PopoverOverlay from './PopoverOverlay.vue'
 
 export const NpPopoverOverlay = withInstall(PopoverOverlay)

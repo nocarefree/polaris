@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from "vue"
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import type { LegacyStackItemProps } from "./Item"
 import styles from "../LegacyStack.module.scss";
 

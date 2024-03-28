@@ -57,7 +57,7 @@ import BulkActionMenu from "./BulkActionMenu";
 import BulkActionButton from "./BulkActionButton";
 import BulkActionsMeasurer from "./BulkActionsMeasurer";
 import type { BulkActionsMeasurements } from './BulkActionsMeasurer';
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../utils';
 import { useI18n } from '../context'
 import { getVisibleAndHiddenActions, instanceOfMenuGroupDescriptor, instanceOfBulkActionListSection, getActionSections, isNewBadgeInBadgeActions } from "./utils";
 import type {

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import ButtonGroup from './ButtonGroup.vue'
 
 export const NpButtonGroup = withInstall(ButtonGroup)

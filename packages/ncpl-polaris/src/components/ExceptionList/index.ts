@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import ExceptionList from './ExceptionList.vue'
 
 export const NpExceptionList = withInstall(ExceptionList)

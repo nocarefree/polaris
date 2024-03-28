@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Dialog from './Dialog.vue'
 
 export const NpModalDialog = withInstall(Dialog)

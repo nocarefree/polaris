@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import InlineError from './InlineError.vue'
 
 export const NpInlineError = withInstall(InlineError)

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import TrapFocus from './TrapFocus.vue'
 
 export const NpTrapFocus = withInstall(TrapFocus)

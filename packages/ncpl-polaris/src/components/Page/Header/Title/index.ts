@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Title from './Title.vue'
 
 export const NpPageHeaderTitle = withInstall(Title)

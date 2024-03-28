@@ -9,10 +9,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { SearchProps } from './Search'
-import SearchDismissOverlay from "../SearchDismissOverlay"
-import styles from './Search.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import type { SearchProps } from './Search';
+import SearchDismissOverlay from "../SearchDismissOverlay";
+import styles from './Search.module.scss';
+import { classNames } from "../../../utils";
 
 defineOptions({
   name: 'NpSearch',

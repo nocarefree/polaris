@@ -123,7 +123,7 @@ import Popover from '../Popover';
 import Tooltip from '../Tooltip';
 import ConditionalWrapper from '../ConditionalWrapper';
 import { ChevronDownIcon, PlusIcon } from "@ncpl/ncpl-icons"
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 
 const CREATE_NEW_VIEW_ID = 'create-new-view';
 

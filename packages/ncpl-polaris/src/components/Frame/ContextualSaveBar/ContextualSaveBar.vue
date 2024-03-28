@@ -41,7 +41,7 @@ import Image from "../../Image"
 import Button from "../../Button"
 import Icon from "../../Icon"
 import DiscardConfirmationModal from "./DiscardConfirmationModal/DiscardConfirmationModal.vue"
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import { useFrame, useI18n } from "../../context"
 import { AlertTriangleIcon } from "@ncpl/ncpl-icons"
 

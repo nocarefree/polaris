@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils';
+import { withInstall } from '../../../utils';
 import TextField from "../../Combobox/TextField";
 TextField.name = 'NpAutocompleteTextField';
 

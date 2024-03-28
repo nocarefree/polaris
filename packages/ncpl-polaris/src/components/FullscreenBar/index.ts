@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import FullscreenBar from './FullscreenBar.vue'
 
 export const NpFullscreenBar = withInstall(FullscreenBar)

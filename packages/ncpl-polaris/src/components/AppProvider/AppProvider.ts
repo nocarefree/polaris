@@ -1,5 +1,5 @@
 import type { Component } from "vue";
-import type { I18n } from "@ncpl-polaris/utils";
+import type { I18n } from "../../utils";
 import type { ThemeName } from '@shopify/polaris-tokens';
 
 export interface FeaturesConfig {

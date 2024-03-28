@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import FormLayout from './FormLayout.vue'
 
 export const NpFormLayout = withInstall(FormLayout)

@@ -31,8 +31,8 @@
 import { ref, computed } from 'vue'
 import { AvatarProps, STYLE_CLASSES } from './Avatar'
 import styles from './Avatar.module.scss'
-import { classNames, variationName } from '@ncpl-polaris/utils';
-import Image from "@ncpl-polaris/components/Image";
+import { classNames, variationName } from '../../utils';
+import Image from "../Image";
 import { useI18n } from '../context';
 import { useMounted } from '@vueuse/core'
 

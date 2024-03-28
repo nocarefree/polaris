@@ -3,7 +3,7 @@ import type {
   ShadowAliasOrScale,
 } from '@shopify/polaris-tokens';
 
-import type { ResponsiveProp } from '@ncpl-polaris/utils/css';
+import type { ResponsiveProp } from '../../utils/css';
 
 
 

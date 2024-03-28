@@ -10,7 +10,7 @@
 import { ref, computed } from 'vue'
 import type { IndexTableRowProps } from './Row'
 import styles from '../IndexTable.module.scss'
-import { classNames, variationName } from "@ncpl-polaris/utils"
+import { classNames, variationName } from "../../../utils"
 import { SelectionType } from "../types"
 import Checkbox from "../Checkbox"
 import { useIndexTable, indexTableRowContext } from "../../context"

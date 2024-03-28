@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Breadcrumbs from './Breadcrumbs.vue'
 
 export const NpBreadcrumbs = withInstall(Breadcrumbs)

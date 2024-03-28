@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import InlineStack from './InlineStack.vue'
 
 export const NpInlineStack = withInstall(InlineStack)

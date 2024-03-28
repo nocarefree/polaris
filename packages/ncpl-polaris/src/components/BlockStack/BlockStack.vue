@@ -9,8 +9,8 @@
 import { computed, type CSSProperties } from 'vue'
 import type { BlockStackProps } from './BlockStack'
 import styles from './BlockStack.module.scss'
-import { getResponsiveProps, sanitizeCustomProperties } from "@ncpl-polaris/utils/css"
-import { classNames } from "@ncpl-polaris/utils"
+import { getResponsiveProps, sanitizeCustomProperties } from "../../utils/css"
+import { classNames } from "../../utils"
 
 defineOptions({
   name: 'NpBlockStack',

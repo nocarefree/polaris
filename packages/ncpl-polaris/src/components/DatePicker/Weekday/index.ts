@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Weekday from './Weekday.vue'
 
 export const NpDatePickerWeekday = withInstall(Weekday)

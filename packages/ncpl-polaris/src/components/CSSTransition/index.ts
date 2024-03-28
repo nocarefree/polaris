@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import CSSTransition from './CSSTransition.vue'
 
 export const NpCSSTransition = withInstall(CSSTransition)

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Layout from './Layout.vue'
 
 export const NpLayout = withInstall(Layout)

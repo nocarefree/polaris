@@ -31,9 +31,9 @@ import { computed } from 'vue'
 import type { TooltipOverlayProps } from './TooltipOverlay'
 import { useI18n } from '../../context';
 import { layer } from '../../shared';
-import type { OverlayDetails } from "@ncpl-polaris/components/PositionedOverlay"
-import PositionedOverlay from "@ncpl-polaris/components/PositionedOverlay"
-import { classNames } from "@ncpl-polaris/utils";
+import type { OverlayDetails } from "../../PositionedOverlay"
+import PositionedOverlay from "../../PositionedOverlay"
+import { classNames } from "../../../utils";
 import styles from './TooltipOverlay.module.scss'
 
 

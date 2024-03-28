@@ -19,8 +19,8 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue'
-import { classNames } from "@ncpl-polaris/utils"
-import Text from "@ncpl-polaris/components/Text"
+import { classNames } from "../../../../utils"
+import Text from "../../../Text"
 import type { PageHeaderTitleProps } from './Title'
 import styles from './Title.module.scss'
 

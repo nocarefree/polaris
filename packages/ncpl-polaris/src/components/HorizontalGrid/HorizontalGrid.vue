@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
-import { sanitizeCustomProperties, getResponsiveValue, getResponsiveProps, type ResponsiveValue } from "@ncpl-polaris/utils/css";
+import { sanitizeCustomProperties, getResponsiveValue, getResponsiveProps, type ResponsiveValue } from "../../utils/css";
 import type { HorizontalGridProps, Columns, ColumnsType } from "./HorizontalGrid";
 import styles from "./HorizontalGrid.module.scss";
 

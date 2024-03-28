@@ -8,7 +8,7 @@ import type {
   ComputedRef,
 } from "vue";
 
-import type { StickyManager, ScrollLockManager, I18n } from "@ncpl-polaris/utils"
+import type { StickyManager, ScrollLockManager, I18n } from "../utils"
 import { scrollable } from "./shared";
 
 export const routerContextKey: InjectionKey<boolean> = Symbol(
@@ -141,12 +141,11 @@ export const linkContext = {
 };
 
 //FrameContext
-import type { FrameLogo } from "./Frame/Frame";
-import type { ToastMessage, ToastID } from "./Frame/ToastManager/types";
+import type { FrameLogo, ToastPropsWithID, ToastID } from "./Frame/Frame";
 
 export type FrameContext = {
   logo: Ref<FrameLogo | undefined>;
-  showToast: (e: ToastMessage) => void;
+  showToast: (e: ToastPropsWithID) => void;
   hideToast: (e: ToastID) => void;
   startLoading: () => void;
   stopLoading: () => void;
@@ -293,11 +292,7 @@ export const useStickyManager = () => {
 
 
 //FeaturesContext
-export interface FeaturesConfig {
-  polarisSummerEditions2023?: boolean;
-  polarisSummerEditions2023ShadowBevelOptOut?: boolean;
-  [key: string]: boolean | undefined;
-}
+import type { FeaturesConfig } from "./AppProvider"
 
 export type FeaturesContext = FeaturesConfig;
 
@@ -496,14 +491,14 @@ export interface IndexTableContext extends IndexTableProps {
   }
 }
 
-export const indexTableContextKey: InjectionKey<ComputedRef<IndexTableContext>> = Symbol(
+export const indexTableContextKey: InjectionKey<ComputedRef<any>> = Symbol(
   "indexTableContextKey"
 );
 export const indexTableContext = {
   inject: () => {
     return inject(indexTableContextKey);
   },
-  provide: (value: ComputedRef<IndexTableContext>) => {
+  provide: (value: ComputedRef<any>) => {
     provide(indexTableContextKey, value);
   },
 }

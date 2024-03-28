@@ -21,7 +21,7 @@
 import type { DescriptionListProps } from './DescriptionList';
 import styles from './DescriptionList.module.scss';
 import Text from "../Text";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 
 defineOptions({
   name: 'NpDescriptionList',

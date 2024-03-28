@@ -82,7 +82,7 @@ import type { ResourceItemProps, Alignment } from './types';
 import { resourceListContextKey } from "../ResourceList/context";
 import { SELECT_ALL_ITEMS, type ResourceListSelectedItems } from "../ResourceList/types";
 import styles from './ResourceItem.module.scss';
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import { useI18n, useBreakpoints, useId } from '../context';
 import UnstyledLink from "../UnstyledLink";
 import Box from "../Box";

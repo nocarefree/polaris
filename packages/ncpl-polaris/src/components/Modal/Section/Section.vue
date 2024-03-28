@@ -13,7 +13,7 @@
 import type { ModalSectionProps } from './Section'
 import styles from './Section.module.scss'
 import Box from '../../Box';
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 
 defineOptions({
   name: 'NpModalSection',

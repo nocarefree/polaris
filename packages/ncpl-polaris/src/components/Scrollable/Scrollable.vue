@@ -5,12 +5,12 @@
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { scrollable } from "@ncpl-polaris/components/shared";
-import { classNames, StickyManager } from "@ncpl-polaris/utils";
+import { scrollable } from "../../components/shared";
+import { classNames, StickyManager } from "../../utils";
 import { stickyManagerContext, scrollableContext } from "../context";
 import { scrollableProps } from './Scrollable'
 import styles from './Scrollable.module.scss'
-import { debounce } from "@ncpl-polaris/utils/debounce";
+import { debounce } from "../../utils/debounce";
 
 
 interface ScrollToOptions {

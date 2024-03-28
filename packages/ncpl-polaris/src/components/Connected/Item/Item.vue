@@ -11,7 +11,7 @@
 import { ref } from 'vue'
 import type { ConnectedItemProps } from './Item'
 import styles from '../Connected.module.scss'
-import { useFocus, classNames } from "@ncpl-polaris/utils"
+import { useFocus, classNames } from "../../../utils"
 
 
 defineProps<ConnectedItemProps>()

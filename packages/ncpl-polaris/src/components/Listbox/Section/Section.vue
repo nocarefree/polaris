@@ -11,7 +11,7 @@
 import { type Component } from 'vue'
 import styles from './Section.module.scss'
 import { listboxSectionDataSelector } from './selectors';
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 import { useId } from "../../context";
 import { sectionContext } from "./Section"
 

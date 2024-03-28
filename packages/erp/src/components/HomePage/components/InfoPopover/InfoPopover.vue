@@ -1,56 +1,27 @@
 <template>
-  <div />
+  <NpPopover active="active" :preferred-alignment="mdUp ? 'right' : 'left'"
+    :preferred-position="mdUp ? 'below' : 'above'" :prefer-input-activator="mdUp" :full-width="false"
+    autofocus-target="none">
+    <template #activator>
+      <div :class="classNames(styles.infoPopoverActivator, mdUp && styles.leftAlign)"></div>
+    </template>
+    <Formula :definition="content?.definition || ''" :formula="content?.formula || ''" />
+  </NpPopover>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-const k2 = ({
-  infoPopoverActive: e,
-  infoPopoverContent: t
-}) => {
-  const a = (t == null ? void 0 : t.definition) ?? '',
-    s = (t == null ? void 0 : t.formula) ?? '',
-    i = d.useRef(null),
-    {
-      mdUp: o
-    }
-      = ln();
-  return d.useEffect(
-    () => {
-      var r;
-      e &&
-        ((r = i.current) == null || r.forceUpdatePosition())
-    },
-    [
-      e
-    ]
-  ),
-    n.jsx(
-      Rn,
-      {
-        active: e,
-        onClose: () => {
-        },
-        activator: n.jsx(
-          'div',
-          {
-            className: U(pe.infoPopoverActivator, {
-              [
-                pe.leftAlign
-              ]: o
-            })
-          }
-        ),
-        preferredAlignment: o ? 'right' : 'left',
-        preferredPosition: o ? 'below' : 'above',
-        ref: i,
-        preferInputActivator: o,
-        fullWidth: !0,
-        autofocusTarget: 'none',
-        children: n.jsx(Or, {
-          definition: a,
-          formula: s
-        })
-      }
-    )
-}
+import Formula from "../../../Formula";
+import { NpPopover, classNames } from "@ncpl/ncpl-polaris";
+import { useBreakpoints } from '@ncpl/ncpl-polaris';
+import styles from "../../HomePage.module.scss";
+
+defineProps<{
+  active?: boolean;
+  content?: {
+    definition: string;
+    formula: string;
+  }
+}>();
+
+const { mdUp } = useBreakpoints();
 </script>

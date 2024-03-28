@@ -1,4 +1,4 @@
-import { withInstall } from "@ncpl-polaris/utils";
+import { withInstall } from "../../utils";
 import Image from "./Image.vue";
 
 export const NpImage = withInstall(Image);

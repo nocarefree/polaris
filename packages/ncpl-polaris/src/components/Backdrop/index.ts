@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Backdrop from './Backdrop.vue'
 
 export const NpBackdrop = withInstall(Backdrop)

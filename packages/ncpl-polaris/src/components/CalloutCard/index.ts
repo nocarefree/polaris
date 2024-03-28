@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import CalloutCard from './CalloutCard.vue'
 
 export const NpCalloutCard = withInstall(CalloutCard)

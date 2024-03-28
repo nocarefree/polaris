@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onUpdated } from 'vue'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 import type { CollapsibleProps } from './Collapsible'
 import styles from './Collapsible.module.scss'
 

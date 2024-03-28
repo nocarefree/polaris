@@ -58,10 +58,5 @@ export default defineConfig({
         return "Polaris" + names.join("");
       },
     },
-  },
-  resolve: {
-    alias: {
-      "@ncpl-polaris": resolve(__dirname, "../ncpl-polaris/src"),
-    },
-  },
+  }
 });

@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import type { ListProps } from './List'
 import styles from './List.module.scss'
-import { classNames, variationName } from "@ncpl-polaris/utils"
+import { classNames, variationName } from "../../utils"
 
 defineOptions({
   name: 'NpList',

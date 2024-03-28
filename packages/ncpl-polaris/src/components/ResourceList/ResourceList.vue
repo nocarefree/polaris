@@ -94,7 +94,7 @@ import type { ResourceListProps, TItemType } from './types'
 import { resourceListContextKey } from './context'
 import { SELECT_ALL_ITEMS, type ResourceListSelectedItems } from './types'
 import styles from './ResourceList.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 import { themeDefault, toPx } from '@shopify/polaris-tokens';
 import { useI18n } from '../context';
 import BulkActions, { useIsBulkActionsSticky } from "../BulkActions";
@@ -104,7 +104,7 @@ import Select from "../Select";
 import SelectAllActions from "../SelectAllActions";
 import EmptySearchResult from "../EmptySearchResult";
 import Spinner from "../Spinner";
-import { debounce } from "@ncpl-polaris/utils/debounce";
+import { debounce } from "../../utils/debounce";
 import { useEventListener } from "@vueuse/core";
 
 defineOptions({

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import EmptyState from './EmptyState.vue'
 
 export const NpEmptyState = withInstall(EmptyState)

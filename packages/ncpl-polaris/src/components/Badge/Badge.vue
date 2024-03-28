@@ -21,10 +21,10 @@
 <script setup lang="ts">
 import { computed, unref, h } from 'vue'
 import type { BadgeProps } from './Badge'
-import Text from '@ncpl-polaris/components/Text';
-import Icon from '@ncpl-polaris/components/Icon';
+import Text from '../Text';
+import Icon from '../Icon';
 import styles from './Badge.module.scss'
-import { classNames, variationName } from '@ncpl-polaris/utils';
+import { classNames, variationName } from '../../utils';
 import { useI18n, useWithinFilter } from "../context";
 import { getDefaultAccessibilityLabel } from "./utils"
 

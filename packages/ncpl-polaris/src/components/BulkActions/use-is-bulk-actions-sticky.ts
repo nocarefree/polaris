@@ -1,6 +1,6 @@
 import { ref, type MaybeRef, unref, onMounted, onBeforeUnmount } from 'vue';
 
-import { debounce } from '@ncpl-polaris/utils/debounce';
+import { debounce } from '../../utils/debounce';
 
 const DEBOUNCE_PERIOD = 250;
 

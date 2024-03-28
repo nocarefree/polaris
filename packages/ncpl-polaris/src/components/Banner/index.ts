@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Banner from './Banner.vue'
 
 export const NpBanner = withInstall(Banner)

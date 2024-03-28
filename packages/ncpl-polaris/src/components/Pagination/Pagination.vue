@@ -49,8 +49,8 @@ import styles from './Pagination.module.scss';
 import { ChevronLeftIcon, ChevronRightIcon } from "@ncpl/ncpl-icons";
 import { useI18n } from "../context";
 import { useEventListener } from "@vueuse/core";
-import { isInputFocused } from '@ncpl-polaris/utils/is-input-focused';
-import { classNames } from "@ncpl-polaris/utils";
+import { isInputFocused } from '../../utils/is-input-focused';
+import { classNames } from "../../utils";
 
 defineOptions({
   name: 'NpPagination',

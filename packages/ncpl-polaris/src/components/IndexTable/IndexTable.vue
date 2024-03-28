@@ -89,10 +89,9 @@ import LoadingMarkup from "./LoadingMarkup/LoadingMarkup.vue";
 import RenderHeadingContent from "./RenderHeadingContent/RenderHeadingContent.vue";
 import StickyHeaderMarkup from "./StickyHeaderMarkup/StickyHeaderMarkup.vue";
 import Checkbox from "../Checkbox";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import BulkActions from "../BulkActions";
-import { useIsBulkActionsSticky } from '../BulkActions/use-is-bulk-actions-sticky';
-import { debounce } from "@ncpl-polaris/utils/debounce";
+import { debounce } from "../../utils/debounce";
 import { useEventListener } from "@vueuse/core";
 import Pagination from "../Pagination";
 

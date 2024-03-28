@@ -13,7 +13,7 @@ import type { ThumbnailProps } from './Thumbnail';
 import styles from './Thumbnail.module.scss';
 import Image from "../Image";
 import Icon from "../Icon";
-import { classNames, variationName } from "@ncpl-polaris/utils"
+import { classNames, variationName } from "../../utils"
 
 defineOptions({
   name: 'NpThumbnail',

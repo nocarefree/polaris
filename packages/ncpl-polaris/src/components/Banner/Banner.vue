@@ -50,7 +50,7 @@ import ButtonGroup from "../ButtonGroup";
 import WithinContentContainerBanner from "./WithinContentContainerBanner.vue";
 import InlineIconBanner from "./InlineIconBanner.vue";
 import DefaultBanner from "./DefaultBanner.vue";
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../utils';
 import { useI18n, bannerContextKey, withinContentContext } from "../context"
 import type { BannerProps } from "./Banner";
 import { useBannerFocus, bannerAttributes } from "./utils";

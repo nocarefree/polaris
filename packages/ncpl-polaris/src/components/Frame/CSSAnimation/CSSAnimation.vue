@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
   import {computed, ref, onMounted, watch } from "vue";
-  import {classNames, variationName } from "@ncpl-polaris/utils";
+  import {classNames, variationName } from "../../../utils";
   import styles from "./CSSAnimation.module.scss";
 
   enum TransitionStatus {

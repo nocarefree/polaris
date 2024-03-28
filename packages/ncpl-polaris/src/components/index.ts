@@ -126,7 +126,6 @@ export * from "./UnstyledLink";
 export * from "./UnstyledButton";
 export * from './PositionedOverlay';
 export * from './VerticalStack';
-export * from './TruncateText';
 export * from './Truncate';
 export * from './Tooltip';
 export * from './Indicator';

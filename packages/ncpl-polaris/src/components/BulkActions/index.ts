@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import BulkActions from './BulkActions.vue'
 
 export const NpBulkActions = withInstall(BulkActions)

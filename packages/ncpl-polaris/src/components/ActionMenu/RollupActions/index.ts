@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import RollupActions from './RollupActions.vue'
 
 export const NpActionMenuRollupActions = withInstall(RollupActions)

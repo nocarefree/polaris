@@ -58,7 +58,7 @@ import Button from "../../Button"
 import styles from './FilterPill.module.scss'
 import { XSmallIcon, ChevronDownIcon } from "@ncpl/ncpl-icons"
 import { useI18n, useBreakpoints } from '../../context'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 defineOptions({
   name: 'NpFiltersFilterPill',

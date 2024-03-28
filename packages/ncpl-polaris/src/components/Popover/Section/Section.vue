@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import styles from '../Popover.module.scss';
-import Box from "@ncpl-polaris/components/Box/Box.vue";
+import Box from "../../Box";
 
 
 </script>

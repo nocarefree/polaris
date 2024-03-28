@@ -1,6 +1,6 @@
 
 import type { IconableAction } from '../../types';
-import type { AvatarProps } from '@ncpl-polaris/components/Avatar';
+import type { AvatarProps } from '../../Avatar';
 import type { MenuProps } from '../Menu';
 
 

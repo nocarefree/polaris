@@ -28,7 +28,7 @@ import Choice from '../Choice';
 import { helpTextID } from "../Choice/utils"
 import Icon from '../Icon';
 import styles from './Checkbox.module.scss';
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import { MinusIcon } from "@ncpl/ncpl-icons";
 import { errorTextID } from '../InlineError';
 import { useId } from "../context";

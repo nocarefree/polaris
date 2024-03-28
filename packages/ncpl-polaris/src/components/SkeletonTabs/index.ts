@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import SkeletonTabs from './SkeletonTabs.vue'
 
 export const NpSkeletonTabs = withInstall(SkeletonTabs)

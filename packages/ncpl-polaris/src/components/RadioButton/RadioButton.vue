@@ -19,7 +19,7 @@ import styles from './RadioButton.module.scss'
 import Choice from '../Choice';
 import { helpTextID } from '../Choice/utils';
 import { useId } from '../context';
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 
 defineOptions({
   name: 'NpRadioButton',

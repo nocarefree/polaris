@@ -15,9 +15,9 @@
 import { ref, onMounted } from 'vue'
 import type { SecondaryActionProps } from './SecondaryAction'
 import styles from './SecondaryAction.module.scss'
-import Tooltip from "@ncpl-polaris/components/Tooltip"
-import Button from "@ncpl-polaris/components/Button"
-import { classNames } from '@ncpl-polaris/utils'
+import Tooltip from "../../Tooltip";
+import Button from "../../Button";
+import { classNames } from '../../../utils'
 
 defineOptions({
   name: 'NpActionMenuSecondaryAction',

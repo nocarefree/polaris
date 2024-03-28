@@ -48,7 +48,7 @@ import Icon from "../../Icon";
 import Tooltip from "../../Tooltip";
 import { useI18n } from "../../context";
 import type { CellProps } from "./types"
-import { classNames, variationName } from "@ncpl-polaris/utils";
+import { classNames, variationName } from "../../../utils";
 import styles from '../DataTable.module.scss';
 import { SortAscendingIcon, SortDescendingIcon } from "@ncpl/ncpl-icons";
 import { headerCell } from '../../shared';

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import SkeletonDisplayText from './SkeletonDisplayText.vue'
 
 export const NpSkeletonDisplayText = withInstall(SkeletonDisplayText)

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import DataTable from './DataTable.vue'
 
 export const NpDataTable = withInstall(DataTable)

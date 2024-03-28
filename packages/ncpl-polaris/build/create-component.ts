@@ -69,7 +69,7 @@ export type ${space}${name}Props = {
 
   const _index = formatCode(
     `
-import { withInstall } from "@ncpl-polaris/utils";
+import { withInstall } from "../utils";
 import ${name} from "./${name}.vue";
 
 export const Np${space}${name} = withInstall(${name});

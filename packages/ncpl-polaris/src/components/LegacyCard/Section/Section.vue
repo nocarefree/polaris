@@ -37,7 +37,7 @@ import ButtonGroup from "../../ButtonGroup";
 import { buttonsFrom } from "../../Button/utils";
 
 import styles from '../LegacyCard.module.scss';
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 
 defineProps<LegacyCardSectionProps>();
 </script>

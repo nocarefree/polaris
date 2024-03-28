@@ -1,4 +1,4 @@
-import type { ActionListProps } from '@ncpl-polaris/components/ActionList';
+import type { ActionListProps } from '../../ActionList';
 import type { MessageProps } from './Message';
 
 export interface MenuProps {

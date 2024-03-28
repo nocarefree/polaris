@@ -14,13 +14,13 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import type { PopoverProps } from './Popover'
-import Portal from "@ncpl-polaris/components/Portal/Portal.vue";
+import Portal from "../Portal/Portal.vue";
 import PopoverOverlay from "./PopoverOverlay/PopoverOverlay.vue";
 import { PopoverCloseSource } from "./PopoverOverlay/PopoverOverlay"
 import { useId } from "../context";
 import { portal } from "../shared";
 import { setActivatorAttributes } from "./set-activator-attributes";
-import { findFirstFocusableNodeIncludingDisabled, focusNextFocusableNode } from "@ncpl-polaris/utils/focus"
+import { findFirstFocusableNodeIncludingDisabled, focusNextFocusableNode } from "../../utils/focus"
 
 
 defineOptions({

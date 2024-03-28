@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import DropZone from './DropZone.vue'
 
 export const NpDropZone = withInstall(DropZone)

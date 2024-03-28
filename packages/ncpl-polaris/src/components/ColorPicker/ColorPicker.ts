@@ -1,4 +1,4 @@
-import type { HSBColor, HSBAColor } from '@ncpl-polaris/utils/color-types';
+import type { HSBColor, HSBAColor } from '../../utils/color-types';
 
 
 interface Color extends HSBColor {

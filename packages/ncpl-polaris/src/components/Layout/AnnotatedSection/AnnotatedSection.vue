@@ -27,9 +27,9 @@
 <script setup lang="ts">
 import type { LayoutAnnotatedSectionProps } from './AnnotatedSection'
 import styles from '../Layout.module.scss'
-import TextContainer from "@ncpl-polaris/components/TextContainer"
-import Text from "@ncpl-polaris/components/Text"
-import Box from "@ncpl-polaris/components/Box"
+import TextContainer from "../../TextContainer"
+import Text from "../../Text"
+import Box from "../../Box"
 
 defineOptions({
   name: 'NpLayoutAnnotatedSection',

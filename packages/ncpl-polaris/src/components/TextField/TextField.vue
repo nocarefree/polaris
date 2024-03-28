@@ -77,7 +77,7 @@ import Icon from '../Icon';
 import Spinner from './Spinner/Spinner.vue';
 import styles from './TextField.module.scss'
 import { XCircleIcon } from "@ncpl/ncpl-icons"
-import { classNames, variationName, isKorean } from "@ncpl-polaris/utils"
+import { classNames, variationName, isKorean } from "../../utils"
 import { useI18n, useId } from '../context';
 import { useEventListener } from "@vueuse/core"
 import { isNil } from 'lodash';

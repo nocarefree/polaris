@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Wrapper from './Wrapper.vue'
 
 export const NpWrapper = withInstall(Wrapper);

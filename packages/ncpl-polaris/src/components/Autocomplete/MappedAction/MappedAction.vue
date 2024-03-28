@@ -44,7 +44,7 @@ import Text from '../../Text';
 import Badge from '../../Badge';
 import type { ActionListItemDescriptor } from '../../types';
 import { useI18n } from "../../context"
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 interface MappedAction extends ActionListItemDescriptor {
   wrapOverflow?: boolean;

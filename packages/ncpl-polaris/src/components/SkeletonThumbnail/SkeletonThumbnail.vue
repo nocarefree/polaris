@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import type { SkeletonThumbnailProps } from './SkeletonThumbnail'
 import styles from './SkeletonThumbnail.module.scss'
-import { classNames, variationName } from "@ncpl-polaris/utils"
+import { classNames, variationName } from "../../utils"
 
 defineOptions({
   name: 'NpSkeletonThumbnail',

@@ -61,7 +61,7 @@ import ButtonGroup from "../ButtonGroup";
 import Button from "../Button";
 import ActionList from "../ActionList";
 import { useI18n } from "../context"
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import { buttonFrom } from "../Button/utils"
 import { XIcon, MenuHorizontalIcon } from "@ncpl/ncpl-icons";
 

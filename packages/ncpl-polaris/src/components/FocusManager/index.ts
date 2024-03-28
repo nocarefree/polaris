@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import FocusManager from './FocusManager.vue'
 
 export const NpFocusManager = withInstall(FocusManager)

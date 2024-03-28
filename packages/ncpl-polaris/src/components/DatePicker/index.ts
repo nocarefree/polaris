@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import DatePicker from './DatePicker.vue'
 
 export const NpDatePicker = withInstall(DatePicker)

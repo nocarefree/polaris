@@ -1,6 +1,6 @@
 <template>
   <li>
-    <UnstyledLink v-if="url" ref="focusedNode" @click="e => $emit('click', e)" v-bind="sharedProps" :url="url">
+    <UnstyledLink v-if="url" ref="focusedNode" @click="(e:any) => $emit('click', e)" v-bind="sharedProps" :url="url">
       <slot></slot>
     </UnstyledLink>
     <button ref="focusedNode" @click="e => $emit('click', e)" v-bind="sharedProps" type="button">
@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import UnstyledLink from "../../UnstyledLink"
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 import styles from '../LegacyTabs.module.scss';
 
 

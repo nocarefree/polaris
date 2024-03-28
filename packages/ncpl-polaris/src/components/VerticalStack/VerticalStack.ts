@@ -1,5 +1,5 @@
 
-import type { ResponsiveProp } from '@ncpl-polaris/utils/css';
+import type { ResponsiveProp } from '../../utils/css';
 import type { SpaceScale } from '@shopify/polaris-tokens';
 
 type Align =

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import SearchDismissOverlay from './SearchDismissOverlay.vue'
 
 export const NpSearchDismissOverlay = withInstall(SearchDismissOverlay)

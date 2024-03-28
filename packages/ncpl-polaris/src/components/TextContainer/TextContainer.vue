@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { TextContainerProps } from './TextContainer'
 import styles from './TextContainer.module.scss'
-import { classNames, variationName } from '@ncpl-polaris/utils';
+import { classNames, variationName } from '../../utils';
 
 defineOptions({
   name: 'NpTextContainer',

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Group from './Group.vue'
 
 export const NpFormLayoutGroup = withInstall(Group)

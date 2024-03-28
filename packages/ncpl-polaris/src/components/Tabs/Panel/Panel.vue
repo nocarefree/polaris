@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import type { TabsPanelProps } from './Panel'
 import styles from '../Tabs.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 defineOptions({
   name: 'NpTabsPanel',

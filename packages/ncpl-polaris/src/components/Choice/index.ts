@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Choice from './Choice.vue'
 
 export const NpChoice = withInstall(Choice)

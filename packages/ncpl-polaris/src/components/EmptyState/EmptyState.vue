@@ -46,7 +46,7 @@ import Text from '../Text'
 import BlockStack from '../BlockStack'
 import InlineStack from '../InlineStack'
 import { buttonFrom } from "../Button/utils"
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 
 defineOptions({
   name: 'NpEmptyState',

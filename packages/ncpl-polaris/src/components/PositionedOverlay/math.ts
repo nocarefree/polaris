@@ -1,4 +1,4 @@
-import { Rect } from '@ncpl-polaris/utils/geometry';
+import { Rect } from '../../utils/geometry';
 
 export type PreferredPosition = 'above' | 'below' | 'mostSpace';
 

@@ -24,7 +24,7 @@ import styles from './MappedOption.module.scss'
 import type { OptionDescriptor } from '../../types';
 import ListboxOption from '../../Listbox/Option';
 import ListboxTextOption from '../../Listbox/TextOption';
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 
 
 type MappedOption = OptionDescriptor & {

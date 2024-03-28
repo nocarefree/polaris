@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Bleed from './Bleed.vue'
 
 export const NpBleed = withInstall(Bleed)

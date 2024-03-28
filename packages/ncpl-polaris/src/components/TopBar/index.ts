@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import TopBar from './TopBar.vue'
 
 export const NpTopBar = withInstall(TopBar)

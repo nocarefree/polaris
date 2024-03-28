@@ -158,11 +158,11 @@ import Heading from "./Heading/Heading.vue";
 import Cell from "./Cell";
 import styles from './DataTable.module.scss';
 import { useMounted } from '@vueuse/core';
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import { useI18n } from '../context';
 import { headerCell } from "../shared"
 import { measureColumn, getPrevAndCurrentColumns } from './utils';
-import { debounce } from "@ncpl-polaris/utils/debounce"
+import { debounce } from "../../utils/debounce"
 
 defineOptions({
   name: 'NpDataTable',

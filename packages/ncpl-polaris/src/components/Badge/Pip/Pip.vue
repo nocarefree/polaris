@@ -8,9 +8,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PipProps } from './Pip'
-import Text from '@ncpl-polaris/components/Text';
+import Text from '../../Text';
 import styles from './Pip.module.scss';
-import { classNames, variationName } from '@ncpl-polaris/utils';
+import { classNames, variationName } from '../../../utils';
 import { getDefaultAccessibilityLabel } from '../utils';
 import { useI18n } from "../../context"
 

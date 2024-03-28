@@ -6,12 +6,12 @@
   </Focus>
 </template>
 <script setup lang="ts">
-import { ref, onBeforeUnmount, toRef, computed } from "vue";
+import { ref, toRef, computed } from "vue";
 import type { TrapFocusProps } from "./TrapFocus"
-import Focus from "@ncpl-polaris/components/Focus"
+import Focus from "../Focus"
 import { useFocusManager } from '../context';
 import { useEventListener } from "@vueuse/core";
-import { findFirstKeyboardFocusableNode, findLastKeyboardFocusableNode, focusFirstKeyboardFocusableNode, focusLastKeyboardFocusableNode } from "@ncpl-polaris/utils/focus"
+import { findFirstKeyboardFocusableNode, findLastKeyboardFocusableNode, focusFirstKeyboardFocusableNode, focusLastKeyboardFocusableNode } from "../../utils/focus"
 import { Key } from "../types";
 
 

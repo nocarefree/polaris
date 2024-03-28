@@ -35,7 +35,7 @@ import {
   secondsToTimeComponents,
   secondsToTimestamp,
   secondsToDurationTranslationKey,
-} from '@ncpl-polaris/utils/duration';
+} from '../../utils/duration';
 
 defineOptions({
   name: 'NpVideoThumbnail',

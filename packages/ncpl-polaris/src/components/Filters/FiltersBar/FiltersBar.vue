@@ -52,7 +52,7 @@ import UnstyledButton from '../../UnstyledButton';
 import Text from '../../Text';
 import FilterPill from "../FilterPill";
 
-import { classNames } from '@ncpl-polaris/utils';
+import { classNames } from '../../../utils';
 import { useI18n, useBreakpoints } from '../../context';
 import { PlusIcon } from "@ncpl/ncpl-icons";
 import styles from '../Filters.module.scss';

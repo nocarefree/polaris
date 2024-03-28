@@ -12,7 +12,7 @@ import type { PositionedOverlayProps } from './PositionedOverlay'
 import { useScrollable } from "../context"
 import { dataPolarisTopBar, layer } from "../shared"
 import styles from './PositionedOverlay.module.scss'
-import { classNames, getRectForNode, Rect } from '@ncpl-polaris/utils';
+import { classNames, getRectForNode, Rect } from '../../utils';
 import { useEventListener } from '@vueuse/core'
 import {
   calculateVerticalPosition,

@@ -1,4 +1,4 @@
-import { ResponsiveProp } from "@ncpl-polaris/utils"
+import { ResponsiveProp } from "../../utils"
 
 import type {
     ColorTextAlias,

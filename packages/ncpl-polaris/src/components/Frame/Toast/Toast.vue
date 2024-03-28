@@ -44,7 +44,7 @@ import Button from "../../Button"
 import Text from "../../Text"
 import { type ToastProps, DEFAULT_TOAST_DURATION, DEFAULT_TOAST_DURATION_WITH_ACTION } from "./Toast";
 import { AlertCircleIcon, XSmallIcon } from "@ncpl/ncpl-icons";
-import { classNames, variationName } from "@ncpl-polaris/utils";
+import { classNames, variationName } from "../../../utils";
 import styles from "./Toast.module.scss";
 import KeypressListener from "../../KeypressListener";
 import { Key } from '../../types';

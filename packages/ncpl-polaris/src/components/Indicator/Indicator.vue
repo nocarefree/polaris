@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import type { IndicatorProps } from './Indicator'
 import styles from './Indicator.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 
 defineOptions({
   name: 'NpIndicator',

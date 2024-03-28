@@ -50,7 +50,7 @@ import { computed } from "vue";
 import {
   classNames,
   variationName,
-} from "@ncpl-polaris/utils";
+} from "../../utils";
 
 import { useI18n } from "../context";
 

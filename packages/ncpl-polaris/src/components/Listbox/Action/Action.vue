@@ -16,7 +16,7 @@ import { actionContext } from '../Listbox';
 import Option, { ListboxOptionProps } from "../Option"
 import TextOption from "../TextOption"
 import Icon, { type IconProps } from '../../Icon';
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 interface ActionProps extends ListboxOptionProps {
   icon?: IconProps['source'];

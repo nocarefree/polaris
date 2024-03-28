@@ -1,5 +1,5 @@
-import { withInstall } from '@ncpl-polaris/utils'
-import SecondaryAction from './SecondaryAction.vue'
+import { withInstall } from '../../../utils';
+import SecondaryAction from './SecondaryAction.vue';
 
 export const NpActionMenuSecondaryAction = withInstall(SecondaryAction)
 export default NpActionMenuSecondaryAction

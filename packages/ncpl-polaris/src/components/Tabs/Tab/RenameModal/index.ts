@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import RenameModal from './RenameModal.vue'
 
 export const NpTabsTabRenameModal = withInstall(RenameModal)

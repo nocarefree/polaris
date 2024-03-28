@@ -50,9 +50,9 @@
 import { ref } from 'vue'
 import type { TopBarProps } from './TopBar'
 import Search from "./Search"
-import Icon from "@ncpl-polaris/components/Icon"
-import UnstyledLink from "@ncpl-polaris/components/UnstyledLink"
-import Image from "@ncpl-polaris/components/Image"
+import Icon from "../Icon"
+import UnstyledLink from "../UnstyledLink"
+import Image from "../Image"
 import { MenuIcon } from "@ncpl/ncpl-icons"
 import styles from './TopBar.module.scss'
 import { useFocus } from "@vueuse/core"

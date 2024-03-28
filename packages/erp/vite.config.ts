@@ -62,7 +62,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@ncpl-polaris": resolve(__dirname, "../ncpl-polaris/src"),
+      "src": resolve(__dirname, "./src"),
     },
   },
   server: {

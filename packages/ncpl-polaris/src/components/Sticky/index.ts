@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Sticky from './Sticky.vue'
 
 export const NpSticky = withInstall(Sticky)

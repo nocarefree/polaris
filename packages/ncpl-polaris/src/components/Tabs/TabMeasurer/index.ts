@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import TabMeasurer from './TabMeasurer.vue'
 
 export const NpTabsTabMeasurer = withInstall(TabMeasurer)

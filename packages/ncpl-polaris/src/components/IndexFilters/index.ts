@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import IndexFilters from './IndexFilters.vue'
 
 export const NpIndexFilters = withInstall(IndexFilters)

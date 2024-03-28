@@ -1,5 +1,5 @@
 import type { Component } from "vue";
-import { ActionListItemDescriptor } from "@ncpl-polaris/components/types";
+import { ActionListItemDescriptor } from "../../types";
 
 export type TabAction =
     | 'rename'

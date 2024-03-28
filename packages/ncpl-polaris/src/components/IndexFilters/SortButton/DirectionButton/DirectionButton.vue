@@ -7,11 +7,11 @@
   </UnstyledButton>
 </template>
 <script setup lang="ts">
-import styles from './DirectionButton.module.scss'
-import UnstyledButton from "../../../UnstyledButton"
-import Icon from "../../../Icon"
-import { classNames } from '@ncpl-polaris/utils'
-import { ArrowDownIcon, ArrowUpIcon } from "@ncpl/ncpl-icons"
+import styles from './DirectionButton.module.scss';
+import UnstyledButton from "../../../UnstyledButton";
+import Icon from "../../../Icon";
+import { classNames } from '../../../../utils';
+import { ArrowDownIcon, ArrowUpIcon } from "@ncpl/ncpl-icons";
 
 type DirectionButtonDirection = 'asc' | 'desc';
 

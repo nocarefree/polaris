@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import TextContainer from './TextContainer.vue'
 
 export const NpTextContainer = withInstall(TextContainer)

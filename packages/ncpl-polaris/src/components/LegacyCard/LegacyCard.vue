@@ -36,8 +36,8 @@ import ActionList from "../ActionList"
 import ButtonGroup from "../ButtonGroup"
 import Section from "./Section"
 import Header from "./Header"
-import { classNames } from "@ncpl-polaris/utils"
-import { buttonFrom } from "../Button/utils"
+import { classNames } from "../../utils";
+import { buttonFrom } from "../Button/utils";
 
 defineOptions({
   name: 'NpLegacyCard',

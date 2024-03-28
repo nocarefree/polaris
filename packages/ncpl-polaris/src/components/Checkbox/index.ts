@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Checkbox from './Checkbox.vue'
 
 export const NpCheckbox = withInstall(Checkbox)

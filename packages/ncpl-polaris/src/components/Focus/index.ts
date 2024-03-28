@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Focus from './Focus.vue'
 
 export const NpFocus = withInstall(Focus)

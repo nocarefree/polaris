@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Avatar from './Avatar.vue'
 
 export const NpAvatar = withInstall(Avatar)

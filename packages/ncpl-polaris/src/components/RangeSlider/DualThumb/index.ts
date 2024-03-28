@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import DualThumb from './DualThumb.vue'
 
 export const NpRangeSliderDualThumb = withInstall(DualThumb)

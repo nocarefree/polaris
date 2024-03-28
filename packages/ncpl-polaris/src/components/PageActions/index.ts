@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import PageActions from './PageActions.vue'
 
 export const NpPageActions = withInstall(PageActions)

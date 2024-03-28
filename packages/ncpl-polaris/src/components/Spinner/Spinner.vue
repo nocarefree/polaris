@@ -18,8 +18,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { classNames, variationName } from "@ncpl-polaris/utils";
-import Text from "@ncpl-polaris/components/Text"
+import { classNames, variationName } from "../../utils";
+import Text from "../../components/Text"
 import { spinnerProps } from "./Spinner";
 import styles from "./Spinner.module.scss"
 

@@ -20,7 +20,7 @@ import Text from '../../Text'
 import Breadcrumbs from '../../Breadcrumbs'
 import Pagination from '../../Pagination'
 import styles from './Header.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 import { useI18n, useMediaQuery } from '../../context'
 
 const SHORT_TITLE = 20;

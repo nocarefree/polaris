@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import FiltersBar from './FiltersBar.vue'
 
 export const NpFiltersBar = withInstall(FiltersBar)

@@ -1,5 +1,4 @@
-import type { ActionListSection } from "@ncpl-polaris/components/ActionList/Section"
-import type { MenuGroupDescriptor } from '../../types';
+import type { MenuGroupDescriptor, ActionListSection } from '../../types';
 
 export interface MenuGroupProps extends MenuGroupDescriptor {
     /** Visually hidden menu description for screen readers */
@@ -7,5 +6,5 @@ export interface MenuGroupProps extends MenuGroupDescriptor {
     /** Whether or not the menu is open */
     active?: boolean;
     /** Collection of sectioned action items */
-    sections?: readonly ActionListSection[];
+    sections?: ActionListSection[];
 }

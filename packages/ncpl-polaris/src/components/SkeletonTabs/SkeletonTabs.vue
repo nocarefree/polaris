@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { SkeletonTabsProps } from './SkeletonTabs'
 import styles from './SkeletonTabs.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../utils"
 import SkeletonBodyText from "../SkeletonBodyText"
 
 defineOptions({

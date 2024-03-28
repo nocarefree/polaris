@@ -37,10 +37,10 @@ import {
   getNewRange,
   getOrderedWeekdays,
   isDateDisabled,
-} from '@ncpl-polaris/utils/dates';
-import { classNames } from "@ncpl-polaris/utils"
+} from '../../../utils/dates';
+import { classNames } from "../../../utils"
 import { useI18n } from "../../context";
-import type { Range } from '@ncpl-polaris/utils/dates';
+import type { Range } from '../../../utils/dates';
 
 defineOptions({
   name: 'NpDatePickerMonth',

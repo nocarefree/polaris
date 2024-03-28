@@ -21,7 +21,7 @@ import { ref, computed } from 'vue';
 import type { ProgressBarProps } from './ProgressBar';
 import styles from './ProgressBar.module.scss';
 import CSSTransition from "../CSSTransition";
-import { classNames, variationName } from "@ncpl-polaris/utils";
+import { classNames, variationName } from "../../utils";
 import { useTheme, useI18n } from "../context";
 
 defineOptions({

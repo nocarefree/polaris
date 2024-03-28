@@ -18,46 +18,39 @@ import { NpPopover, NpButton, NpActionList, NpIcon, classNames } from "@ncpl/ncp
 import styles from "../../HomePage.module.scss";
 import { useCommon, metrics } from "../../../context";
 import { EditIcon, ChartLineIcon, ChartHorizontalIcon, DataTableIcon, ChartCohortIcon, ChartDonutIcon, ChartStackedIcon, ChartVerticalIcon } from "@ncpl/ncpl-icons";
+import InfoPopover from '../InfoPopover';
+import InfoPopoverHandle from '../InfoPopoverHandle';
 
 const props = defineProps<{ activeHandle?: string }>();
+const emit = defineEmits(['change']);
 
 const opened = ref(false)
 const { i18n } = useCommon();
+const popoverHandle = ref<string | null>(null)
 
 
-const F2 = ({
-  chartType: e
-}) => {
-  let icon;
+const getIcon = (e: string) => {
   switch (e) {
     case 'line':
     case 'sparkline':
     case 'stackedArea':
-      icon = ChartLineIcon;
-      break;
+      return ChartLineIcon;
     case 'compactHorizontalBar':
     case 'simpleHorizontalBar':
     case 'dynamicBar':
     case 'bar':
-      icon = ChartHorizontalIcon;
-      break;
+      return ChartHorizontalIcon;
     case 'dataTable':
-      icon = DataTableIcon;
-      break;
+      return DataTableIcon;
     case 'cohorts':
-      icon = ChartCohortIcon;
-      break;
+      return ChartCohortIcon;
     case 'donut':
-      icon = ChartDonutIcon;
-      break;
+      return ChartDonutIcon;
     case 'simpleNormalized':
-      icon = ChartStackedIcon;
-      break;
+      return ChartStackedIcon;
     default:
-      icon = ChartVerticalIcon;
-      break;
+      return ChartVerticalIcon;
   }
-  return h(NpIcon, { source: icon })
 }
 
 const items = computed(() => {
@@ -70,36 +63,36 @@ const items = computed(() => {
       prefix: h(
         'div',
         {
-          className: styles.prefixContainer,
-          children: [
-            h(
-              F2,
-              {
-                chartType: (
-                  (g = (C = p.overrideMeta) == null ? void 0 : C.visualization) == null ? void 0 : g.chartType
-                ) ?? ((b = p.visualization) == null ? void 0 : b.chartType)
-              }
-            ),
-            h(
-              k2,
-              {
-                infoPopoverActive: p.handle === o,
-                infoPopoverContent: p.popover
-              }
-            )
-          ]
-        }
+          class: styles.prefixContainer,
+        },
+        [
+          h(
+            NpIcon,
+            {
+              icon: getIcon(
+                (g = (C = p.overrideMeta) == null ? void 0 : C.visualization) == null ? void 0 : g.chartType
+              ) ?? ((b = p.visualization) == null ? void 0 : b.chartType)
+            }
+          ),
+          h(
+            InfoPopover,
+            {
+              active: p.handle === popoverHandle.value,
+              content: p.popover
+            }
+          )
+        ]
       ),
       suffix: h(
-        v2,
+        InfoPopoverHandle,
         {
           id: p.handle,
-          onInfoActive: r,
-          infoPopoverActive: p.handle === o
+          'onUpdate:active': (e: string) => popoverHandle.value = e,
+          active: p.handle === popoverHandle.value
         }
       ),
       onAction: () => {
-        p.handle !== e && t(p.handle), i()
+        p.handle !== props.activeHandle && emit('change',p.handle)
       }
     }
   })

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../utils'
 import Navigation from './Navigation.vue'
 
 export const NpNavigation = withInstall(Navigation)

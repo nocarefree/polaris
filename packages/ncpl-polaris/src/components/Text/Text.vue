@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { TextProps } from "./Text";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import styles from "./Text.module.scss";
 
 defineOptions({

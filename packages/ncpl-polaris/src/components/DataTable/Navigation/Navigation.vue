@@ -16,7 +16,7 @@ import { useI18n } from "../../context";
 import Button from "../../Button";
 import styles from "../DataTable.module.scss";
 import type { NavigationProps } from "./types";
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../../utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "@ncpl/ncpl-icons";
 
 defineProps<NavigationProps>()

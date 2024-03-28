@@ -22,7 +22,7 @@ import Icon from "../Icon";
 import Truncate from "../Truncate";
 import styles from "./ExceptionList.module.scss";
 import type { ExceptionListItemProps } from './ExceptionList';
-import { classNames, variationName } from "@ncpl-polaris/utils";
+import { classNames, variationName } from "../../utils";
 
 
 defineProps<ExceptionListItemProps>();

@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import Spinner from './Spinner.vue'
 
 export const NpTextFieldSpinner = withInstall(Spinner)

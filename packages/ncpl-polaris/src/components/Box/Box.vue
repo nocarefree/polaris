@@ -7,7 +7,7 @@
 import { computed, h, useSlots } from 'vue'
 import type { BoxProps } from './Box'
 import styles from './Box.module.scss'
-import { classNames, getResponsiveProps } from '@ncpl-polaris/utils';
+import { classNames, getResponsiveProps } from '../../utils';
 
 defineOptions({
   name: 'NpBox',

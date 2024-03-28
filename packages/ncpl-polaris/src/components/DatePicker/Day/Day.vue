@@ -30,8 +30,8 @@ import { ref, computed, watchEffect } from 'vue'
 import type { DatePickerDayProps } from './Day'
 import styles from '../DatePicker.module.scss'
 import { useI18n } from "../../context"
-import { classNames } from "@ncpl-polaris/utils"
-import { isSameDay } from "@ncpl-polaris/utils/dates"
+import { classNames } from "../../../utils"
+import { isSameDay } from "../../../utils/dates"
 import { monthName } from "../utils"
 
 defineOptions({

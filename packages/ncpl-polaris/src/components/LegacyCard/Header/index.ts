@@ -1,4 +1,4 @@
-import { withInstall } from '@ncpl-polaris/utils'
+import { withInstall } from '../../../utils'
 import LegacyCardHeader from './Header.vue'
 
 export const NpLegacyCardHeader = withInstall(LegacyCardHeader)

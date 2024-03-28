@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { DatePickerWeekdayProps } from './Weekday'
 import styles from '../DatePicker.module.scss'
-import { classNames } from "@ncpl-polaris/utils"
+import { classNames } from "../../../utils"
 
 defineOptions({
   name: 'NpDatePickerWeekday',

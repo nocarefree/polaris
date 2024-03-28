@@ -46,7 +46,7 @@ import Text from '../Text';
 import Image from '../Image';
 import TextContainer from '../TextContainer';
 import ConditionalWrapper from '../ConditionalWrapper';
-import { classNames } from "@ncpl-polaris/utils";
+import { classNames } from "../../utils";
 import { XSmallIcon } from "@ncpl/ncpl-icons";
 
 defineOptions({

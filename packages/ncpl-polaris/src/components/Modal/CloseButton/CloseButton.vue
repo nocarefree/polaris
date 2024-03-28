@@ -4,7 +4,7 @@
 </template>
 <script setup lang="ts">
 import type { CloseButtonProps } from './CloseButton';
-import Button from '@ncpl-polaris/components/Button';
+import Button from '../../Button';
 import { useI18n } from "../../context";
 import { XIcon } from "@ncpl/ncpl-icons"
 

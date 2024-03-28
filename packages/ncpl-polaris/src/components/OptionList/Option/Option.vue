@@ -46,7 +46,7 @@ import type { InlineStackProps } from "../../InlineStack";
 import PolarisCheckbox from "../../Checkbox";
 import Icon from "../../Icon";
 import { CheckIcon } from "@ncpl/ncpl-icons";
-import { classNames, variationName } from "@ncpl-polaris/utils"
+import { classNames, variationName } from "../../../utils"
 import type { Alignment } from "../types"
 
 defineOptions({
