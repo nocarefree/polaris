@@ -1,4 +1,4 @@
-import { withInstall } from '../../../utils'
+import { withInstall } from '../../../../utils'
 import SecondaryNavigation from './SecondaryNavigation.vue'
 
 export const NpSecondaryNavigation = withInstall(SecondaryNavigation)

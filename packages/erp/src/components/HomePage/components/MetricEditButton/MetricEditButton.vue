@@ -18,8 +18,7 @@ import { NpPopover, NpButton, NpActionList, NpIcon, classNames } from "@ncpl/ncp
 import styles from "../../HomePage.module.scss";
 import { useCommon, metrics } from "../../../context";
 import { EditIcon, ChartLineIcon, ChartHorizontalIcon, DataTableIcon, ChartCohortIcon, ChartDonutIcon, ChartStackedIcon, ChartVerticalIcon } from "@ncpl/ncpl-icons";
-import InfoPopover from '../InfoPopover';
-import InfoPopoverHandle from '../InfoPopoverHandle';
+import { InfoPopover, InfoPopoverHandle } from '../';
 
 const props = defineProps<{ activeHandle?: string }>();
 const emit = defineEmits(['change']);
@@ -69,9 +68,9 @@ const items = computed(() => {
           h(
             NpIcon,
             {
-              icon: getIcon(
+              source: getIcon((
                 (g = (C = p.overrideMeta) == null ? void 0 : C.visualization) == null ? void 0 : g.chartType
-              ) ?? ((b = p.visualization) == null ? void 0 : b.chartType)
+              ) ?? ((b = p.visualization) == null ? void 0 : b.chartType))
             }
           ),
           h(
@@ -92,7 +91,7 @@ const items = computed(() => {
         }
       ),
       onAction: () => {
-        p.handle !== props.activeHandle && emit('change',p.handle)
+        p.handle !== props.activeHandle && emit('change', p.handle)
       }
     }
   })

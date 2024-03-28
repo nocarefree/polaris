@@ -5,12 +5,12 @@
         <div :class="styles.metricButtonStack">
           <NpInlineStack :wrap="false" gap="050">
             <MetricsButton v-for="(card, index) in cards" :card="card" :selected="expanded && selected == index"
-              :items="[]" @click="onMetricClick(index)">
+              @click="onMetricClick(index)">
             </MetricsButton>
           </NpInlineStack>
         </div>
         <div :class="classNames(styles.expandButton, shadow && styles.shadow)">
-          <NpIcon :icon="expanded ? ChevronUpIcon : ChevronDownIcon" size="slim" @click="expanded = !expanded"
+          <NpIcon :source="expanded ? ChevronUpIcon : ChevronDownIcon" size="slim" @click="expanded = !expanded"
             :aria-expanded="expanded" aria-controls="home-metrics-collapsible-section" accessibility-label="" role="tab"
             variant="tertiary"></NpIcon>
         </div>
@@ -28,11 +28,11 @@
 </template>
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { NpBlockStack, NpCard, NpInlineStack, classNames } from "@ncpl/ncpl-polaris"
+import { NpBlockStack, NpCard, NpInlineStack, NpIcon, NpText, classNames } from "@ncpl/ncpl-polaris"
 import styles from "../../HomePage.module.scss";
-import { metrics } from "../../../context";
 import { MetricsButton } from "../"
 import { ChevronUpIcon, ChevronDownIcon } from "@ncpl/ncpl-icons";
+import { useAnalytics } from "../../stores";
 
 const selected = ref<number>(0);
 const shadow = ref(false);
@@ -43,20 +43,15 @@ const expanded = ref(false);
 const {
   dateControls: {
     primaryRange,
-    comparisonRange: I,
-    selectedRangePreset: y
+    comparisonRange,
   },
-  channelsData: {
-    channelsLoading: v,
-    activeChannel: L
-  },
-  metricCardResponses: T,
+  metricCardResponses,
   metricsLoading,
-  visibleMetrics: w
-} = ((): any => ({}))();
+  visibleMetrics
+} = useAnalytics();
 
 const cards = computed(() => {
-  return [metrics[0], metrics[1], metrics[2], metrics[3]].map((R: any) => ({
+  return [visibleMetrics[0], visibleMetrics[1], visibleMetrics[3], visibleMetrics[4]].map((R: any) => ({
     card: {
       type: 'compact',
       title: R.title,
@@ -68,7 +63,7 @@ const cards = computed(() => {
     overrideMeta: R.overrideMeta,
     data: G(R.handle),
     reportingPeriod: primaryRange,
-    comparisonPeriod: I,
+    comparisonPeriod: comparisonRange,
     handle: R.handle
   }))
 });
@@ -77,14 +72,14 @@ const selectedCard = computed(() => {
   return cards.value[selected.value];
 })
 
-const G = (R: any) => {
+const G = (R: string) => {
   return metricsLoading ? [
     {
       data: [],
       isLoading: !0,
       isError: !1
     }
-  ] : T[R]
+  ] : metricCardResponses.visibleMetricsQueryData[R]
 }
 
 const onMetricClick = (index: number) => {

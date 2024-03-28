@@ -1,4 +1,4 @@
-import { withInstall } from '../../../utils'
+import { withInstall } from '../../../../utils'
 import DuplicateModal from './DuplicateModal.vue'
 
 export const NpTabsTabDuplicateModal = withInstall(DuplicateModal)

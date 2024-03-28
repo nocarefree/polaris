@@ -1,5 +1,5 @@
 <template>
-  <ConditionalWrapper :condition="Boolean(helpText || hasError)">
+  <ConditionalWrapper :condition="Boolean(helpText)">
     <template #wrapper="{ children }">
       <div>
         <component :is="children"></component>
@@ -50,7 +50,6 @@ const className = computed(() => classNames(
   props.disabled && styles.disabled,
   props.labelClassName,
 ));
-const hasError = computed(() => props.error && typeof props.error !== 'boolean')
 
 const labelStyle = computed(() => {
   const { bleedBlockEnd, bleed, bleedBlockStart, bleedInlineStart, bleedInlineEnd, fill } = props;

@@ -8,8 +8,8 @@
           :class="classNames(styles.Button, inline && styles.Inline, active && styles.Active, titleClassName)"
           @click="e => $emit('click', e)">
           <slot v-if="$slots.renderWrapper" name="renderWrapper" :title="title"></slot>
-          <NpText variant="headingMd" as="h2">
-            <component :is="title"></component>
+          <NpText v-else variant="headingMd" as="h2">
+            <component :is="titleComponent"></component>
           </NpText>
         </button>
       </template>
@@ -48,8 +48,8 @@ const overlayEl = computed(() => {
 })
 const wrapperContainer = ref<HTMLElement>();
 
-const title = computed(() => {
-  return h('span', { class: "styles.WrappedContent" }, props.title);
+const titleComponent = computed(() => {
+  return h('span', { class: styles.WrappedContent }, props.title);
 })
 
 

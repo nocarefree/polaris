@@ -1,5 +1,5 @@
 <template>
-  <NpPopover active="active" :preferred-alignment="mdUp ? 'right' : 'left'"
+  <NpPopover :active="active" :preferred-alignment="mdUp ? 'right' : 'left'"
     :preferred-position="mdUp ? 'below' : 'above'" :prefer-input-activator="mdUp" :full-width="false"
     autofocus-target="none">
     <template #activator>
@@ -9,14 +9,13 @@
   </NpPopover>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
 import Formula from "../../../Formula";
 import { NpPopover, classNames } from "@ncpl/ncpl-polaris";
 import { useBreakpoints } from '@ncpl/ncpl-polaris';
 import styles from "../../HomePage.module.scss";
 
 defineProps<{
-  active?: boolean;
+  active: boolean;
   content?: {
     definition: string;
     formula: string;

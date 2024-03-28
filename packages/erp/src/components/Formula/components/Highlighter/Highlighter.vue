@@ -6,8 +6,7 @@
     </p>
 </template>
 <script setup lang="ts">
-import { result } from "lodash";
-import styles from "../../MetricLayout.module.scss";
+import styles from "./Highlighter.module.scss";
 
 defineProps<{
     result: string;

@@ -1,14 +1,16 @@
 <template>
-  <DefinitionPopover v-if="popover" :title="title">
+  <DefinitionPopover v-if="popover" :title="title" preferred-alignment="left" preferred-position="below"
+    :constrain-width="false" :sectioned="false" :title-class-name="styles.Button" inline>
     <Formula :title="title" :formula="popover.formula" :definition="popover.definition"></Formula>
   </DefinitionPopover>
-  <div v-else :class="classNames(styles.Title, disabled && styles.Disabled),">
+  <div v-else :class="classNames(styles.Title, disabled && styles.Disabled)">
     <NpText variant="bodySm" as="h2" truncate>
       {{ title }}
     </NpText>
   </div>
 </template>
 <script setup lang="ts">
+import { NpText } from "@ncpl/ncpl-polaris";
 import styles from "../../MetricCard.module.scss";
 import DefinitionPopover from "../../../DefinitionPopover";
 import Formula from "../../../Formula";

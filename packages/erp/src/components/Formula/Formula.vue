@@ -1,7 +1,7 @@
 <template>
-    <NpBox>
+    <NpBox padding="400">
         <NpBlockStack inline-align="start" gap="200" as="div">
-            <NpText v-if="title" variant="bodyMd" as="p" font-weight="semibold"></NpText>
+            <NpText v-if="title" variant="bodyMd" as="p" font-weight="semibold">{{ title }}</NpText>
             {{ definition }}
             <NpBox v-if="_formula" as="div" padding="200" background="bg" border-radius="100" width="100%">
                 <Highlighter :result="_formula.result" :variables="_formula.variables"></Highlighter>

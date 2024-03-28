@@ -5,9 +5,9 @@
       border-radius="200">
       <CompactPrimaryMetricSkeleton v-if="loading" :has-title="Boolean(card.card.title)" :type="card.card.type"
         :wrapper="card.card.wrapper" />
-      <MetricCard v-else-if="card.data" v-bind="card" empty-state-text="—">
+      <MetricCard v-else v-bind="card.card">
         <template #primaryAction>
-          <MetricEditButton></MetricEditButton>
+          <MetricEditButton :active-handle="card.card.handle"></MetricEditButton>
         </template>
       </MetricCard>
     </NpBox>
