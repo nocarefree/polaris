@@ -149,9 +149,11 @@ const handleDrop = (event: DropZoneEvent) => {
   rejectedFiles.length && emit('dropRejected', rejectedFiles);
 
 
-  if (!(event.target && 'value' in event.target)) return;
+  if (event.target && 'value' in event.target) {
+    (event.target as HTMLInputElement).value = '';
+  }
 
-  event.target.value = '';
+
 }
 
 const handleDragOver = (event: DropZoneEvent) => {

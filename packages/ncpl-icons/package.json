@@ -15,19 +15,19 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     },
     "./global": {
       "types": "./dist/types/global.d.ts",
-      "require": "./dist/global.cjs",
-      "import": "./dist/global.js"
+      "require": "./dist/global.js",
+      "import": "./dist/global.mjs"
     },
     "./*": "./*"
   },

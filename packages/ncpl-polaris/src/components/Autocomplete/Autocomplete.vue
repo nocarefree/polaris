@@ -31,12 +31,14 @@
             <component :is="children"></component>
           </ListboxSection>
         </template>
-        <MappedOption v-for="option in (conditionalOptions as OptionDescriptor[])" :key="option.id || option.value"
-          v-bind="option" :selected="selected.includes(option.value)" :single-selection="!allowMultiple" />
+        <template v-if="conditionalOptions.length">
+          <MappedOption v-for="option in conditionalOptions" :key="option.id || option.value"
+            v-bind="option" :selected="selected.includes(option.value)" :single-selection="!allowMultiple" />
+        </template>
       </ConditionalWrapper>
 
       <ListboxLoading v-if="loading" :accessibility-label="i18n.translate('Polaris.Autocomplete.spinnerAccessibilityLabel'
-        ,)" />
+    ,)" />
       <div v-if="hasEmptyStateMarkup" role="status">
         <slot name="emptyState"></slot>
       </div>
@@ -56,7 +58,7 @@ import ListboxHeader from "../Listbox/Header";
 import MappedAction from "./MappedAction"
 import MappedOption from "./MappedOption"
 import { isSection } from '../Option/utils';
-import type { SectionDescriptor, OptionDescriptor } from "../types"
+import type { SectionDescriptor } from "../types"
 import { useI18n } from "../context"
 
 defineOptions({
@@ -70,8 +72,8 @@ const i18n = useI18n();
 
 const conditionalOptions = computed(() => props.loading && !props.willLoadMoreResults ? [] : props.options);
 const isOptionSection = computed(() => isSection(conditionalOptions.value));
-const noOptionsAvailable = computed(() => !isOptionSection.value || conditionalOptions.value.every(
-  (value) => (value as SectionDescriptor).options.length === 0,
+const noOptionsAvailable = computed(() => !isOptionSection.value || (conditionalOptions.value as SectionDescriptor[]).every(
+  (value: SectionDescriptor) => value.options.length === 0
 ));
 const hasOptionsMarkup = computed(() => {
   return !noOptionsAvailable.value || conditionalOptions.value.length > 0;

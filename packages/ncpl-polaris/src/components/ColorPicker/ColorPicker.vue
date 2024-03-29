@@ -8,7 +8,7 @@
       <Slidable @change="handleDraggerMove" :dragger-x="draggerX" :dragger-y="draggerY" />
     </div>
     <HuePicker :hue="modelValue.hue" @change="handleHueChange" />
-    <AlphaPicker v-if="allowAlpha" :alpha="alpha" :color="(modelValue as HSBColor)" @change="handleAlphaChange" />
+    <AlphaPicker v-if="allowAlpha" :alpha="alpha" :color="modelValue" @change="handleAlphaChange" />
   </div>
 </template>
 <script setup lang="ts">
@@ -23,7 +23,6 @@ import Slidable from "./Slidable";
 import HuePicker from "./HuePicker";
 import AlphaPicker from "./AlphaPicker";
 import { clamp } from "lodash";
-import type { HSBColor } from '../../utils/color-types';
 
 interface State {
   pickerSize: {

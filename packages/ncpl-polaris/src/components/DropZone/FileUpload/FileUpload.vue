@@ -25,7 +25,7 @@ import BlockStack from "../../BlockStack"
 import Text from "../../Text"
 import Icon from "../../Icon"
 import styles from "./FileUpload.module.scss"
-import { classNames } from '../../utils';
+import { classNames } from '../../../utils';
 import { useI18n, dropZoneContext } from "../../context"
 import { UploadIcon } from "@ncpl/ncpl-icons";
 import { createAllowMultipleKey } from "../utils"

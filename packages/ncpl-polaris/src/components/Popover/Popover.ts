@@ -1,4 +1,4 @@
-import type { PopoverOverlayProps, PopoverCloseSource, PopoverAutofocusTarget } from "./PopoverOverlay/PopoverOverlay"
+import type { PopoverOverlayProps, PopoverAutofocusTarget } from "./PopoverOverlay/PopoverOverlay"
 
 
 export interface PopoverProps {

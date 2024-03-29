@@ -1,5 +1,4 @@
 import type { Key } from '../types';
-import type { Component } from "vue"
 
 interface AccessibilityLabels {
     previous: string;

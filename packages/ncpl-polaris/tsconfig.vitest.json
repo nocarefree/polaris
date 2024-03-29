@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "es2018",
+    "target": "esnext",
     "module": "esnext",
     "baseUrl": ".",
     "sourceMap": false,
@@ -12,15 +12,19 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "removeComments": false,
+    "removeComments": true,
     "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "lib": [
       "ESNext",
       "DOM",
       "DOM.Iterable"
     ]
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     // Paths to lint
     "src",

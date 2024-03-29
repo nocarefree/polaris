@@ -38,11 +38,11 @@ const withOutWrapper = (nodes: any[], component: any) => {
     : h(component, null, { default: () => nodes });
 };
 
-const withOutWrapperOnly = (nodes: any[], component: any) => {
-  return hasWrapper(nodes, component)
-    ? nodes
-    : h(component, null, { default: () => nodes });
-};
+// const withOutWrapperOnly = (nodes: any[], component: any) => {
+//   return hasWrapper(nodes, component)
+//     ? nodes
+//     : h(component, null, { default: () => nodes });
+// };
 
 export const useWrapper = (children: any[], component: any, each = false) => {
   if (children.length > 0) {

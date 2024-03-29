@@ -11,7 +11,7 @@
   </ul>
 </template>
 <script setup lang="ts">
-import { ref, computed, watchEffect, toRef, watch, onUnmounted } from 'vue';
+import { ref, computed, watchEffect, toRef, watch, onUnmounted, shallowRef } from 'vue';
 import { AutoSelection, listboxContext } from './Listbox';
 import type { ListboxProps, ArrowKeys, NavigableOption } from './Listbox';
 import Text from '../Text';
@@ -36,11 +36,11 @@ const props = withDefaults(defineProps<ListboxProps>(), {
   autoSelection: AutoSelection.FirstSelected,
 });
 const loading = ref<string | undefined>();
-const listboxRef = ref<HTMLUListElement>();
-const currentOptions = ref<HTMLElement[]>([])
+const listboxRef = shallowRef<HTMLUListElement>();
+const currentOptions = shallowRef<HTMLElement[]>([])
 const activeOption = ref<NavigableOption>();
 const lazyLoading = ref(false);
-const scrollableRef = ref<HTMLElement | null>(null);
+const scrollableRef = shallowRef<HTMLElement | null>(null);
 const listId = useId(toRef(props, 'customListId'));
 const keyboardEventsEnabled = ref<boolean>(Boolean(props.enableKeyboardControl));
 
@@ -93,14 +93,14 @@ const getNextIndex = (currentIndex: number, lastIndex: number, direction: string
   return nextIndex;
 };
 
-const getFirstNavigableOption = (currentOptions: HTMLElement[]) => {
+const getFirstNavigableOption = (_currentOptions: HTMLElement[]) => {
   const { autoSelection } = props;
-  const hasSelectedOptions = currentOptions.some(
+  const hasSelectedOptions = _currentOptions.some(
     (option) => option.getAttribute('aria-selected') === 'true',
   );
 
   let elementIndex = 0;
-  const element = currentOptions.find((option, index) => {
+  const element = _currentOptions.find((option, index) => {
     const isInteractable = option.getAttribute('aria-disabled') !== 'true';
     let isFirstNavigableOption;
 
@@ -142,7 +142,7 @@ const getNextValidOption = async (key: ArrowKeys) => {
   const { autoSelection } = props;
   let currentIndex = activeOption.value?.index || 0;
   let nextIndex = 0;
-  let element:any = activeOption.value?.element;
+  let element: any = activeOption.value?.element;
   let totalOptions = -1;
 
   if (!activeOption.value && autoSelection === AutoSelection.None) {
@@ -189,7 +189,7 @@ const getFormattedOption = (element: HTMLElement, index: number) => {
 
 const handleScrollIntoView = (option: NavigableOption) => {
   if (scrollableRef.value) {
-    scrollOptionIntoView(option.element, scrollableRef.value!);
+    scrollOptionIntoView(option.element, (scrollableRef.value as HTMLElement));
   }
 };
 const handleScrollIntoViewDebounced = debounce(handleScrollIntoView, 50);

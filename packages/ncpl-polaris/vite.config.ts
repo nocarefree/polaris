@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
+import dts from 'vite-plugin-dts';
 import postCssPxToRem from "postcss-pxtorem";
 import postcssCustomMedia from "postcss-custom-media";
 import postcssGlobalData from "@csstools/postcss-global-data";
@@ -9,7 +10,43 @@ import { camelCase, upperFirst } from "lodash";
 const mediaQueriesCssPath = resolve(__dirname, '../../node_modules/@shopify/polaris-tokens/dist/css/media-queries.css');
 
 export default defineConfig({
-  plugins: [vue()],
+  base: './',
+  build: {
+    target: "esnext",
+    //打包文件目录
+    outDir: "dist",
+    //压缩
+    minify: true,
+    rollupOptions: {
+      //忽略打包vue文件
+      external: ["vue"],
+      input: ["src/index.ts"],
+      output: [
+        {
+          //打包格式
+          format: "es",
+          //打包后文件名
+          entryFileNames: "[name].mjs",
+          exports: "named",
+          //配置打包根目录
+          dir: "dist",
+        },
+        {
+          //打包格式
+          format: "cjs",
+          //打包后文件名
+          entryFileNames: "[name].js",
+          exports: "named",
+          //配置打包根目录
+          dir: "dist",
+        },
+      ],
+    },
+    lib: {
+      entry: "src/index.ts",
+    }
+  },
+  plugins: [vue(), dts()],
   css: {
     postcss: {
       plugins: [

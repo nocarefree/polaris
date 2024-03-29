@@ -1,5 +1,3 @@
-import { type InjectionKey, inject, provide } from "vue";
-
 import type {
     ActionListItemDescriptor,
     OptionDescriptor,

@@ -1,4 +1,4 @@
-import { useSlots, onBeforeUpdate, onUpdated, ref, type Ref } from "vue";
+import { useSlots, onBeforeUpdate, type Ref } from "vue";
 
 
 export function slotsChange(slots: { [key: string]: Ref<Boolean | undefined> }) {

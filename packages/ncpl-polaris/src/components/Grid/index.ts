@@ -6,3 +6,4 @@ export default NpGrid
 
 export * from './Grid'
 export * from './Cell'
+export * from "./utils";

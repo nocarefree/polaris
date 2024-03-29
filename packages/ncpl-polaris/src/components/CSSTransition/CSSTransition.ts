@@ -1,6 +1,5 @@
 
 
-const TransitionHookValidator = [Function, Array];
 
 export interface CSSTransitionClassNames {
   appear?: string | undefined;

@@ -42,7 +42,7 @@ defineOptions({
   name: 'NpChoice',
 })
 const props = defineProps<ChoiceProps>()
-const emit = defineEmits(['click']);
+defineEmits(['click']);
 
 const className = computed(() => classNames(
   styles.Choice,

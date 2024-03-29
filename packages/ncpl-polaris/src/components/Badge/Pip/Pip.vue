@@ -22,14 +22,14 @@ const props = defineProps<PipProps>()
 const i18n = useI18n();
 const className = computed(() => classNames(
   styles.Pip,
-  props.status && styles[variationName('status', props.status)],
+  props.tone && styles[variationName('tone', props.tone)],
   props.progress && styles[variationName('progress', props.progress)],
 ));
 
 const accessibilityLabel = computed(() =>
   props.accessibilityLabelOverride
     ? props.accessibilityLabelOverride
-    : getDefaultAccessibilityLabel(i18n.value, props.progress, props.status)
+    : getDefaultAccessibilityLabel(i18n.value, props.progress, props.tone)
 )
 
 </script>

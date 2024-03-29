@@ -1,4 +1,4 @@
-@import '../../../styles/common';
+@import "../../../styles/common";
 
 .Pip {
   // stylelint-disable -- Polaris component custom properties
@@ -57,13 +57,7 @@
 }
 
 .progressPartiallyComplete {
-  background: linear-gradient(
-    to top,
-    currentColor,
-    currentColor 50%,
-    transparent 50%,
-    transparent
-  );
+  background: linear-gradient(to top, currentColor, currentColor 50%, transparent 50%, transparent);
 
   &.Pip {
     background: none;
@@ -71,7 +65,7 @@
     overflow: hidden;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       /* stylelint-disable-next-line polaris/conventions/polaris/custom-property-allowed-list -- custom pip */
       top: calc(-1 * var(--pc-border-width));

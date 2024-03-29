@@ -8,7 +8,7 @@ import { ref, computed, onMounted } from 'vue'
 import { scrollable } from "../../components/shared";
 import { classNames, StickyManager } from "../../utils";
 import { stickyManagerContext, scrollableContext } from "../context";
-import { scrollableProps } from './Scrollable'
+import type { ScrollableProps } from './types'
 import styles from './Scrollable.module.scss'
 import { debounce } from "../../utils/debounce";
 
@@ -23,7 +23,10 @@ const LOW_RES_BUFFER = 2;
 defineOptions({
   name: 'NpScrollable',
 })
-const props = defineProps(scrollableProps);
+const props = withDefaults(defineProps<ScrollableProps>(), {
+  vertical: true,
+  horizontal: true,
+});
 const emit = defineEmits(['scrolledToBottom']);
 
 const scrollArea = ref();

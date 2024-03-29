@@ -5,7 +5,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineComponent } from 'vue'
 import { MessageIndicatorProps } from './MessageIndicator'
 import styles from './MessageIndicator.module.scss'
 

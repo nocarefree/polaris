@@ -1,1 +1,1 @@
-export * from './DiscardConfirmationModal';
+export * from './DiscardConfirmationModal.vue';

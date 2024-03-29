@@ -1,4 +1,4 @@
-import type { ToastPropsWithID } from '../Frame.ts';
+import type { ToastPropsWithID } from '../Frame';
 
 export type ToastMessagesProps = {
   toastMessages: ToastPropsWithID[];

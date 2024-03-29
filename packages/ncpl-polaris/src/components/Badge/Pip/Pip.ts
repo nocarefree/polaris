@@ -1,7 +1,7 @@
-import type { Progress, Status } from '../types';
+import type { Progress, Tone } from '../types';
 
 export interface PipProps {
-    status?: Status;
+    tone?: Tone;
     progress?: Progress;
     accessibilityLabelOverride?: string;
 }

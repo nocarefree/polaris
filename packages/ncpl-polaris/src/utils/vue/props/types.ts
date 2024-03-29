@@ -1,6 +1,8 @@
 import type { ExtractPropTypes, PropType } from "vue";
 import type { IfNever, UnknownToNever, WritableArray } from "./util";
 
+export const epPropKey = '__epPropKey'
+
 type Value<T> = T[keyof T];
 
 /**
@@ -71,7 +73,7 @@ export type EpPropInputDefault<
  */
 export type NativePropType =
   | ((...args: any) => any)
-  | { new (...args: any): any }
+  | { new(...args: any): any }
   | undefined
   | null;
 export type IfNativePropType<T, Y, N> = [T] extends [NativePropType] ? Y : N;
@@ -160,4 +162,4 @@ export type EpPropFinalized<Type, Value, Validator, Default, Required> = EpProp<
   Required
 >;
 
-export {};
+export { };

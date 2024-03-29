@@ -46,7 +46,7 @@ defineOptions({
   name: 'NpRangeSliderSingleThumb',
 })
 
-const emit = defineEmits(['change', 'update:modelValue', 'blur', 'focus'])
+defineEmits(['change', 'update:modelValue', 'blur', 'focus'])
 const props = defineProps<RangeSliderSingleThumbProps>()
 
 const clampedValue = computed(() => clamp(props.modelValue, props.min, props.max));

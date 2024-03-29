@@ -1,4 +1,4 @@
-import {clamp} from 'lodash';
+import { clamp } from 'lodash';
 import type {
   RGBColor,
   RGBAColor,
@@ -8,10 +8,10 @@ import type {
   HSLAColor,
   HSBLAColor,
 } from './color-types';
-import {roundNumberToDecimalPlaces} from './roundNumberToDecimalPlaces';
+import { roundNumberToDecimalPlaces } from './roundNumberToDecimalPlaces';
 
 export function rgbString(color: RGBColor | RGBAColor) {
-  const {red, green, blue} = color;
+  const { red, green, blue } = color;
 
   if ('alpha' in color) {
     return `rgba(${red}, ${green}, ${blue}, ${color.alpha})`;
@@ -22,7 +22,7 @@ export function rgbString(color: RGBColor | RGBAColor) {
 
 export const rgbaString = rgbString;
 
-export function rgbToHex({red, green, blue}: RGBColor) {
+export function rgbToHex({ red, green, blue }: RGBColor) {
   return `#${componentToHex(red)}${componentToHex(green)}${componentToHex(
     blue,
   )}`;
@@ -81,17 +81,17 @@ function rgbFromHueAndChroma(hue: number, chroma: number) {
     blue = intermediateValue;
   }
 
-  return {red, green, blue};
+  return { red, green, blue };
 }
 
 // implements https://en.wikipedia.org/wiki/HSL_and_HSV#From_HSV
 export function hsbToRgb(color: HSBColor): RGBColor;
 export function hsbToRgb(color: HSBAColor): RGBAColor;
-export function hsbToRgb(color: HSBAColor): RGBAColor {
-  const {hue, saturation, brightness, alpha = 1} = color;
+export function hsbToRgb(color: HSBAColor | HSBColor): RGBAColor | RGBColor {
+  const { hue, saturation, brightness, alpha = 1 } = (color as HSBAColor);
   const chroma = brightness * saturation;
 
-  let {red, green, blue} = rgbFromHueAndChroma(hue, chroma);
+  let { red, green, blue } = rgbFromHueAndChroma(hue, chroma);
 
   const chromaBrightnessDelta = brightness - chroma;
   red += chromaBrightnessDelta;
@@ -109,11 +109,11 @@ export function hsbToRgb(color: HSBAColor): RGBAColor {
 // implements https://en.wikipedia.org/wiki/HSL_and_HSV#From_HSV
 export function hslToRgb(color: HSLColor): RGBColor;
 export function hslToRgb(color: HSLAColor): RGBAColor;
-export function hslToRgb(color: HSLAColor): RGBAColor {
-  const {hue, saturation, lightness, alpha = 1} = color;
+export function hslToRgb(color: HSLAColor | HSLColor): RGBAColor | RGBColor {
+  const { hue, saturation, lightness, alpha = 1 } = (color as HSLAColor);
   const chroma = (1 - Math.abs(2 * (lightness / 100) - 1)) * (saturation / 100);
 
-  let {red, green, blue} = rgbFromHueAndChroma(hue, chroma);
+  let { red, green, blue } = rgbFromHueAndChroma(hue, chroma);
 
   const lightnessVal = lightness / 100 - chroma / 2;
   red += lightnessVal;
@@ -130,7 +130,7 @@ export function hslToRgb(color: HSLAColor): RGBAColor {
 
 // ref https://en.wikipedia.org/wiki/HSL_and_HSV
 function rgbToHsbl(color: RGBAColor, type: 'b' | 'l' = 'b'): HSBLAColor {
-  const {alpha = 1} = color;
+  const { alpha = 1 } = color;
 
   const red = color.red / 255;
   const green = color.green / 255;
@@ -179,24 +179,24 @@ function rgbToHsbl(color: RGBAColor, type: 'b' | 'l' = 'b'): HSBLAColor {
 }
 
 export function rgbToHsb(color: RGBColor): HSBColor;
-export function rgbToHsb(color: RGBAColor): HSBAColor {
-  const {hue, saturation, brightness, alpha = 1} = rgbToHsbl(color, 'b');
-  return {hue, saturation, brightness, alpha};
+export function rgbToHsb(color: RGBAColor | RGBColor): HSBAColor | HSBColor {
+  const { hue, saturation, brightness, alpha = 1 } = rgbToHsbl(color as RGBAColor, 'b');
+  return { hue, saturation, brightness, alpha };
 }
 
 export function rgbToHsl(color: RGBColor): HSLAColor;
-export function rgbToHsl(color: RGBAColor): HSLAColor {
+export function rgbToHsl(color: RGBAColor | RGBColor): HSLAColor | HSLAColor {
   const {
     hue,
     saturation: rawSaturation,
     lightness: rawLightness,
     alpha = 1,
-  } = rgbToHsbl(color, 'l');
+  } = rgbToHsbl(color as RGBAColor, 'l');
 
   const saturation = roundNumberToDecimalPlaces(rawSaturation * 100, 2);
   const lightness = roundNumberToDecimalPlaces(rawLightness * 100, 2);
 
-  return {hue, saturation, lightness, alpha};
+  return { hue, saturation, lightness, alpha };
 }
 
 export function hexToRgb(color: string) {
@@ -207,14 +207,14 @@ export function hexToRgb(color: string) {
     const green = parseInt(repeatHex(2, 3), 16);
     const blue = parseInt(repeatHex(3, 4), 16);
 
-    return {red, green, blue};
+    return { red, green, blue };
   }
 
   const red = parseInt(color.slice(1, 3), 16);
   const green = parseInt(color.slice(3, 5), 16);
   const blue = parseInt(color.slice(5, 7), 16);
 
-  return {red, green, blue};
+  return { red, green, blue };
 }
 
 type ColorType = 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'default';
@@ -244,7 +244,7 @@ function rgbToObject(color: string): RGBAColor {
   const colorMatch = color.match(/\(([^)]+)\)/);
 
   if (!colorMatch) {
-    return {red: 0, green: 0, blue: 0, alpha: 0};
+    return { red: 0, green: 0, blue: 0, alpha: 0 };
   }
 
   const [red, green, blue, alpha] = colorMatch[1].split(',');
@@ -270,7 +270,7 @@ function hslToObject(color: string): HSLAColor {
   const colorMatch = color.match(/\(([^)]+)\)/);
 
   if (!colorMatch) {
-    return {hue: 0, saturation: 0, lightness: 0, alpha: 0};
+    return { hue: 0, saturation: 0, lightness: 0, alpha: 0 };
   }
 
   const [hue, saturation, lightness, alpha] = colorMatch[1].split(',');

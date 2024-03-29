@@ -20,7 +20,7 @@ export interface CellProps {
     stickyHeadingCell?: boolean;
     stickyCellWidth?: number;
     hovered?: boolean;
-    handleFocus?: FocusEventHandler;
+    handleFocus?: (e: FocusEvent) => void;
     inFixedNthColumn?: boolean;
     hasFixedNthColumn?: boolean;
     fixedCellVisible?: boolean;

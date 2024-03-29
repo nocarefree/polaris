@@ -27,7 +27,7 @@ const buildBundle = () => {
       format,
       minifySyntax: true,
       banner: {
-        js: `/*! Element Plus Icons Vue v${version} */\n`,
+        js: `/*! Icons Vue v${version} */\n`,
       },
       outdir: pathOutput,
     };
@@ -37,7 +37,7 @@ const buildBundle = () => {
           vue: "Vue",
         })
       );
-      options.globalName = "ElementPlusIconsVue";
+      options.globalName = "PolarisIconsVue";
     } else {
       options.external = ["vue"];
     }

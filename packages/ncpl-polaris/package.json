@@ -2,7 +2,25 @@
   "name": "@ncpl/ncpl-polaris",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
+  
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*",
+        "./dist/types/*"
+      ]
+    }
+  },
   "scripts": {
     "create": "pnpm run create:component",
     "create:component": "tsx build/create-component.ts",
@@ -18,7 +36,8 @@
   "author": "",
   "license": "ISC",
   "files": [
-    "locales/"
+    "dist",
+    "locales"
   ],
   "dependencies": {
     "@ncpl/ncpl-icons": "workspace:^",

@@ -1,4 +1,3 @@
-import type { PropType, ExtractPropTypes } from "vue";
 import { IconSource, Action } from "../types";
 
 export interface FrameLogo {
@@ -71,7 +70,7 @@ interface ContextualSaveBarDiscardActionProps {
   discardConfirmationModal?: boolean;
 }
 
-type ContextualSaveBarCombinedActionProps =
+export type ContextualSaveBarCombinedActionProps =
   ContextualSaveBarDiscardActionProps & ContextualSaveBarAction;
 
 

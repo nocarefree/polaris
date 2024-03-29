@@ -20,9 +20,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { GridProps } from './Grid'
 import styles from './Grid.module.scss'
+import  { formatAreas } from "./utils"
 
 defineOptions({
   name: 'NpGrid',

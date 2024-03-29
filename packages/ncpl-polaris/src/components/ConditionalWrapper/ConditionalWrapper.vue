@@ -3,6 +3,5 @@
   <slot v-else />
 </template>
 <script setup lang="ts">
-import { watch, onUpdated, useSlots } from "vue";
 defineProps<{ condition?: boolean; }>();
 </script>

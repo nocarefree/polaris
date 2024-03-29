@@ -6,9 +6,10 @@
           <div :class="styles.SearchField"
             :style="mountedState ? { ...defaultStyle, ...transitionStyles[mountedState], } : undefined">
             <SearchField :model-value="queryValue" @update:modelValue="e => $emit('update:queryValue', e)"
-              @focus="e => $emit('queryFocus', e)" @blur="e => $emit('queryBlur', e)" @clear="e => $emit('queryClear', e)"
-              :placeholder="queryPlaceholder" :focused="focused" :disabled="disabled || disableQueryField"
-              :borderless-query-field="borderlessQueryField" :loading="loading" />
+              @focus="e => $emit('queryFocus', e)" @blur="e => $emit('queryBlur', e)"
+              @clear="e => $emit('queryClear', e)" :placeholder="queryPlaceholder" :focused="focused"
+              :disabled="disabled || disableQueryField" :borderless-query-field="borderlessQueryField"
+              :loading="loading" />
           </div>
           <slot></slot>
         </InlineStack>
@@ -41,7 +42,7 @@ defineOptions({
   name: 'NpFilters',
 })
 
-const emit = defineEmits(['addFilterClick', 'queryChange', 'queryClear', 'queryBlur', 'queryFocus', 'clearAll', 'update:queryValue'])
+defineEmits(['addFilterClick', 'queryChange', 'queryClear', 'queryBlur', 'queryFocus', 'clearAll', 'update:queryValue'])
 const props = defineProps<FiltersProps>();
 
 const TRANSITION_DURATION = 'var(--p-motion-duration-150)';

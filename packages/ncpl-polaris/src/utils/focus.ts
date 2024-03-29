@@ -12,7 +12,7 @@ const KEYBOARD_FOCUSABLE_SELECTORS =
 const MENUITEM_FOCUSABLE_SELECTORS =
   'a[role="menuitem"],frame[role="menuitem"],iframe[role="menuitem"],input[role="menuitem"]:not([type=hidden]):not(:disabled),select[role="menuitem"]:not(:disabled),textarea[role="menuitem"]:not(:disabled),button[role="menuitem"]:not(:disabled),*[tabindex]:not([tabindex="-1"])';
 export const handleMouseUpByBlurring: MouseUpBlurHandler = ({ currentTarget }) =>
-  currentTarget?.blur();
+  (currentTarget as HTMLElement)?.blur();
 
 export function nextFocusableNode(
   node: HTMLElement,
