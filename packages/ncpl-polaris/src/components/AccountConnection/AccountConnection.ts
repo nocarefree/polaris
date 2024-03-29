@@ -1,6 +1,5 @@
 import type { Action } from '../types';
-
-export type AccountConnectionProps = {
+export interface AccountConnectionProps {
     title?: string;
     details?: string;
     /** The name of the service */

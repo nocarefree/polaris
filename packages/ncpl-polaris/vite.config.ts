@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
-import dts from 'vite-plugin-dts';
 import postCssPxToRem from "postcss-pxtorem";
 import postcssCustomMedia from "postcss-custom-media";
 import postcssGlobalData from "@csstools/postcss-global-data";
@@ -12,11 +11,11 @@ const mediaQueriesCssPath = resolve(__dirname, '../../node_modules/@shopify/pola
 export default defineConfig({
   base: './',
   build: {
-    target: "esnext",
+    //target: "esnext",
     //打包文件目录
     outDir: "dist",
     //压缩
-    minify: true,
+    //minify: true,
     rollupOptions: {
       //忽略打包vue文件
       external: ["vue"],
@@ -41,12 +40,9 @@ export default defineConfig({
           dir: "dist",
         },
       ],
-    },
-    lib: {
-      entry: "src/index.ts",
     }
   },
-  plugins: [vue(), dts()],
+  plugins: [vue()],
   css: {
     postcss: {
       plugins: [

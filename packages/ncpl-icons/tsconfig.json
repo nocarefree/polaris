@@ -9,9 +9,9 @@
       "moduleResolution": "node",
       "esModuleInterop": true,
       "jsx": "preserve",
-      "target": "ES2018",
+      "target": "ESNEXT",
       "sourceMap": true,
-      "lib": ["ES2018", "DOM"],
+      "lib": ["ESNEXT", "DOM"],
       "allowSyntheticDefaultImports": true,
       "skipLibCheck": true,
       "types": []

@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "baseUrl": ".",
     "sourceMap": false,
     "moduleResolution": "node",
@@ -15,6 +15,7 @@
     "removeComments": false,
     "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "lib": [
       "ESNext",
       "DOM",

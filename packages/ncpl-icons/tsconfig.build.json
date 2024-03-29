@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
       "composite": true,
-      "target": "ES2021",
+      "target": "ESNEXT",
       "module": "ESNext",
-      "lib": ["ES2021"],
+      "lib": ["ESNEXT"],
       "baseUrl": ".",
       "strict": true,
       "noImplicitAny": true,
