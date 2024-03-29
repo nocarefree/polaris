@@ -12,12 +12,14 @@
 
       <ButtonGroup v-if="footerActionAlignment === 'right'">
         <component v-if="secondaryFooterActionsMarkup" :is="secondaryFooterActionsMarkup"></component>
-        <component v-if="primaryFooterAction" :is="() => buttonFrom(props.primaryFooterAction, { variant: 'primary' })">
+        <component v-if="primaryFooterAction"
+          :is="() => buttonFrom(props.primaryFooterAction!, { variant: 'primary' })">
         </component>
       </ButtonGroup>
 
       <ButtonGroup v-else>
-        <component v-if="primaryFooterAction" :is="() => buttonFrom(props.primaryFooterAction, { variant: 'primary' })">
+        <component v-if="primaryFooterAction"
+          :is="() => buttonFrom(props.primaryFooterAction!, { variant: 'primary' })">
         </component>
         <component v-if="secondaryFooterActionsMarkup" :is="secondaryFooterActionsMarkup"></component>
       </ButtonGroup>

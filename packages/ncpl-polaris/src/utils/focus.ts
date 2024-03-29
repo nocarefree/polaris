@@ -1,6 +1,6 @@
 import { isElementInViewport } from './is-element-in-viewport';
 
-type Filter = (element: Element) => void;
+type Filter = (element: Element) => boolean | void;
 export type MouseUpBlurHandler = (
   event: MouseEvent,
 ) => void;

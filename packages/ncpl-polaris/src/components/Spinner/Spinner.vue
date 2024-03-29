@@ -20,13 +20,13 @@
 import { computed, onMounted, ref } from "vue";
 import { classNames, variationName } from "../../utils";
 import Text from "../../components/Text"
-import { spinnerProps } from "./Spinner";
+import type { SpinnerProps } from "./Spinner";
 import styles from "./Spinner.module.scss"
 
 defineOptions({
   name: 'NpSpinner',
 })
-const props = defineProps(spinnerProps)
+const props = defineProps<SpinnerProps>()
 const isAfterInitialMount = ref(false)
 
 const className = computed(() => classNames(

@@ -29,4 +29,6 @@ export interface CheckboxProps extends ChoiceBleedProps {
     helpText?: string | Component;
     /** Display an error message */
     error?: Error | boolean;
+    /** Indicates the tone of the checkbox */
+    tone?: 'magic';
 }

@@ -4,7 +4,9 @@ import { resolve } from "path";
 import postCssPxToRem from "postcss-pxtorem";
 import postcssCustomMedia from "postcss-custom-media";
 import postcssGlobalData from "@csstools/postcss-global-data";
-import { camelCase, upperFirst } from "lodash";
+import upperFirst from "lodash/upperFirst";
+import camelCase from "lodash/camelCase";
+import dts from "vite-plugin-dts"
 
 const mediaQueriesCssPath = resolve(__dirname, '../../node_modules/@shopify/polaris-tokens/dist/css/media-queries.css');
 
@@ -16,33 +18,28 @@ export default defineConfig({
     outDir: "dist",
     //压缩
     //minify: true,
+    lib: {
+      // Could also be a dictionary or array of multiple entry points
+      entry: "src/index.ts",
+      name: 'polaris',
+      formats: ["es", "cjs", "umd"],
+      fileName: format => `polaris.${format}.js`
+    },
     rollupOptions: {
       //忽略打包vue文件
       external: ["vue"],
       input: ["src/index.ts"],
-      output: [
-        {
-          //打包格式
-          format: "es",
-          //打包后文件名
-          entryFileNames: "[name].mjs",
-          exports: "named",
-          //配置打包根目录
-          dir: "dist",
-        },
-        {
-          //打包格式
-          format: "cjs",
-          //打包后文件名
-          entryFileNames: "[name].js",
-          exports: "named",
-          //配置打包根目录
-          dir: "dist",
-        },
-      ],
+      output: {
+        exports: "named",
+        globals: {
+          vue: 'Vue',
+        }
+      }
     }
   },
-  plugins: [vue()],
+  plugins: [vue(), dts({
+    insertTypesEntry: true,
+  })],
   css: {
     postcss: {
       plugins: [

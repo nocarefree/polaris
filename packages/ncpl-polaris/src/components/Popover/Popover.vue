@@ -5,7 +5,7 @@
       <PopoverOverlay ref="overlayRef" :id="id" :activator="activatorNode"
         :prefer-input-activator="preferInputActivator" @close="handleClose" :active="active"
         @update:active="e => $emit('update:active', e)" :fixed="fixed" :z-index-override="zIndexOverride"
-        :autofocus-target="autofocusTarget" v-bind="overlayProps">
+        v-bind="overlayProps">
         <slot></slot>
       </PopoverOverlay>
     </Portal>

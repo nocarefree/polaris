@@ -1,6 +1,7 @@
 <template>
   <Choice :id="uniqId" :label="label || ''" :label-hidden="labelHidden" :disabled="disabled"
-    :label-class-name="classNames(styles.ChoiceLabel, labelClassName)" :fill="fill" v-bind="extraChoiceProps">
+    :label-class-name="classNames(styles.ChoiceLabel, labelClassName)" :fill="fill" :tone="tone"
+    v-bind="extraChoiceProps">
     <span :class="classNames(styles.Checkbox, error && styles.error)">
       <input ref="inputNode" :id="uniqId" :name="name" :value="value" type="checkbox" :checked="isChecked"
         :disabled="disabled" :class="classNames(styles.Input, isIndeterminate && styles['Input-indeterminate'],)"
@@ -13,8 +14,8 @@
           textRendering="geometricPrecision">
           <path :class="classNames(checked && styles.checked)"
             d="M1.5,5.5L3.44655,8.22517C3.72862,8.62007,4.30578,8.64717,4.62362,8.28044L10.5,1.5"
-            transform="translate(2 2.980376)" opacity="0" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"
-            strokeLinejoin="round" pathLength="1" />
+            transform="translate(2 2.980376)" opacity="0" fill="none" stroke="#fff" strokeWidth="2"
+            strokeLinecap="round" strokeLinejoin="round" pathLength="1" />
         </svg>
         <Icon v-else :source="MinusIcon" />
       </span>
@@ -63,10 +64,8 @@ const _ariaDescribedBy = computed(() => {
 })
 
 const extraChoiceProps = computed(() => {
-  const { helpText, error, bleed, bleedBlockStart, bleedBlockEnd, bleedInlineStart, bleedInlineEnd } = props;
+  const { bleed, bleedBlockStart, bleedBlockEnd, bleedInlineStart, bleedInlineEnd } = props;
   return {
-    helpText,
-    error,
     bleed,
     bleedBlockStart,
     bleedBlockEnd,

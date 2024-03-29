@@ -3,17 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/polaris.cjs.js",
+  "module": "./dist/polaris.es.js",
   "types": "./dist/src/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./*",
-        "./dist/types/*"
-      ]
-    }
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/polaris.es.js",
+      "require": "./dist/polaris.cjs.js"
+    },
+    "./es": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/polaris.es.js"
+    },
+    "./*": "./*"
   },
+  "style":"./dist/style.css",
   "scripts": {
     "create": "pnpm run create:component",
     "create:component": "tsx build/create-component.ts",

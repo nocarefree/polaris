@@ -28,7 +28,7 @@
       </Text>
     </InlineStack>
     <div v-if="action" :class="styles.Action">
-      <Button variant="monochromePlain" remove-underline size="slim" @click="() => action?.onAction()">
+      <Button variant="monochromePlain" remove-underline size="slim" @click="() => action!.onAction?.()">
         {{ action.content }}</Button>
     </div>
     <button type="button" :class="styles.CloseButton" @click="(e) => onDismiss()">

@@ -32,8 +32,8 @@
           </ListboxSection>
         </template>
         <template v-if="conditionalOptions.length">
-          <MappedOption v-for="option in conditionalOptions" :key="option.id || option.value"
-            v-bind="option" :selected="selected.includes(option.value)" :single-selection="!allowMultiple" />
+          <MappedOption v-for="option in (conditionalOptions as OptionDescriptor[])" v-bind="option"
+            :selected="selected.includes(option.value)" :single-selection="!allowMultiple" />
         </template>
       </ConditionalWrapper>
 
@@ -58,7 +58,7 @@ import ListboxHeader from "../Listbox/Header";
 import MappedAction from "./MappedAction"
 import MappedOption from "./MappedOption"
 import { isSection } from '../Option/utils';
-import type { SectionDescriptor } from "../types"
+import type { SectionDescriptor, OptionDescriptor } from "../types"
 import { useI18n } from "../context"
 
 defineOptions({
