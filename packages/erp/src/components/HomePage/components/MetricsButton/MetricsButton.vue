@@ -5,7 +5,7 @@
       border-radius="200">
       <CompactPrimaryMetricSkeleton v-if="loading" :has-title="Boolean(card.card.title)" :type="card.card.type"
         :wrapper="card.card.wrapper" />
-      <MetricCard v-else v-bind="card.card">
+      <MetricCard v-else v-bind="card.card" :primary-metric="primaryMetric">
         <template #primaryAction>
           <MetricEditButton :active-handle="card.card.handle"></MetricEditButton>
         </template>
@@ -14,24 +14,32 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import { NpBox, classNames } from "@ncpl/ncpl-polaris";
 import { MetricCard } from "../../../MetricCard";
 import { MetricEditButton } from "../";
 import styles from "../../HomePage.module.scss";
 
-defineProps<{
+const props = defineProps<{
   selected?: boolean;
   metricsLoading?: boolean;
   card: {
     data: any[];
-    card: any
+    card: any;
+    primaryMetricConfig: any;
   };
 }>()
 
 defineEmits(['click']);
 const loading = ref(false)
+
+const primaryMetric = computed(() => {
+  props.card.primaryMetricConfig
+  return {
+    value: '',
+  }
+})
 
 
 </script>

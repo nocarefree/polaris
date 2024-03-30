@@ -18,7 +18,7 @@
     },
     "./*": "./*"
   },
-  "style":"./dist/style.css",
+  "style": "./dist/style.css",
   "scripts": {
     "create": "pnpm run create:component",
     "create:component": "tsx build/create-component.ts",
@@ -38,11 +38,11 @@
     "locales"
   ],
   "dependencies": {
-    "@ncpl/ncpl-icons": "workspace:^",
-    "sass": "^1.64.2"
+    "@ncpl/ncpl-icons": "workspace:^1.0.0",
+    "sass": "^1.72.0"
   },
   "devDependencies": {
-    "@types/node": "^20.4.9",
+    "@types/node": "^20.11.30",
     "stylus": "^0.59.0"
   }
 }

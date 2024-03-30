@@ -5,11 +5,11 @@
       :preferred-alignment="preferredAlignment" :preferred-position="preferredPosition" ref="popover">
       <template #activator>
         <button type="button" :aria-describedby="id"
-          :class="classNames(styles.Button, inline && styles.Inline, active && styles.Active, titleClassName)"
-          @click="e => $emit('click', e)">
-          <slot v-if="$slots.renderWrapper" name="renderWrapper" :title="title"></slot>
+          :class="classNames(styles.Button, inline && styles.Inline, titleClassName)" @click="e => $emit('click', e)">
+          <slot v-if="$slots.renderWrapper" name="renderWrapper" :title="title" :class-name="styles.WrappedContent">
+          </slot>
           <NpText v-else variant="headingMd" as="h2">
-            <component :is="titleComponent"></component>
+            <span :class="styles.WrappedContent">{{ title }}</span>
           </NpText>
         </button>
       </template>
@@ -21,12 +21,12 @@
   </component>
 </template>
 <script setup lang="ts">
-import { type Component, ref, computed, h } from 'vue';
+import { type Component, ref, computed } from 'vue';
 import { NpPopover, NpText, useId, classNames, type PreferredAlignment, type PreferredPosition } from "@ncpl/ncpl-polaris";
 import styles from "./DefinitionPopover.module.scss";
 import { useEventListener } from '@vueuse/core';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   title: string;
   titleClassName?: string;
   definitionClassName?: string;
@@ -47,11 +47,6 @@ const overlayEl = computed(() => {
   return popover.value?.overlayEl;
 })
 const wrapperContainer = ref<HTMLElement>();
-
-const titleComponent = computed(() => {
-  return h('span', { class: styles.WrappedContent }, props.title);
-})
-
 
 const handleMouseLeave = (event: MouseEvent) => {
   let rect;

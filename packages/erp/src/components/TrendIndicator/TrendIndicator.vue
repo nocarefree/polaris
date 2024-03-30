@@ -3,14 +3,14 @@
     <path d="M0.519531 1.79395H12.0039V0.249023H0.519531V1.79395Z" :fill="n.trendIndicator[trend]"
       :transform="`translate(${(i - i) / 2}, ${(f - v) / 2})`"></path>
   </Icon>
-  <Icon v-if="!value" :accessibility-label="accessibilityLabel" :height="f" :tab-index="tabIndex"
+  <Icon v-if="value" :accessibility-label="accessibilityLabel" :height="f" :tab-index="tabIndex"
     :width="svg.totalWidth">
     <g :color="n.trendIndicator[trend]">
       <g :transform="`translate(0, ${(f - g) / 2})`">
         <UpwardIcon v-if="direction == 'upward'" />
         <DownwardIcon v-else />
       </g>
-      <text :x="g + b" :y="(f + m) / 2" :font-size="p" fill="currentColor" :font-weight="w" dominant-baseline="middle" ,
+      <text :x="g + b" :y="(f + m) / 2" :font-size="p" fill="currentColor" :font-weight="w" dominant-baseline="middle"
         font-family="-apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
         text-rendering="geometricPrecision" :width="svg.textWidth">{{ value }}</text>
     </g>
@@ -21,7 +21,7 @@
 import { computed } from "vue";
 import Icon from "./components/Icon";
 import { useTheme } from "../../utils/use-theme";
-import UpwardIcon from './components/UpwardIcon';
+import UpwardIcon from './components/UpwardIcon'; q
 import DownwardIcon from './components/DownwardIcon';
 import { characterScale, getCharsWidth } from "../../utils/character-width-offsets";
 

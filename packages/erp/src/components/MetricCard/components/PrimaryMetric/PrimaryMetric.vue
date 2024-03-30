@@ -1,6 +1,6 @@
 <template>
   <div :class="styles.FlexWrapper">
-    <div :class="styles.PrimaryMetricWrapper">
+    <div v-if="value" :class="styles.PrimaryMetricWrapper">
       <NpTooltip v-if="tooltip" v-bind="tooltip">
         <p :class="classNames(styles.PrimaryMetric, disabled && styles.Disabled, type === 'compact' && styles.Compact)">
           {{ value }}</p>
@@ -18,7 +18,7 @@ import styles from "../../MetricCard.module.scss";
 import TrendIndicator from "../../../TrendIndicator";
 
 withDefaults(defineProps<{
-  value: string;
+  value?: string;
   type?: string;
   tooltip?: TooltipProps;
   disabled?: boolean;

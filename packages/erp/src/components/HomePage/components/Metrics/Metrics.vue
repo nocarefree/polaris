@@ -36,7 +36,7 @@ import { useAnalytics } from "../../stores";
 
 const selected = ref<number>(0);
 const shadow = ref(false);
-const expanded = ref(false);
+const expanded = ref(true);
 
 
 
@@ -59,7 +59,7 @@ const cards = computed(() => {
       wrapper: "none"
     },
     visualization: R.visualization,
-    primaryMetricOptions: R.overridePrimaryMetric ?? R.metricValue,
+    primaryMetricConfig: R.overridePrimaryMetric ?? R.primaryMetricConfig,
     overrideMeta: R.overrideMeta,
     data: G(R.handle),
     reportingPeriod: primaryRange,

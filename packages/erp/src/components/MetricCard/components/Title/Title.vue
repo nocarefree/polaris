@@ -1,6 +1,11 @@
 <template>
   <DefinitionPopover v-if="popover" :title="title" preferred-alignment="left" preferred-position="below"
     :constrain-width="false" :sectioned="false" :title-class-name="styles.Button" inline>
+    <template #renderWrapper="{ title, className }">
+      <NpText as="h2" tone="truncate" variant="bodySm">
+        <span :class="className">{{ title }}</span>
+      </NpText>
+    </template>
     <Formula :title="title" :formula="popover.formula" :definition="popover.definition"></Formula>
   </DefinitionPopover>
   <div v-else :class="classNames(styles.Title, disabled && styles.Disabled)">

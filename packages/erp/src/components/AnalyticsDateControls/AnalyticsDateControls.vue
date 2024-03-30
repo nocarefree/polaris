@@ -1,8 +1,8 @@
 <template>
     <NpInlineStack>
-        <template v-for="value in ['primary', 'comparison', 'timeDimension']">
-            <NpPopover v-if="controls.includes(value)" v-model:active="active" preferred-position="below"
-                preferred-alignment="left" :sectioned="false" :fluid-content="true"
+        <template v-for="value in controls">
+            <NpPopover v-if="['primary', 'comparison', 'timeDimension'].includes(value)" v-model:active="active"
+                preferred-position="below" preferred-alignment="left" :sectioned="false" :fluid-content="true"
                 :z-index-override="Number(theme.zIndex['z-index-5'])">
                 <template #activator>
                     <div :class="$style.Wrapper">

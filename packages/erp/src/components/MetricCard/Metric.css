@@ -1,0 +1,139 @@
+.ListContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    gap: var(--p-space-100);
+    padding: 0;
+    margin: 0;
+}
+.ListItem {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    align-items: center;
+    padding: var(--p-space-200) var(--p-space-300);
+    min-height: var(--p-space-800);
+    border-radius: var(--p-border-radius-200);
+    background-color: var(--p-color-bg-surface-hover);
+}
+.ListItemValue {
+    display: flex;
+}
+.TrendIndicator {
+    display: flex;
+    margin-left: var(--p-space-100);
+    min-width: 2.5rem;
+    align-items: center;
+    justify-content: center;
+}
+.Metric {
+    font-size: var(--p-font-size-900);
+    font-weight: var(--p-font-weight-bold);
+    line-height: 1;
+}
+.Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    gap: var(--p-space-100);
+}
+.GradientBackground {
+    background: radial-gradient(136.23% 86.43% at 50% 107.92%, #05496814, #128ac014 25.32%, #c8ecfc14 52.6%, #ffffff14);
+}
+.GradientBackground.positive {
+    background: radial-gradient(136.23% 86.43% at 50% 107.92%, #083d2514, #29845a14 25.32%, #cdfee114 52.6%, #ffffff14);
+}
+.GradientBackground.negative {
+    background: radial-gradient(136.23% 86.43% at 50% 107.92%, #5f150714, #e51c0014 25.32%, #ffedec14 52.6%, #ffffff14);
+}
+.GradientBackground.neutral {
+    background: radial-gradient(136.23% 86.43% at 50% 107.92%, #30303014, #8a8a8a14 25.32%, #fafafa14 52.6%, #ffffff14);
+}
+.DonutChartContainer {
+    height: 100%;
+    width: 100%;
+    max-width: 31.25rem;
+    align-self: center;
+}
+.Bar {
+    height: var(--p-border-width-050);
+    border-radius: var(--p-border-radius-full);
+}
+.Value {
+    font-size: var(--p-font-size-350);
+    line-height: var(--p-font-line-height-300);
+    font-weight: var(--p-font-weight-semibold);
+}
+.Button {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+}
+.Button:before,
+.Button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.Button:before {
+    z-index: var(--p-z-index-2);
+    border: var(--p-border-width-050) solid var(--p-color-border-emphasis-active);
+    opacity: 0;
+    pointer-events: none;
+}
+.Button:after {
+    z-index: var(--p-z-index-5);
+}
+.Button.Active:before,
+.Button:hover:before {
+    opacity: 1;
+}
+.Cell {
+    margin: 0;
+    padding: 0;
+}
+.Table {
+    border-collapse: separate;
+    border-spacing: var(--p-space-025);
+    width: 100%;
+    table-layout: fixed;
+}
+.CellContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Container {
+    --metric-table-sticky-header-top: 0;
+    --metric-table-container-box-shadow: initial;
+    position: relative;
+    z-index: 1;
+    margin: calc(var(--p-space-400) * -1);
+    margin-top: 0;
+    border-top: 0.0625rem solid var(--p-color-border-secondary);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.Container::-webkit-scrollbar {
+    display: none;
+}
+.VisualizationWrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 0;
+}

@@ -10,7 +10,7 @@
       <slot name="prefix"></slot>
     </template>
     <PrimaryMetric v-if="primaryMetric" :value="primaryMetric.value" :tooltip="primaryMetric.tooltip"
-      :disabled="disabled" :type="type"></PrimaryMetric>
+      :disabled="disabled" :type="type" :trend-indicator="trendIndicator"></PrimaryMetric>
     <div v-if="visualization" :class="styles.VisualizationWrapper">
       <Visualization :visualization="visualization"></Visualization>
     </div>
@@ -35,6 +35,7 @@ withDefaults(defineProps<{
   primaryMetric?: {
     value: string;
     tooltip?: any;
+    trendIndicator?: any;
   },
   visualization?: any;
 }>(), {

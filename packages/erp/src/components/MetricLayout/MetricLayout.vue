@@ -31,6 +31,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { NpCard } from "@ncpl/ncpl-polaris";
 import styles from "./MetricLayout.module.scss";
 
 withDefaults(defineProps<{
