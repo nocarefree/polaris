@@ -7,7 +7,7 @@
 import { computed } from "vue";
 import type { TextProps } from "./Text";
 import { classNames } from "../../utils";
-import styles from "./Text.module.scss";
+import styles from "./Text.module.css";
 
 defineOptions({
   name: 'NpText',

@@ -21,7 +21,7 @@
 import { computed } from "vue";
 import Icon from "./components/Icon";
 import { useTheme } from "../../utils/use-theme";
-import UpwardIcon from './components/UpwardIcon'; q
+import UpwardIcon from './components/UpwardIcon';
 import DownwardIcon from './components/DownwardIcon';
 import { characterScale, getCharsWidth } from "../../utils/character-width-offsets";
 

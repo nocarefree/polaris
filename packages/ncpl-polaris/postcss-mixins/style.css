@@ -1,0 +1,53 @@
+@define-mixin safe-area-for $property, $spacing, $area {
+  @if $spacing == 0 {
+      $spacing: $(spacing)px;
+  }
+  $(property): $spacing;
+  $(property): calc($spacing + constant(safe-area-inset-$(area)));
+  $(property): calc($spacing + env(safe-area-inset-$(area)));
+}
+
+@define-mixin focus-ring $size, $border-width, $style {
+
+  @if isnull($size) {
+    $size: 'base';
+  }
+
+  @if isnull($style) {
+    $style: 'base';
+  }
+  
+  @if $size == 'base' {
+    $border-radius: var(--p-border-radius-200);
+  } @else { 
+    $border-radius: var(--p-border-radius-100);
+  }
+
+  @if $border-width == 0 or isnull($border-width) {
+    $negative-offset: 1px;
+  } @else {
+    $negative-offset: calc($border-width + 1px);
+  }
+
+  @if $style == 'base' {
+    position: relative;
+
+    &::after {
+      content: '';
+      z-index: 1;
+      top: $negative-offset;
+      right: $negative-offset;
+      bottom: $negative-offset;
+      left: $negative-offset;
+      display: block;
+      pointer-events: none;
+      box-shadow: 0 0 0 $negative-offset var(--p-color-border-focus);
+      border-radius: $border-radius;
+    }
+  } @else if $style == 'focused' {
+    &::after {
+      box-shadow:0 0 0 2px var(--p-color-border-focus);
+      outline: var(--p-border-width-025) solid transparent;
+    }
+  }
+}

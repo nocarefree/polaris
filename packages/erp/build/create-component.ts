@@ -1,15 +1,9 @@
-import path from "node:path";
-import { readFile, writeFile, mkdir, appendFile } from "node:fs/promises";
+import { writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { emptyDir, ensureDir } from "fs-extra";
-import consola from "consola";
 import camelcase from "camelcase";
-import glob from "fast-glob";
 import { type BuiltInParserName, format } from "prettier";
-import chalk from "chalk";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { space } from "@shopify/polaris-tokens";
 
 //component path
 const dir = dirname(fileURLToPath(import.meta.url));

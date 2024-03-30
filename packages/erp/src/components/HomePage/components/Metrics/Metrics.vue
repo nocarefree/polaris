@@ -15,8 +15,8 @@
             variant="tertiary"></NpIcon>
         </div>
       </div>
-      <div :class="classNames(styles.MetricCardContainer, metricsLoading && styles.loading)">
-        <div :class="classNames(styles.EmptyState, styles[selectedCard.visualization.chartType])">
+      <div v-if="expanded" :class="classNames(styles.MetricCardContainer, metricsLoading && styles.loading)">
+        <div :class="classNames(styles.EmptyState, styles[selectedChartType])">
           <NpBlockStack inline-align="center">
             <NpText as="h2" variant="headingMd">此日期范围内没有转化</NpText>
             <NpText as="p" variant="bodyMd" tone="subdued">请尝试选择不同的日期范围或渠道</NpText>
@@ -30,14 +30,13 @@
 import { ref, computed } from 'vue';
 import { NpBlockStack, NpCard, NpInlineStack, NpIcon, NpText, classNames } from "@ncpl/ncpl-polaris"
 import styles from "../../HomePage.module.scss";
-import { MetricsButton } from "../"
+import { MetricsButton } from "../MetricsButton"
 import { ChevronUpIcon, ChevronDownIcon } from "@ncpl/ncpl-icons";
 import { useAnalytics } from "../../stores";
 
 const selected = ref<number>(0);
 const shadow = ref(false);
 const expanded = ref(true);
-
 
 
 const {
@@ -48,7 +47,7 @@ const {
   metricCardResponses,
   metricsLoading,
   visibleMetrics
-} = useAnalytics();
+}: any = useAnalytics();
 
 const cards = computed(() => {
   return [visibleMetrics[0], visibleMetrics[1], visibleMetrics[3], visibleMetrics[4]].map((R: any) => ({
@@ -70,6 +69,10 @@ const cards = computed(() => {
 
 const selectedCard = computed(() => {
   return cards.value[selected.value];
+})
+
+const selectedChartType = computed(() => {
+  return selectedCard.value.visualization.vizType?.toLowerCase();
 })
 
 const G = (R: string) => {

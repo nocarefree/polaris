@@ -20,6 +20,7 @@ import { NpBox, classNames } from "@ncpl/ncpl-polaris";
 import { MetricCard } from "../../../MetricCard";
 import { MetricEditButton } from "../";
 import styles from "../../HomePage.module.scss";
+import { CompactPrimaryMetricSkeleton } from "../../../CompactPrimaryMetricSkeleton"
 
 const props = defineProps<{
   selected?: boolean;

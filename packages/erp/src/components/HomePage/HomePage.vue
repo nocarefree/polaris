@@ -5,6 +5,6 @@
 </template>
 <script setup lang="ts">
 import { NpPage } from "@ncpl/ncpl-polaris";
-import { Analytics } from "./components/index";
+import { Analytics } from "./components/Analytics";
 
 </script>

@@ -38,11 +38,14 @@
     "locales"
   ],
   "dependencies": {
-    "@ncpl/ncpl-icons": "workspace:^1.0.0",
+    "@ncpl/ncpl-icons": "workspace:^",
     "sass": "^1.72.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.2",
+    "postcss-custom-media": "^10.0.4",
+    "postcss-import": "^16.1.0",
+    "postcss-mixins": "^10.0.0",
     "stylus": "^0.59.0"
   }
 }

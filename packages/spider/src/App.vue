@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref， watch } from "vue";
 import { useRoute } from "vue-router";
 
 import { NpActionList, NpTopBarSearchField, NpFrame, NpNavigation, NpNavigationSection, NpAppProvider, NpTopBar, NpTopBarUserMenu } from "@ncpl/ncpl-polaris"
@@ -14,6 +14,10 @@ import { apolloClient } from "./apollo";
 
 
 const route = useRoute();
+
+watch(() => route.path, () => {
+  console.log(String(route.path))
+})
 
 const logo = {
   width: 124,

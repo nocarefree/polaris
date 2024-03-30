@@ -4,8 +4,6 @@ import { resolve } from "path";
 import postCssPxToRem from "postcss-pxtorem";
 import postcssCustomMedia from "postcss-custom-media";
 import postcssGlobalData from "@csstools/postcss-global-data";
-import { camelCase, upperFirst } from "lodash";
-
 
 const mediaQueriesCssPath = resolve(__dirname, '../../node_modules/@shopify/polaris-tokens/dist/css/media-queries.css');
 

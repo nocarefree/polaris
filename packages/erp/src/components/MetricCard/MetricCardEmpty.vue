@@ -82,4 +82,28 @@ const text = computed(() => {
   justify-content: center;
   height: 100%
 }
+
+._EmptyState_16whr_1 {
+  --empty-state-bg-height: 10.875rem;
+  padding-top:var(--p-space-1600);
+  height:var(--home-metric-card-container-height);
+  background:no-repeat bottom center / 100% var(--empty-state-bg-height)
+}
+._EmptyState_16whr_1._line_16whr_7 {
+  background-image:url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/line-D7elCgVj2dfy.svg)
+}
+._EmptyState_16whr_1._bar_16whr_11,
+._EmptyState_16whr_1._dynamicBar_16whr_12,
+._EmptyState_16whr_1._simpleHorizontalBar_16whr_13 {
+  background-image:url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/bar-Dc-vNfGWGY3T.svg)
+}
+._EmptyState_16whr_1._table_16whr_17 {
+  background:url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/table1-WXz7fno4lBBm.svg) no-repeat bottom left / auto var(--empty-state-bg-height),url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/table2-Bee8sJXnz01d.svg) no-repeat bottom center / 100% var(--empty-state-bg-height),url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/table3-BveFVDoWlrE8.svg) no-repeat bottom right / auto var(--empty-state-bg-height)
+}
+._EmptyState_16whr_1._cohorts_16whr_26 {
+  background-image:url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/cohorts-CHG0Ery0nnQ0.svg)
+}
+._EmptyState_16whr_1._donut_16whr_30 {
+  background:url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/donut1-Bt7pJUGQLWzG.svg) no-repeat 2.25rem 2.5625rem / 17.875rem 8.75rem,url(https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/zh-CN/assets/donut2-CC1QaTJVRaVF.svg) no-repeat 15rem 2.0625rem / calc(100% - 17.25rem) 10rem
+}
 </style>

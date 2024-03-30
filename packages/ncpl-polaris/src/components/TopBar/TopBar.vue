@@ -3,9 +3,9 @@
     <div :class="styles.Container">
       <div :class="styles.LeftContent">
         <button v-if="showNavigationToggle" type="button" :class="classNames(
-          styles.NavigationIcon,
-          focused && styles.focused,
-        )" ref="toggleButton" @click="$emit('navigationToggle')"
+    styles.NavigationIcon,
+    focused && styles.focused,
+  )" ref="toggleButton" @click="$emit('navigationToggle')"
           :aria-label="i18n.translate('Polaris.TopBar.toggleMenuLabel')">
           <div :class="styles.IconWrapper">
             <Icon :source="MenuIcon" />
@@ -15,12 +15,12 @@
           <slot name="contextControl"></slot>
         </div>
         <div v-else-if="logo" :class="classNames(
-          styles.LogoContainer,
-          showNavigationToggle || $slots.searchField
-            ? styles.LogoDisplayControl
-            : styles.LogoDisplayContainer,
-          $slots.logoSuffix && styles.hasLogoSuffix,
-        )">
+    styles.LogoContainer,
+    showNavigationToggle || $slots.searchField
+      ? styles.LogoDisplayControl
+      : styles.LogoDisplayContainer,
+    $slots.logoSuffix && styles.hasLogoSuffix,
+  )">
           <UnstyledLink :url="logo.url || ''" :class="styles.LogoLink" :style="{ width }">
             <Image :source="logo.topBarSource || ''" :alt="logo.accessibilityLabel || ''" :class="styles.Logo"
               :style="{ width }" />
@@ -54,7 +54,7 @@ import Icon from "../Icon"
 import UnstyledLink from "../UnstyledLink"
 import Image from "../Image"
 import { MenuIcon } from "@ncpl/ncpl-icons"
-import styles from './TopBar.module.scss'
+import styles from './TopBar.module.css'
 import { useFocus } from "@vueuse/core"
 import { useI18n, useFrame } from "../context"
 import { classNames, getWidth } from "../../utils"

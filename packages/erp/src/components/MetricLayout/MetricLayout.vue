@@ -1,9 +1,9 @@
 <template>
   <NpCard v-if="wrapper == 'card'">
-    <div :class="styles.MetricLayout">
+    <div :class="classNames(styles.MetricLayout, type && styles.Compact)">
       <div :class="styles.Header">
         <slot name="prefix"></slot>
-        <div :class="[styles.Title, $slots.primaryAction && styles.HasPrimaryAction]">
+        <div :class="classNames(styles.Title, $slots.primaryAction && styles.HasPrimaryAction)">
           <slot name="title"></slot>
         </div>
       </div>
@@ -15,7 +15,7 @@
       </div>
     </div>
   </NpCard>
-  <div v-else :class="styles.MetricLayout">
+  <div v-else :class="classNames(styles.MetricLayout, type && styles.Compact)">
     <div :class="styles.Header">
       <slot name="prefix"></slot>
       <div :class="[styles.Title, $slots.primaryAction && styles.HasPrimaryAction]">
@@ -31,12 +31,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { NpCard } from "@ncpl/ncpl-polaris";
+import { NpCard, classNames } from "@ncpl/ncpl-polaris";
 import styles from "./MetricLayout.module.scss";
 
 withDefaults(defineProps<{
+  type?: 'full' | 'compact';
   wrapper?: string;
 }>(), {
+  type: 'full',
   wrapper: 'card'
 })
 </script>

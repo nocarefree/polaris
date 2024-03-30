@@ -3,7 +3,9 @@ import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import postCssPxToRem from "postcss-pxtorem";
 import postcssCustomMedia from "postcss-custom-media";
+import postcssImport from "postcss-import";
 import postcssGlobalData from "@csstools/postcss-global-data";
+import postcssMixins from "postcss-mixins";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 import dts from "vite-plugin-dts"
@@ -43,6 +45,10 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
+        postcssImport(),
+        postcssMixins({
+          mixinsDir: resolve(__dirname, './postcss-mixins'),
+        }),
         postcssGlobalData({
           files: [mediaQueriesCssPath],
         }),
