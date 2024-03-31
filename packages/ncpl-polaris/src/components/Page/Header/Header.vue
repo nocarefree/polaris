@@ -2,6 +2,14 @@
   <Box position="relative" :padding-block-start="{ xs: '400', md: '600' }" :padding-block-end="{ xs: '400', md: '600' }"
     :padding-inline-start="{ xs: '400', sm: '0' }" :padding-inline-end="{ xs: '400', sm: '0' }"
     :visually-hidden="titleHidden">
+    <div v-if="labelForPageReadyAccessibilityLabel" role="status">
+      <Text visuallyHidden as="p">
+        {{ i18n.translate('Polaris.Page.Header.pageReadyAccessibilityLabel', {
+    title:
+      labelForPageReadyAccessibilityLabel
+  }) }}
+      </Text>
+    </div>
     <div :class="headerClassNames">
       <component :is="()=>contentRender"></component>
     </div>
@@ -40,6 +48,10 @@ const props = withDefaults(defineProps<PageHeaderProps>(), {
 const slots = useSlots();
 const mediaQuery = useMediaQuery();
 const i18n = useI18n();
+
+const labelForPageReadyAccessibilityLabel = computed(() => {
+  return props.pageReadyAccessibilityLabel || props.title;
+})
 
 const isSingleRow = computed(() => {
   return props.primaryAction && props.pagination &&

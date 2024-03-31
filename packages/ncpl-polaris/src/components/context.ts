@@ -141,7 +141,7 @@ export const linkContext = {
 };
 
 //FrameContext
-import type { FrameLogo, ToastPropsWithID, ToastID } from "./Frame/Frame";
+import type { FrameLogo, ToastPropsWithID, ToastID } from "./Frame/types";
 
 export type FrameContext = {
   logo: Ref<FrameLogo | undefined>;

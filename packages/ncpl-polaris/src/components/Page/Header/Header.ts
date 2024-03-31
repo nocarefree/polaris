@@ -19,6 +19,8 @@ export interface PageHeaderPrimaryAction
 export interface PageHeaderProps extends PageHeaderTitleProps {
     /** Visually hide the title */
     titleHidden?: boolean;
+    /** A label to use for the page when the page is ready, used by screen readers. Will override the title prop if present */
+    pageReadyAccessibilityLabel?: string;
     /** Enables filtering action list items */
     filterActions?: boolean;
     /** Primary page-level action */

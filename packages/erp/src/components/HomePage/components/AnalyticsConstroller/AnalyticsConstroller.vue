@@ -1,6 +1,6 @@
 <template>
   <div :class="smDown ? styles.metricsControllerPadding : void 0">
-    <div style="margin-top: calc(var(--p-space-400)*-1);">
+    <div>
       <AnalyticsDateControls :initial-state="initialState" :controls="initialState.controls"></AnalyticsDateControls>
     </div>
   </div>

@@ -61,7 +61,7 @@ import { useI18n, useMediaQuery, frameContext, useTheme } from "../context";
 import { classNames, setRootProperty } from "../../utils";
 import type { AttrsType } from "../types";
 import { dataPolarisTopBar, layer } from "../shared";
-import type { FrameProps, ToastPropsWithID, ToastID } from "./Frame";
+import type { FrameProps, ToastPropsWithID, ToastID } from "./types";
 import CSSAnimation from "./CSSAnimation/CSSAnimation.vue";
 import { XIcon } from "@ncpl/ncpl-icons";
 import Icon from "../Icon";

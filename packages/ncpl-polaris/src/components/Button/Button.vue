@@ -23,7 +23,8 @@
       <slot v-else name="icon"></slot>
     </span>
 
-    <Text v-if="$slots.default" as="span" :variant="size === 'large' || hasPlainText ? 'bodyMd' : 'bodySm'"
+    <Text v-if="$slots.default" as="span"
+      :variant="size === 'large' || (hasPlainText && size !== 'micro') ? 'bodyMd' : 'bodySm'"
       :font-weight="textFontWeight" :key="disabled ? 'text-disabled' : 'text'">
       <slot></slot>
     </Text>
@@ -91,7 +92,7 @@ const disclosureIconSource = computed(() => {
 const hasPlainText = computed(() => ['plain', 'monochromePlain'].includes(props.variant));
 const textFontWeight = computed(() => {
   let data: TextProps['fontWeight'] = 'medium';
-  if (data) {
+  if (hasPlainText.value) {
     data = 'regular';
   } else if (props.variant === 'primary') {
     data = mdUp.value ? 'medium' : 'semibold';

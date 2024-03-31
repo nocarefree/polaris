@@ -1,5 +1,5 @@
 <template>
-    <NpPage>
+    <NpPage title="主页" title-hidden>
         <Analytics></Analytics>
     </NpPage>
 </template>

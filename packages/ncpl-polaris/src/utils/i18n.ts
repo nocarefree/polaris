@@ -1,8 +1,8 @@
-import {get, merge} from 'lodash';
+import { get, merge } from 'lodash';
 
 const REPLACE_REGEX = /{([^}]*)}/g;
 
-interface TranslationDictionary {
+export interface TranslationDictionary {
   [key: string]: string | TranslationDictionary;
 }
 
@@ -16,13 +16,13 @@ export class I18n {
     // slice the array to make a shallow copy of it, so we don't accidentally
     // modify the original translation array
     this.translation = Array.isArray(translation)
-      ? merge({},...translation)
+      ? merge({}, ...translation)
       : translation;
   }
 
   translate(
     id: string,
-    replacements?: {[key: string]: string | number},
+    replacements?: { [key: string]: string | number },
   ): string {
     const text: string = get(this.translation, id, '') as string;
 

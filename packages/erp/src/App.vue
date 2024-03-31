@@ -3,7 +3,8 @@ import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { NpActionList, NpTopBarSearchField, NpFrame, NpNavigation, NpNavigationSection, NpAppProvider, NpTopBar, NpTopBarUserMenu } from "@ncpl/ncpl-polaris";
-import { HomeIcon, ThemeTemplateIcon, OrderFilledIcon } from "@ncpl/ncpl-icons"
+import { HomeIcon, HomeFilledIcon, PersonIcon, PersonFilledIcon, OrderIcon, OrderFilledIcon, ProductFilledIcon, ProductIcon, ChartVerticalIcon, ChartVerticalFilledIcon } from "@ncpl/ncpl-icons";
+
 import zhCn from "@ncpl/ncpl-polaris/locales/zh-CN.json"
 
 import LogoColor from './assets/jaded-pixel-logo-color.svg';
@@ -28,19 +29,33 @@ const navItems = [
   {
     url: '/',
     label: '主页',
-    icon: HomeIcon,
+    icon: HomeFilledIcon,
+    matchedItemIcon: HomeIcon,
     exactMatch: true,
   },
   {
     url: '/orders',
     label: '订单',
     icon: OrderFilledIcon,
+    matchedItemIcon: OrderIcon,
   },
   {
-    url: '#templates',
-    excludePaths: ['#'],
-    label: '模板',
-    icon: ThemeTemplateIcon,
+    url: '/products',
+    label: '产品',
+    icon: ProductFilledIcon,
+    matchedItemIcon: ProductIcon,
+  },
+  {
+    url: '/customers',
+    label: '客户',
+    icon: PersonFilledIcon,
+    matchedItemIcon: PersonIcon,
+  },
+  {
+    url: '/dashboards',
+    label: '分析',
+    icon: ChartVerticalFilledIcon,
+    matchedItemIcon: ChartVerticalIcon,
   },
 ];
 
@@ -68,6 +83,7 @@ provide(ApolloClients, {
 </script>
 
 <template>
+
   <div :class="$style.OuterContainer">
     <NpAppProvider :i18n="zhCn" router>
       <div id="AppFrame" :class="$style.AppFrame">

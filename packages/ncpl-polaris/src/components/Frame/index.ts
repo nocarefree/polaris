@@ -6,4 +6,4 @@ export const NpFrame = withInstall(Frame);
 
 export default NpFrame;
 
-export * from "./Frame";
+export * from "./types";

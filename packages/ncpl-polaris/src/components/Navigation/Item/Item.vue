@@ -1,14 +1,15 @@
 <template>
-  <li v-if="url" :class="classNames(styles.ListItem, Boolean(actions && actions.length) && styles['ListItem-hasAction'])"
+  <li v-if="url"
+    :class="classNames(styles.ListItem, Boolean(actions && actions.length) && styles['ListItem-hasAction'])"
     @mouseenter="$emit('mouseenter', label)">
     <div :class="styles.ItemWrapper">
       <div :class="classNames(
-        styles.ItemInnerWrapper,
-        (_selected && childIsActive && styles['ItemInnerWrapper-open']) || (_selected && !childIsActive && styles['ItemInnerWrapper-selected']),
-        displayActionsOnHover &&
-        styles['ItemInnerWrapper-display-actions-on-hover'],
-        disabled && styles.ItemInnerDisabled
-      )">
+    styles.ItemInnerWrapper,
+    (_selected && childIsActive && styles['ItemInnerWrapper-open']) || (_selected && !childIsActive && styles['ItemInnerWrapper-selected']),
+    displayActionsOnHover &&
+    styles['ItemInnerWrapper-display-actions-on-hover'],
+    disabled && styles.ItemInnerDisabled
+  )">
         <ConditionalWrapper :condition="Boolean(displayActionsOnHover && actions?.length && hasBadge)">
           <template #wrapper="{ children }">
             <span :class="styles.ItemWithFloatingActions">
@@ -23,15 +24,15 @@
               </Tooltip>
             </template>
             <UnstyledLink :url="url" :class="classNames(
-              styles.Item,
-              disabled && styles['Item-disabled'],
-              (_selected || childIsActive) && styles['Item-selected'],
-              showExpanded && styles.subNavigationActive,
-              childIsActive && styles['Item-child-active'],
-              showVerticalLine && styles['Item-line'],
-              matches && styles['Item-line-pointer'],
-              showVerticalHoverPointer && styles['Item-hover-pointer'],
-            )" :external="external" :tabindex="tabIndex" :aria-disabled="disabled" :aria-label="accessibilityLabel"
+    styles.Item,
+    disabled && styles['Item-disabled'],
+    (_selected || childIsActive) && styles['Item-selected'],
+    showExpanded && styles.subNavigationActive,
+    childIsActive && styles['Item-child-active'],
+    showVerticalLine && styles['Item-line'],
+    matches && styles['Item-line-pointer'],
+    showVerticalHoverPointer && styles['Item-hover-pointer'],
+  )" :external="external" :tabindex="tabIndex" :aria-disabled="disabled" :aria-label="accessibilityLabel"
               @click="onClick"
               v-bind="normalizeAriaAttributes(secondaryNavigationId, subNavigationItems.length > 0, showExpanded)">
               <div v-if="iconSource" :class="classNames(styles.Icon, shouldResizeIcon && styles['Icon-resized'])">
@@ -85,10 +86,10 @@
   <li v-else :class="styles.ListItem">
     <div :class="styles.ItemWrapper">
       <div :class="classNames(
-        styles.ItemInnerWrapper,
-        disabled && styles.ItemInnerDisabled,
-        selected && styles['ItemInnerWrapper-selected'],
-      )">
+    styles.ItemInnerWrapper,
+    disabled && styles.ItemInnerDisabled,
+    selected && styles['ItemInnerWrapper-selected'],
+  )">
         <button type="button"
           :class="classNames(styles.Item, disabled && styles['Item-disabled'], selected && styles['Item-selected'],)"
           :disabled="disabled" :aria-disabled="disabled" :aria-label="accessibilityLabel" @click="onClick">
@@ -191,7 +192,7 @@ const _selected = computed(() => {
 });
 
 const showExpanded = computed(() => _selected.value || props.expanded || childIsActive.value);
-const iconSource = computed(() => props.selected || childIsActive.value ? props.matchedItemIcon ?? props.icon : props.icon);
+const iconSource = computed(() => _selected.value || childIsActive.value ? props.matchedItemIcon ?? props.icon : props.icon);
 
 
 function onClick(event: MouseEvent) {

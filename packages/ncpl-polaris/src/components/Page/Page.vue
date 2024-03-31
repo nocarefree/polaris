@@ -17,7 +17,7 @@
 import { computed } from 'vue'
 import type { PageProps } from './Page'
 import Header from './Header'
-import styles from './Page.module.scss'
+import styles from './Page.module.css'
 import { classNames } from '../../utils';
 
 defineOptions({
@@ -58,7 +58,6 @@ const hasHeaderContent = computed(() => {
 const contentClassName = computed(() => {
   return classNames(
     !hasHeaderContent.value && styles.Content,
-    props.divider && hasHeaderContent.value && styles.divider,
   );
 });
 
